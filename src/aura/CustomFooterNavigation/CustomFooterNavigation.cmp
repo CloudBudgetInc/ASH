@@ -1,0 +1,130 @@
+<aura:component extends="forceCommunity:navigationMenuBase">
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="navigationLinkSetId" type="String" />
+
+  <nav class="footer-nav">
+    <ul class="footer-nav__links">
+      <li class="footer-nav__link footer-nav__subnav">
+        <p class="footer-nav__subnav-label">
+          ASHRC.ORG
+        </p>
+          <ul class="footer-nav__subnav-links">
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community'}">
+                Sickle Cell Disease Community Home
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'clinical-trials-network'}">
+                Clinical Trials Network
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'about-the-data-hub'}">
+                Data Hub
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'news-and-events'}">
+                News &amp; Events
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'about'}">
+                About Us
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'contact-us'}">
+                Contact Us
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" target="_blank" href="https://hematology.my.salesforce.com/sfc/p/6A000000uIj9/a/3u000000LxEc/NaqTv7GnGDG7AKiPbMqRFEQ_oq.C64u6jdpvtbsVZtw">
+                W-9 Form
+              </a>
+            </li>
+          </ul>
+      </li>
+      <li class="footer-nav__link footer-nav__subnav">
+        <p class="footer-nav__subnav-label">
+          COVID-19
+        </p>
+          <ul class="footer-nav__subnav-links">
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'covid-19-registry'}">
+                COVID-19 Registry
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'covid-19-registry/data-summaries'}">
+                Data Summaries
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'covid-19-registry/acknowledgements'}">
+                Acknowledgements
+              </a>
+            </li>
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" target="_blank" href="https://www.hematology.org/covid-19">
+                ASH COVID-19 Resources
+              </a>
+            </li>
+          </ul>
+      </li>
+      <li class="footer-nav__link footer-nav__subnav">
+        <p class="footer-nav__subnav-label">
+          Clinical Trials Network
+        </p>
+          <ul class="footer-nav__subnav-links">
+            <li class="footer-nav__subnav-link">
+              <a class="footer-nav-link" href="{!v.baseUrl + 'clinical-trials-network/faqs'}">
+                CTN FAQs
+              </a>
+            </li>
+          </ul>
+      </li>
+
+
+
+
+      <!-- <li class="footer-nav__link">
+        <a class="footer-nav-link" href=""></a>
+      </li> -->
+    </ul>
+
+
+    <!-- <ul class="footer-nav__links" onclick="{!c.onClick}">
+      <aura:iteration items="{!v.menuItems}" var="item">
+        <aura:if isTrue="{!item.subMenu}">
+          <li
+            class="footer-nav__link footer-nav__subnav"
+            data-label="{!item.label}"
+          >
+            <p class="footer-nav__subnav-label">
+              {!item.label}
+            </p>
+              <ul
+                class="footer-nav__subnav-links"
+                onclick="{!c.onNavClick}"
+              >
+                <aura:iteration items="{!item.subMenu}" var="subItem">
+                  <li class="footer-nav__subnav-link" data-label="{!subItem.label}">
+                    <a class="footer-nav-link" href="{!subItem.target}" target="{!subItem.tab}" data-menu-item-id="{!subItem.id}">{!subItem.label}</a>
+                  </li>
+                </aura:iteration>
+              </ul>
+          </li>
+          <aura:set attribute="else">
+            <aura:if isTrue="{!item.label != 'Home'}">
+              <li class="footer-nav__link" data-label="{!item.label}">
+                <a class="footer-nav-link" href="{!item.target}" target="{!item.tab}" data-menu-item-id="{!item.id}">{!item.label}</a>
+              </li>
+            </aura:if>
+          </aura:set>
+        </aura:if>
+      </aura:iteration>
+    </ul> -->
+  </nav>
+</aura:component>

@@ -1,0 +1,105 @@
+<design:component label="Upcoming News">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="articleDetailUrl"
+    label="Article Detail Base Url"
+    description="Enter the base url of the article detail page."
+  />
+  <design:attribute
+    name="topic"
+    label="Topic"
+    datasource="apex://CustomTopicPickList"
+    description="Choose a topic name to show the corresponding articles."
+  />
+  <design:attribute
+    name="headlineField"
+    label="Headline Field"
+    datasource="Headline, Subheading, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for a headline to display."
+  ></design:attribute>
+  <design:attribute
+    name="iconImageField"
+    label="Icon Field"
+    datasource="None, Image 1"
+    description="Select the CMS field name for the icon to display next to the headline."
+  ></design:attribute>
+  <design:attribute
+    name="bodyField"
+    label="Body Field"
+    datasource="Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for a description to display."
+  ></design:attribute>
+  <design:attribute
+    name="topButtonLabel"
+    label="Top Button Label"
+    description="Enter a label for a top button."
+  />
+  <design:attribute
+    name="topButtonLink"
+    label="Top Button Link"
+    description="Enter the path of the page the top button should link to."
+  />
+  <design:attribute
+    name="openTopTab"
+    label="Open top button link in new tab"
+    description="Check to open the top button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="topButtonStyle"
+    label="Top Button Style"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Choose a style for the top button."
+  ></design:attribute>
+  <design:attribute
+    name="topButtonSize"
+    label="Top Button Size"
+    datasource="small, medium, large"
+    description="Select a button size."
+  ></design:attribute>
+  <design:attribute
+    name="bottomButtonLabel"
+    label="Bottom Button Label"
+    description="Enter a label for a bottom button."
+  />
+  <design:attribute
+    name="bottomButtonLink"
+    label="Bottom Button Link"
+    description="Enter the path of the page the bottom button should link to."
+  />
+  <design:attribute
+    name="openBottomTab"
+    label="Open bottom button link in new tab"
+    description="Check to open the bottom button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="bottomButtonStyle"
+    label="Bottom Button Style"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Choose a style for the button."
+  ></design:attribute>
+  <design:attribute
+    name="bottomButtonSize"
+    label="Bottom Button Size"
+    datasource="small, medium, large"
+    description="Select a button size."
+  ></design:attribute>
+  <!-- <design:attribute
+    name="reverse"
+    label="Reverse Content"
+    description="Check to swap the sides of the text and image."
+  ></design:attribute> -->
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,44 @@
+<design:component label="Custom Hero">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="headingField"
+    label="Headline Field"
+    datasource="Headline, Subheading, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the headline to display. Note that this field will only display in banner layout mode."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingField"
+    label="Subheading Field"
+    datasource="None, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the subheading to display. Note that this field will not display in banner layout mode."
+  ></design:attribute>
+  <design:attribute
+    name="bannerLayout"
+    label="Banner Layout"
+    description="If checked banner layout only has headline."
+  ></design:attribute>
+  <design:attribute
+    name="showButton"
+    label="Show Button"
+    description="Check to display a button at the bottom of the hero. Note that this button will not display in banner layout mode."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter the label for the button."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+</design:component>

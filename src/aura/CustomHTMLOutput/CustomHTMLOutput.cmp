@@ -1,0 +1,7 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute name="input" type="String" />
+
+  <div class="component-container--padding-horizontal">
+    <aura:unescapedHtml value="{!v.input}" />
+  </div>
+</aura:component>

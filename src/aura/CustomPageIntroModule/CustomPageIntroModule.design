@@ -1,0 +1,23 @@
+<design:component label="Text and Image Intro">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="descriptionField"
+    label="Description Field"
+    datasource="Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the description to display."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

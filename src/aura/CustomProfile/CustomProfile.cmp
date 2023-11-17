@@ -1,0 +1,318 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomUserProfileController"
+>
+<!-- Design Attributes -->
+<aura:attribute name="recordType" type="String" default="User" />
+<aura:attribute name="recordId" type="String" />
+<aura:attribute name="baseUrl" type="String" default="/s/" />
+<aura:attribute name="myAccountUrl" type="String" default="profile" />
+<aura:attribute name="dashboardUrl" type="String" default="portal" />
+<aura:attribute name="subscriptionManagementUrl" type="String" default="portal/subscription-management" />
+
+<!-- API Attributes -->
+<aura:attribute name="contactJunction" type="Contact_Junction__c" />
+<aura:attribute name="contactUser" type="User" />
+<aura:attribute name="loggedInUser" type="User" />
+<aura:attribute name="cjId" type="String" />
+<aura:attribute name="contactAddress" type="Contact_Junction__c" />
+<aura:attribute name="editable" type="Boolean" default="false" />
+
+<!-- Local attributes -->
+<aura:attribute name="profileImg" type="String" default="{!$ContentAsset.profile_default}" />
+<aura:attribute name="editing" type="Boolean" default="false" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+<aura:attribute name="changed" type="Boolean" default="false" />
+<aura:attribute name="submitted" type="Boolean" default="false" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="custom-profile slds-grid slds-wrap component-container--padding-horizontal">
+  <div class="custom-profile__left slds-col slds-size_1-of-1 slds-medium-size_5-of-12 slds-large-size_4-of-12 slds-grid slds-wrap">
+    <div class="custom-profile__avatar slds-col slds-size_1-of-1">
+      <div class="custom-profile__img-container">
+        <img class="custom-profile__img" src="{!v.profileImg}" alt="profile-image" />
+        <img class="custom-profile__bubbles" src="{!$ContentAsset.profile_bubbles}" alt="profile image bubbles" />
+      </div>
+      <aura:if isTrue="{!v.editable}">
+        <label for="file-upload" class="custom-profile__upload">
+          <span class="custom-profile__upload-label">Add/Update an Image</span>
+          <img class="custom-profile__edit-img" src="{!$ContentAsset.profile_edit}" alt="edit profile image" />
+        </label>
+        <input id="file-upload" type="file" accept="image/jpg,image/jpeg,image/png" onchange="{!c.handleImageUpload}" />
+      </aura:if>
+    </div>
+    <ul class="custom-profile__links custom-profile__links--md slds-col slds-size_1-of-1">
+      <aura:if isTrue="{!!v.editable}">
+        <li>
+          <a href="{!v.baseUrl + v.myAccountUrl + '/' + v.loggedInUser.Id}">My Account</a>
+        </li>
+      </aura:if>
+      <li>
+        <a href="{!v.baseUrl + v.dashboardUrl}">My Dashboard</a>
+      </li>
+      <li>
+        <a href="{!v.baseUrl + v.subscriptionManagementUrl}">Subscription Management</a>
+      </li>
+    </ul>
+  </div>
+  <div class="custom-profile__info slds-col slds-size_1-of-1 slds-medium-size_7-of-12 slds-large-size_8-of-12">
+    <div class="custom-profile__user">
+      <h2>
+        <span class="custom-profile__user-title">
+          <aura:if isTrue="{!v.recordType == 'User'}">
+            My
+            <aura:set attribute="else">
+              <aura:if isTrue="{!v.editable}">
+                My
+              </aura:if>
+            </aura:set>
+          </aura:if>
+          Profile Details
+        </span>
+        <aura:if isTrue="{!v.editable &amp;&amp; !v.editing}">
+          <button class="custom-profile__edit-btn" onclick="{!c.handleEdit}">
+            <img class="custom-profile__edit-img" src="{!$ContentAsset.profile_edit}" alt="edit profile image" />
+          </button>
+        </aura:if>
+      </h2>
+      <aura:if isTrue="{!v.editing}">
+        <lightning:recordEditForm
+          class="custom-profile__form"
+          recordId="{!v.contactUser.Id}"
+          objectApiName="User"
+          onerror="{!c.handleError}"
+          onload="{!c.setLoadingFalse}"
+          onsubmit="{!c.submitDetails}"
+          onsuccess="{!c.handleSuccess}"
+        >
+          <div class="custom-profile__form-wrapper slds-grid slds-wrap slds-gutters">
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_2-of-12">
+              <label for="Prefix"><p class="custom-profile__form-label">Prefix</p></label>
+              <lightning:inputField
+                aura:id="Prefix"
+                id="Prefix"
+                fieldName="Salutation__c"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field--md slds-col slds-size_8-of-12"></div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+              <label for="FirstName"><p class="custom-profile__form-label">First Name</p></label>
+              <lightning:inputField
+                aura:id="FirstName"
+                id="FirstName"
+                fieldName="FirstName"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+              <label for="LastName"><p class="custom-profile__form-label">Last Name</p></label>
+              <lightning:inputField
+                aura:id="LastName"
+                id="LastName"
+                fieldName="LastName"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1">
+              <label for="Credentials"><p class="custom-profile__form-label">Credentials</p></label>
+              <lightning:inputField
+                aura:id="Credentials"
+                id="Credentials"
+                fieldName="Credentials__c"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1">
+              <label for="SenderEmail"><p class="custom-profile__form-label">Email</p></label>
+              <lightning:inputField
+                aura:id="SenderEmail"
+                id="SenderEmail"
+                fieldName="SenderEmail"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1">
+              <label for="Title"><p class="custom-profile__form-label">Title</p></label>
+              <lightning:inputField
+                aura:id="Title"
+                id="Title"
+                fieldName="Title"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1">
+              <label for="Phone"><p class="custom-profile__form-label">Phone</p></label>
+              <lightning:inputField
+                aura:id="Phone"
+                id="Phone"
+                fieldName="Phone"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+            <div class="custom-profile__form-field slds-col slds-size_1-of-1">
+              <label for="AboutMe"><p class="custom-profile__form-label">About Me</p></label>
+              <lightning:inputField
+                aura:id="AboutMe"
+                id="AboutMe"
+                fieldName="AboutMe"
+                onchange="{!c.handleInputChange}"
+                variant="label-hidden"
+              />
+            </div>
+          </div>
+
+          <div class="custom-profile__cj">
+            <p class="custom-profile__cj-title">
+              ASH RC Only<span class="custom-profile__cj-title-small">(No edit available)</span>
+            </p>
+            <div class="custom-profile__fields">
+              <p class="custom-profile__field">
+                {!v.contactJunction.Contact_Type__c}
+              </p>
+              <p class="custom-profile__field">
+                {!v.contactJunction.Clinical_Trial_Unit__r.Consortium__r.Name}
+              </p>
+              <p class="custom-profile__field">
+                {!v.contactJunction.Clinical_Trial_Unit__r.Name}
+                <aura:if isTrue="{!v.contactAddress.Address__r.City__c}">
+                  {!' | ' + v.contactAddress.Address__r.City__c}
+                </aura:if>
+                <aura:if isTrue="{!v.contactAddress.Address__r.State__c}">
+                  {!', ' + v.contactAddress.Address__r.State__c}
+                </aura:if>
+              </p>
+            </div>
+          </div>
+          <div class="custom-profile__bottom">
+            <aura:if isTrue="{!v.loading}">
+              <div class="custom-profile__spinner">
+                <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+              </div>
+            </aura:if>
+            <lightning:messages />
+            <aura:if isTrue="{!v.submitted}">
+              <p class="custom-profile__thank-you custom-profile__thank-you--sm">
+                Thank you, your information has been successfully updated. 
+                If your information is displaying incorrectly from ASH RC, 
+                please email us at <a href="mailto:info@ashrc.org">info@ashrc.org</a>
+              </p>
+              <button class="custom-profile__btn-link custom-profile__btn-link--sm" onclick="{!c.handleCancel}">
+                Click here to return to your profile page.
+              </button>
+            </aura:if>
+            <div class="custom-profile__submit">
+              <lightning:button
+                class="{! join(' ',
+                  'cta-button',
+                  !v.changed ? 'cta-button--disabled' : 'cta-button--tertiary'
+                )}"
+                variant="brand"
+                disabled="{!!v.changed}"
+                type="submit"
+                name="Update Profile"
+                label="Update Profile"
+              />
+              <lightning:button
+                class="{! join(' ',
+                  'cta-button custom-profile__cancel',
+                  v.changed ? 'cta-button--disabled' : 'cta-button--form'
+                )}"
+                variant="brand"
+                disabled="{!v.changed}"
+                type="reset"
+                name="Cancel"
+                label="Cancel"
+                onclick="{!c.handleCancel}"
+              />
+            </div>
+            <aura:if isTrue="{!v.submitted}">
+              <p class="custom-profile__thank-you custom-profile__thank-you--md">
+                Thank you, your information has been successfully updated. 
+                If your information is displaying incorrectly from ASH RC, 
+                please email us at <a href="mailto:info@ashrc.org">info@ashrc.org</a>
+              </p>
+              <button class="custom-profile__btn-link custom-profile__btn-link--md" onclick="{!c.handleCancel}">
+                Click here to return to your profile page.
+              </button>
+            </aura:if>
+          </div>
+        </lightning:recordEditForm>
+        <aura:set attribute="else">
+          <div class="custom-profile__fields">
+            <p class="custom-profile__field">
+              <span class="custom-profile__field-label">Name</span>:&nbsp;
+              {!v.contactUser.Salutation__c + ' '}{!v.contactUser.FirstName + ' '}{!v.contactUser.LastName}
+            </p>
+            <p class="custom-profile__field">
+              <span class="custom-profile__field-label">Credentials</span>:&nbsp;
+              {!v.contactUser.Credentials__c}
+            </p>
+            <aura:if isTrue="{!v.contactUser.Show_Email__c}">
+              <p class="custom-profile__field">
+                <span class="custom-profile__field-label">Email</span>:&nbsp;
+                {!v.contactUser.SenderEmail}
+              </p>
+            </aura:if>
+            <p class="custom-profile__field">
+              <span class="custom-profile__field-label">Title</span>:&nbsp;
+              {!v.contactUser.Title}
+            </p>
+            <aura:if isTrue="{!v.contactUser.Show_Phone__c}">
+              <p class="custom-profile__field">
+                <span class="custom-profile__field-label">Phone Number</span>:&nbsp;
+                <lightning:formattedPhone value="{!v.contactUser.Phone}" />
+              </p>
+            </aura:if>
+            <p class="custom-profile__field">
+              <span class="custom-profile__field-label">About Me</span>:&nbsp;
+              {!v.contactUser.AboutMe}
+            </p>
+          </div>
+          <div class="custom-profile__cj">
+            <p class="custom-profile__cj-title">
+              ASH RC Only<span class="custom-profile__cj-title-small">(No edit available)</span>
+            </p>
+            <div class="custom-profile__fields">
+              <p class="custom-profile__field">
+                {!v.contactJunction.Contact_Type__c}
+              </p>
+              <p class="custom-profile__field">
+                {!v.contactJunction.Clinical_Trial_Unit__r.Consortium__r.Name}
+              </p>
+              <p class="custom-profile__field">
+                {!v.contactJunction.Clinical_Trial_Unit__r.Name}
+                <aura:if isTrue="{!v.contactAddress.Address__r.City__c}">
+                  {!' | ' + v.contactAddress.Address__r.City__c}
+                </aura:if>
+                <aura:if isTrue="{!v.contactAddress.Address__r.State__c}">
+                  {!', ' + v.contactAddress.Address__r.State__c}
+                </aura:if>
+              </p>
+            </div>
+          </div>
+        </aura:set>
+      </aura:if>
+    </div>
+    <ul class="custom-profile__links custom-profile__links--sm">
+      <li>
+        <a href="{!v.baseUrl + v.myAccountUrl + '/' + v.cjId}">My Account</a>
+      </li>
+      <li>
+        <a href="{!v.baseUrl + v.dashboardUrl}">My Dashboard</a>
+      </li>
+      <li>
+        <a href="{!v.baseUrl + v.subscriptionManagementUrl}">Subscription Management</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</aura:component>

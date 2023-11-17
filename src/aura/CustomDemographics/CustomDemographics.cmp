@@ -1,0 +1,757 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomDemographicsController"
+>
+<aura:attribute name="contact" type="Contact" />
+<aura:attribute name="title" type="String" default="Diversity, Equity &amp; Inclusion (DEI)" />
+<aura:attribute name="intro" type="String" default="The American Society of Hematology (ASH) is committed to building and nurturing a global hematology community and workforce inclusive of diverse perspectives, talents, and experiences as its works toward one collective goal: helping hematologists conquer blood diseases worldwide. The information provided below will help the Society in advancing this commitment and including members and non-members more effectively." />
+<aura:attribute name="learnMoreLabel" type="String" default="Learn More" />
+<aura:attribute name="learnMoreLink" type="String" default="https://www.hematology.org/about/diversity-equity-and-inclusion" />
+<aura:attribute name="personalTitle" type="String" default="Personal Info" />
+<aura:attribute name="personalHelp" type="String" default="This information will highlight the diversity of the Society across cultures and generations." />
+<aura:attribute name="genderTitle" type="String" default="Gender" />
+<aura:attribute name="genderHelp" type="String" default="Gender identities can be different from the sex a person was assigned at birth." />
+<aura:attribute name="pronounsTitle" type="String" default="Pronouns" />
+<aura:attribute name="pronounsHelp" type="String" default="It is important that we use the appropriate pronouns in personalized messages and marketing materials." />
+<aura:attribute name="orientationTitle" type="String" default="Orientation" />
+<aura:attribute name="orientationHelp" type="String" default="Do you identify as a Lesbian, Gay, Bisexual, Transgender, and/or Queer individual?" />
+<aura:attribute name="disabilityTitle" type="String" default="Disability" />
+<aura:attribute name="disabilityHelp" type="String" default="Do you identify as having a disability?" />
+<aura:attribute name="ethnicityTitle" type="String" default="Race/Ethnicity" />
+<aura:attribute name="ethnicityHelp" type="String" default="This will help identify meaningful actions that ASH can take to better understand the experiences of each community." />
+<aura:attribute name="msg" type="String" default="This will remove any information that you previously provided permanently. Do you want to continue?" />
+<aura:attribute name="editButtonLabel" type="String" default="Edit DEI Info" />
+<aura:attribute name="editFormTitle" type="String" default="Edit DEI Information" />
+<aura:attribute name="placeholder" type="String" default="N/A" />
+<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+<aura:attribute name="isConfirmModalOpen" type="Boolean" default="false" />
+<aura:attribute name="isEthnicityModalOpen" type="Boolean" default="false" />
+<aura:attribute name="optIn" type="String" />
+<aura:attribute name="currentOptIn" type="String" />
+<aura:attribute name="ethnicities" type="String[]" />
+<aura:attribute name="showEthnicitySelf" type="Boolean" default="false" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+<aura:attribute name="options" type="List" default="[
+    {'label': 'My data can be used in an identifiable way', 'value': 'My data can be used in an identifiable way'},
+    {'label': 'My data can be used in aggregate only (de-identified)', 'value': 'My data can be used in aggregate only (de-identified)'},
+    {'label': 'I do not want to provide demographic information', 'value': 'I do not want to provide demographic information'}
+    ]"
+/>
+<aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="demographics">
+  <div class="demographics__header">
+    <h2 class="demographics__title">{!v.title}</h2>
+    <aura:if isTrue="{!v.currentOptIn == 'Opt-In' || !v.contact.IsNA__c}">
+      <lightning:button
+        class="demographics__btn"
+        variant="neutral"
+        label="{!v.editButtonLabel}"
+        title="{!v.editButtonLabel}"
+        onclick="{! c.openModal }"
+      />
+    </aura:if>
+  </div>
+  <aura:if isTrue="{!v.intro}">
+    <p class="demographics__intro">{!v.intro}</p>
+  </aura:if>
+  <aura:if isTrue="{!v.learnMoreLink}">
+    <a class="demographics__link" href="{!v.learnMoreLink}" target="_blank">
+      {!v.learnMoreLabel}
+    </a>
+  </aura:if>
+  <aura:if isTrue="{!v.contact.IsNA__c}">
+    <div>
+      Please select one of the following options regarding sharing of your DEI Data
+    </div>
+    <lightning:radioGroup
+      aura:id="opt-in"
+      class="demographics__opt-in"
+      name="deiRadioGroup"
+      label="DEI Opt In"
+      options="{!v.options}"
+      onchange="{!c.handleOptIn}"
+      value="{!v.optIn}"
+      type="radio"
+      variant="label-hidden"
+      default="{!v.demVal}"
+    />
+    <aura:if isTrue="{!v.currentOptIn == 'Opt-In'}">
+      <h2 class="demographics__section-title">{!v.personalTitle}</h2>
+      <p class="demographics__help">
+        {!v.personalHelp}
+      </p>
+      <section class="demographics__details">
+        <p class="demographics__field">
+          <span class="demographics__field-label">Birthdate</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Birthdate}">
+              <lightning:formattedDateTime
+                value="{!v.contact.Birthdate}"
+                year="numeric"
+                month="short"
+                day="2-digit"
+                timeZone="UTC"
+              />
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+        <p class="demographics__field">
+          <span class="demographics__field-label">Country of Origin/Birth</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.COB__c}">
+              {!v.contact.COB__r.Name}
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+        <p class="demographics__field">
+          <span class="demographics__field-label">Country of Residence</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.COR__c}">
+              {!v.contact.COR__c}
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+      </section>
+      <h2 class="demographics__section-title">{!v.genderTitle}</h2>
+      <p class="demographics__help">
+        {!v.genderHelp}
+      </p>
+      <section class="demographics__details">
+        <p class="demographics__field">
+          <span class="demographics__field-label">Gender</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Gender_Expanded__c}">
+              <aura:if isTrue="{!v.contact.Gender_Expanded__c == 'Prefer to Self-Describe'}">
+                {!v.contact.Gender_Self_Describe__c}
+                <aura:set attribute="else">
+                  {!v.contact.Gender_Expanded__c}
+                </aura:set>
+              </aura:if>
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+
+        <!-- <aura:if isTrue="{!v.contact.Gender_Expanded__c == 'Prefer to Self-Describe'}">
+          <p class="demographics__field">
+            <span class="demographics__field-label">Gender Self-Describe</span>
+            <span class="demographics__field-item">
+              <aura:if isTrue="{!v.contact.Gender_Self_Describe__c}">
+                {!v.contact.Gender_Self_Describe__c}
+                <aura:set attribute="else">
+                  <span class="demographics__placeholder">
+                    {!v.placeholder}
+                  </span>
+                </aura:set>
+              </aura:if>
+            </span>
+          </p>
+        </aura:if> -->
+
+      </section>
+      <h2 class="demographics__section-title">{!v.pronounsTitle}</h2>
+      <p class="demographics__help">
+        {!v.pronounsHelp}
+      </p>
+      <section class="demographics__details">
+        <p class="demographics__field">
+          <span class="demographics__field-label">Pronouns</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Pronouns__c}">
+              <aura:if isTrue="{!v.contact.Pronouns__c == 'Prefer to Self-Describe'}">
+                {!v.contact.Pronouns_Self_Describe__c}
+                <aura:set attribute="else">
+                  {!v.contact.Pronouns__c}
+                </aura:set>
+              </aura:if>
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+
+        <!-- <aura:if isTrue="{!v.contact.Pronouns__c == 'Prefer to Self-Describe'}">
+          <p class="demographics__field">
+            <span class="demographics__field-label">Pronouns Self-Describe</span>
+            <span class="demographics__field-item">
+              <aura:if isTrue="{!v.contact.Pronouns_Self_Describe__c}">
+                {!v.contact.Pronouns_Self_Describe__c}
+                <aura:set attribute="else">
+                  <span class="demographics__placeholder">
+                    {!v.placeholder}
+                  </span>
+                </aura:set>
+              </aura:if>
+            </span>
+          </p>
+        </aura:if> -->
+
+      </section>
+      <h2 class="demographics__section-title">{!v.orientationTitle}</h2>
+      <p class="demographics__help">
+        {!v.orientationHelp}
+      </p>
+      <section class="demographics__details">
+        <p class="demographics__field">
+          <span class="demographics__field-label">Orientation</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Orientation__c}">
+              <aura:if isTrue="{!v.contact.Orientation__c == 'Prefer to Self-Describe'}">
+                {!v.contact.Orientation_Self_Describe__c}
+                <aura:set attribute="else">
+                  {!v.contact.Orientation__c}
+                </aura:set>
+              </aura:if>
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+
+        <!-- <aura:if isTrue="{!v.contact.Orientation__c == 'Prefer to Self-Describe'}">
+          <p class="demographics__field">
+            <span class="demographics__field-label">Orientation Self-Describe</span>
+            <span class="demographics__field-item">
+              <aura:if isTrue="{!v.contact.Orientation_Self_Describe__c}">
+                {!v.contact.Orientation_Self_Describe__c}
+                <aura:set attribute="else">
+                  <span class="demographics__placeholder">
+                    {!v.placeholder}
+                  </span>
+                </aura:set>
+              </aura:if>
+            </span>
+          </p>
+        </aura:if> -->
+
+      </section>
+      <h2 class="demographics__section-title">{!v.disabilityTitle}</h2>
+      <p class="demographics__help">
+        {!v.disabilityHelp}
+      </p>
+      <section class="demographics__details">
+        <p class="demographics__field">
+          <span class="demographics__field-label">Disability</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Disability__c}">
+              <aura:if isTrue="{!v.contact.Disability__c == 'Prefer to Self-Describe'}">
+                {!v.contact.Disabililty_Self_Describe__c}
+                <aura:set attribute="else">
+                  {!v.contact.Disability__c}
+                </aura:set>
+              </aura:if>
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+
+        <!-- <aura:if isTrue="{!v.contact.Disability__c == 'Prefer to Self-Describe'}">
+          <p class="demographics__field">
+            <span class="demographics__field-label">Disabililty Self-Describe</span>
+            <span class="demographics__field-item">
+              <aura:if isTrue="{!v.contact.Disabililty_Self_Describe__c}">
+                {!v.contact.Disabililty_Self_Describe__c}
+                <aura:set attribute="else">
+                  <span class="demographics__placeholder">
+                    {!v.placeholder}
+                  </span>
+                </aura:set>
+              </aura:if>
+            </span>
+          </p>
+        </aura:if> -->
+
+      </section>
+      <h2 class="demographics__section-title">{!v.ethnicityTitle}</h2>
+      <p class="demographics__help">
+        {!v.ethnicityHelp}
+      </p>
+      <section class="demographics__details">
+        <p class="demographics__field demographics__field-ethnicity">
+          <span class="demographics__field-label">Ethnicity</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Ethnicity__c}">
+              <ul class="demographics__pills">
+                <aura:iteration items="{!v.ethnicities}" var="ethnicity">
+                  <aura:if isTrue="{!ethnicity != 'Prefer to Self-Identify'}">
+                    <li class="demographics__pill">
+                      {!ethnicity}
+                    </li>
+                  </aura:if>
+                </aura:iteration>
+                <aura:if isTrue="{!v.showEthnicitySelf}">
+                  <li class="demographics__pill">
+                    {!v.contact.Ethnicity_Self_Identify__c}
+                  </li>
+                </aura:if>
+              </ul>
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+
+        <!-- <aura:if isTrue="{!v.showEthnicitySelf}">
+          <p class="demographics__field demographics__field-ethnicity">
+            <span class="demographics__field-label">Ethnicity Self-Identify</span>
+            <span class="demographics__field-item">
+              <aura:if isTrue="{!v.contact.Ethnicity_Self_Identify__c}">
+                <div class="demographics__pills">
+                  <div class="demographics__pill">
+                    {!v.contact.Ethnicity_Self_Identify__c}
+                  </div>
+                </div>
+                <aura:set attribute="else">
+                  <span class="demographics__placeholder">
+                    {!v.placeholder}
+                  </span>
+                </aura:set>
+              </aura:if>
+            </span>
+          </p>
+        </aura:if> -->
+
+      </section>
+    </aura:if>
+    <aura:set attribute="else">
+      <section class="demographics__details">
+        <p class="demographics__field">
+          <span class="demographics__field-label">Birthdate</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Birthdate}">
+              <lightning:formattedDateTime
+                value="{!v.contact.Birthdate}"
+                year="numeric"
+                month="short"
+                day="2-digit"
+                timeZone="UTC"
+              />
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+        <p class="demographics__field">
+          <span class="demographics__field-label">Gender</span>
+          <span class="demographics__field-item">
+            <aura:if isTrue="{!v.contact.Gender_Expanded__c}">
+              <aura:if isTrue="{!v.contact.Gender_Expanded__c == 'Prefer to Self-Describe'}">
+                {!v.contact.Gender_Self_Describe__c}
+                <aura:set attribute="else">
+                  {!v.contact.Gender_Expanded__c}
+                </aura:set>
+              </aura:if>
+              <aura:set attribute="else">
+                <span class="demographics__placeholder">
+                  {!v.placeholder}
+                </span>
+              </aura:set>
+            </aura:if>
+          </span>
+        </p>
+      </section>
+    </aura:set>
+  </aura:if>
+    
+  <!-- START of EDIT Popup FORM -->
+  <div>
+    <aura:if isTrue="{!v.isModalOpen}">
+      <!-- Modal/Popup Box starts here -->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-edit"
+        aria-modal="true"
+        aria-describedby="modal-content-id-edit"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here -->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-edit"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              {!v.editFormTitle}
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-edit"
+          >
+            <lightning:recordEditForm
+              aura:id="deiEditForm"
+              recordId="{!v.contact.Id}"
+              objectApiName="Contact"
+              onerror="{!c.handleError}"
+              onload="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.closeModal}"
+            >
+              <div class="slds-grid slds-wrap">
+                <aura:if isTrue="{!v.contact.IsNA__c}">
+                  <h2 class="demographics__title demographics__title-form slds-col slds-size_1-of-1">
+                    {!v.personalTitle}
+                  </h2>
+                  <p class="demographics__desc slds-col slds-size_1-of-1">{!v.personalHelp}</p>
+                  <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Birthdate" />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" 
+                    fieldName="COB__c"
+                    style="display: none;"
+                  />
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                    <c:CustomLookup
+                      objectAPIName="Country__c"
+                      IconName="custom:custom26"
+                      selectedRecord="{!v.selectedLookUpRecord}"
+                      label="Country of Origin/Birth"
+                      placeholder="Search Countries..."
+                    />
+                  </div>
+                  <div class="slds-col slds-size_1-of-1" style="height: 20px;"></div>
+                  <h2 class="demographics__title demographics__title-form slds-col slds-size_1-of-1">
+                    {!v.genderTitle}
+                  </h2>
+                  <p class="demographics__desc slds-col slds-size_1-of-1">{!v.genderHelp}</p>
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Gender_Expanded__c"
+                    onchange="{!c.handleGenderSelf}"
+                    aura:id="gender"
+                  />
+                  <lightning:inputField
+                    class="{! join(' ',
+                      'demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12',
+                      v.contact.Gender_Expanded__c != 'Prefer to Self-Describe' ? 'hide' : ''
+                    )}"
+                    required="{!v.contact.Gender_Expanded__c == 'Prefer to Self-Describe'}"
+                    fieldName="Gender_Self_Describe__c"
+                    aura:id="genderSelf"
+                  />
+                  <div class="slds-col slds-size_1-of-1" style="height: 20px;"></div>
+                  <h2 class="demographics__title demographics__title-form slds-col slds-size_1-of-1">
+                    {!v.pronounsTitle}
+                  </h2>
+                  <p class="demographics__desc slds-col slds-size_1-of-1">{!v.pronounsHelp}</p>
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Pronouns__c"
+                    onchange="{!c.handlePronounsSelf}"
+                    aura:id="pronouns"
+                  />
+                  <lightning:inputField
+                    class="{! join(' ',
+                      'demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12',
+                      v.contact.Pronouns__c != 'Prefer to Self-Describe' ? 'hide' : ''
+                    )}"
+                    required="{!v.contact.Pronouns__c == 'Prefer to Self-Describe'}"
+                    fieldName="Pronouns_Self_Describe__c"
+                    aura:id="pronounsSelf"
+                  />
+                  <div class="slds-col slds-size_1-of-1" style="height: 20px;"></div>
+                  <h2 class="demographics__title demographics__title-form slds-col slds-size_1-of-1">
+                    {!v.orientationTitle}
+                  </h2>
+                  <p class="demographics__desc slds-col slds-size_1-of-1">{!v.orientationHelp}</p>
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Orientation__c"
+                    onchange="{!c.handleOrientationSelf}"
+                    aura:id="orientation"
+                  />
+                  <lightning:inputField
+                    class="{! join(' ',
+                      'demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12',
+                      v.contact.Orientation__c != 'Prefer to Self-Describe' ? 'hide' : ''
+                    )}"
+                    required="{!v.contact.Orientation__c == 'Prefer to Self-Describe'}"
+                    fieldName="Orientation_Self_Describe__c"
+                    aura:id="orientationSelf"
+                  />
+                  <div class="slds-col slds-size_1-of-1" style="height: 20px;"></div>
+                  <h2 class="demographics__title demographics__title-form slds-col slds-size_1-of-1">
+                    {!v.disabilityTitle}
+                  </h2>
+                  <p class="demographics__desc slds-col slds-size_1-of-1">{!v.disabilityHelp}</p>
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Disability__c"
+                    onchange="{!c.handleDisabilitySelf}"
+                    aura:id="disability"
+                  />
+                  <lightning:inputField
+                    class="{! join(' ',
+                      'demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12',
+                      v.contact.Disability__c != 'Prefer to Self-Describe' ? 'hide' : ''
+                    )}"
+                    required="{!v.contact.Disability__c == 'Prefer to Self-Describe'}"
+                    fieldName="Disabililty_Self_Describe__c"
+                    aura:id="disabilitySelf"
+                  />
+                  <div class="slds-col slds-size_1-of-1" style="height: 20px;"></div>
+                  <h2 class="demographics__title demographics__title-form slds-col slds-size_1-of-1">
+                    {!v.ethnicityTitle}
+                    <lightning:buttonIcon
+                      alternativeText="View More Info"
+                      ariaLabel="View More Info"
+                      class="demographics__view-more"
+                      iconName="utility:info"
+                      name="View More Info"
+                      onclick="{!c.openEthnicityModal}"
+                      variant="bare"
+                    />
+                  </h2>
+                  <p class="demographics__desc slds-col slds-size_1-of-1">{!v.ethnicityHelp}</p>
+                  <p class="demographics__msg slds-col slds-size_1-of-1">Select All that Apply</p>
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1"
+                    fieldName="Ethnicity__c"
+                    onchange="{!c.handleEthnicitySelf}"
+                    aura:id="ethnicity"
+                  />
+                  <lightning:inputField
+                    class="{! join(' ',
+                      'demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12',
+                      !v.showEthnicitySelf ? 'hidden' : ''
+                    )}"
+                    required="{!v.showEthnicitySelf}"
+                    fieldName="Ethnicity_Self_Identify__c"
+                    aura:id="ethnicitySelf"
+                  />
+                  <aura:set attribute="else">
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Birthdate"
+                  />
+                  <lightning:inputField
+                    class="demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Gender_Expanded__c"
+                    onchange="{!c.handleGenderSelf}"
+                    aura:id="gender"
+                  />
+                  <lightning:inputField
+                    class="{! join(' ',
+                      'demographics__input slds-col slds-size_1-of-1 slds-medium-size_6-of-12',
+                      v.contact.Gender_Expanded__c != 'Prefer to Self-Describe' ? 'hide' : ''
+                    )}"
+                    required="{!v.contact.Gender_Expanded__c == 'Prefer to Self-Describe'}"
+                    fieldName="Gender_Self_Describe__c"
+                    aura:id="genderSelf"
+                  />
+                  </aura:set>
+                </aura:if>
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="demographics__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <lightning:messages />
+              <div class="demographics__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of EDIT Popup FORM -->
+
+  <!-- START of DELETE Popup FORM -->
+  <div class="demographics__modal">
+    <aura:if
+      isTrue="{!v.isConfirmModalOpen}"
+    >
+      <!-- Modal/Popup Box starts here -->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-delete"
+        aria-modal="true"
+        aria-describedby="modal-content-id-delete"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+         <!-- Modal/Popup Box Header Starts here -->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-confirm"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Confirm Opt Out
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeConfirmModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-confirm"
+          >
+            <p class="demographics__confirm-msg">
+              {!v.msg}
+            </p>
+            <aura:if isTrue="{!v.loading}">
+              <div class="demographics__spinner">
+                <lightning:spinner
+                  alternativeText="Loading"
+                  size="small"
+                  variant="brand"
+                />
+              </div>
+            </aura:if>
+            <div
+              class="demographics__actions slds-m-top_medium"
+            >
+              <lightning:button
+                variant="neutral"
+                label="Cancel"
+                title="Cancel"
+                onclick="{! c.closeConfirmModal }"
+              />
+              <lightning:button
+                variant="brand"
+                name="confirm"
+                label="Confirm"
+                title="Confirm"
+                onclick="{! c.handleConfirm }"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of DELETE Popup FORM -->
+
+  <!-- START of Ethnicity Popup FORM -->
+  <div class="demographics__modal--ethnicities">
+    <aura:if
+      isTrue="{!v.isEthnicityModalOpen}"
+    >
+      <!-- Modal/Popup Box starts here -->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-delete"
+        aria-modal="true"
+        aria-describedby="modal-content-id-delete"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here -->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-confirm"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Ethnicities
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeEthnicityModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-confirm"
+          >
+            <ul class="demographics__ethnicities">
+              <li>
+                <strong>African or Black or African American</strong> - A person having origins in any of the black racial groups of Africa.
+              </li>
+              <li>
+                <strong>Asian</strong> - A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.
+              </li>
+              <li>
+                <strong>Hispanic or Latinx</strong> - A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin, regardless of race.
+              </li>
+              <li>
+                <strong>White</strong> - A person having origins in any of the original peoples of Europe.
+              </li>
+              <li>
+                <strong>Indigenous Persons</strong> - A person who lives within, or is attached to, geographically distinct ancestral territories, and who identify themselves as being part of a distinct cultural group, descended from groups present in the area before modern states were created and current borders defined.
+              </li>
+              <li>
+                <strong>Native Hawaiian or Other Pacific Islander</strong> - A person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands.
+              </li>
+            </ul>  
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open ethnicities"></div>
+    </aura:if>
+  </div>
+  <!-- END of Ethnicity Popup FORM -->
+</div>
+</aura:component>

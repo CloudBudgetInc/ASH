@@ -1,0 +1,139 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomContentDocumentController"
+>
+<aura:attribute name="fileType" type="List" default="['.pdf', '.doc', '.docx', '.txt']" />
+<aura:attribute name="multiple" type="Boolean" default="true" />
+<aura:attribute name="recordId" type="String" />
+<aura:attribute name="files" type="Map[]" />
+<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+<aura:attribute name="editVersionId" type="String" />
+<aura:attribute name="editContentDocumentId" type="String" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="content-docs">
+  <aura:if isTrue="{!empty(v.files)}">
+    <div class="content-docs__empty">
+      <p>
+        There are no files to display.
+      </p>
+  
+      <!-- Upload Button -->
+      <lightning:fileUpload
+        class="content-docs__btn--empty"
+        label="Upload Document"
+        name="fileUploader"
+        multiple="{!v.multiple}"
+        accept="{!v.fileType}"
+        recordId="{!v.recordId}"
+        onuploadfinished="{!c.handleUploadFinished}"
+      />
+    </div>
+    <aura:set attribute="else">
+      <div class="content-docs__container">
+        <!-- Upload Button -->
+        <lightning:fileUpload
+          class="content-docs__btn"
+          label="Upload Document"
+          name="fileUploader"
+          multiple="true"
+          accept="{!v.fileType}"
+          recordId="{!v.recordId}"
+          onuploadfinished="{!c.handleUploadFinished}"
+        />
+        <ul class="content-docs__list">
+          <aura:iteration items="{!v.files}" var="file">
+            <li class="content-docs__list-item">
+              <lightning:fileCard fileId="{!file.Id}" description="{!file.CardDescription}"/>
+            </li>
+          </aura:iteration>
+        </ul>
+      </div>
+    </aura:set>
+  </aura:if>
+
+  <!-- START of EDIT Popup FORM -->
+  <div class="content-docs__modal">
+    <aura:if isTrue="{!v.isModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-edit"
+        aria-modal="true"
+        aria-describedby="modal-content-id-edit"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-edit"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Edit Document
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-edit"
+          >
+            <lightning:recordEditForm
+              recordId="{!v.editVersionId}"
+              objectApiName="ContentVersion"
+              onload="{!c.setLoadingFalse}"
+              onerror="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.closeModal}"
+            >
+              <lightning:messages />
+              <div class="slds-grid slds-wrap">
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-hide"
+                  fieldName="ContentDocumentId"
+                  disabled="true"
+                  value="{!v.editContentDocumentId}"
+                />
+                <lightning:inputField class="slds-col slds-size_1-of-1" fieldName="Title" />
+                <lightning:inputField class="slds-col slds-size_1-of-1" fieldName="Type__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1" fieldName="Description" />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="content-docs__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <div class="content-docs__actions slds-m-top_medium">
+                <lightning:button
+                variant="neutral"
+                label="Cancel"
+                title="Cancel"
+                  onclick="{! c.closeModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of EDIT Popup FORM -->
+</div>
+</aura:component>

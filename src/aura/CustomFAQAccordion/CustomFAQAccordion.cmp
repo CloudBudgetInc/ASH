@@ -1,0 +1,69 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ArticleController"
+>
+  <aura:attribute name="topic" type="String" />
+  <aura:attribute name="faqs" type="Knowledge__kav[]" />
+  <aura:attribute name="title" type="String" />
+  <aura:attribute name="showTitle" type="String" default="true" />
+  <aura:attribute name="borderColor" type="String" default="white" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  <aura:attribute name="showLargeTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showLargeBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'custom-faq component-container--padding-horizontal',
+      v.showTopPadding ? 'custom-faq--padding-top' : '',
+      v.showBottomPadding ? 'custom-faq--padding-bottom' : '',
+      v.showLargeTopPadding ? 'custom-faq--large-padding-top' : '',
+      v.showLargeBottomPadding ? 'custom-faq--large-padding-bottom' : ''
+    )}"
+  >
+    <aura:if isTrue="{!v.showTitle}">
+      <p class="custom-faq__title">
+        {!v.title}
+      </p>
+    </aura:if>
+    <aura:iteration items="{!v.faqs}" var="faq" indexVar="index">
+      <div
+        class="{! join(' ',
+          'custom-faq__accordionSectionHeader',
+          v.borderColor == 'white' ? 'custom-faq__accordionSectionHeader--white' : 'custom-faq__accordionSectionHeader--blue'
+        )}"
+        id="{!'custom-faq-accordion-container-' + index + '-' + v.title}"
+        onclick="{!c.handleAccordion}"
+      >
+        <span
+          class="custom-faq__label"
+          id="{!'custom-faq-accordion-label-' + index + '-' + v.title}"
+          onclick="{!c.handleAccordion}"
+          data-label="{!faq.Question__c}"
+        >
+          {!faq.Question__c}
+        </span>
+        <span
+          class="custom-faq__label custom-faq__icon-plus"
+          id="{!'custom-faq-accordion-plus-' + index + '-' + v.title}"
+          onclick="{!c.handleAccordion}"
+          >+</span
+        >
+        <span
+          class="custom-faq__label custom-faq__icon-minus"
+          id="{!'custom-faq-accordion-minus-' + index + '-' + v.title}"
+          onclick="{!c.handleAccordion}"
+          >X</span
+        >
+      </div>
+      <div
+        class="custom-faq__accordionSection"
+        id="{!'custom-faq-accordion-' + index + '-section-' + v.title}"
+      >
+        <lightning:formattedRichText value="{!faq.Answer__c}" />
+      </div>
+    </aura:iteration>
+  </div>
+</aura:component>

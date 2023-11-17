@@ -1,0 +1,397 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CurrentUserController"
+>
+<aura:attribute name="contact" type="Contact" />
+<aura:attribute name="isMember" type="Boolean" default="false" />
+<aura:attribute name="placeholder" type="String" default="N/A" />
+<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="contact-profile">
+  <div class="contact-profile__header">
+    <lightning:button
+      class="contact-profile__btn"
+      variant="neutral"
+      label="Edit Contact"
+      title="Edit Contact"
+      onclick="{! c.openModal }"
+    />
+  </div>
+  <aura:if isTrue="{!v.isMember}">
+    <div class="slds-form-element contact-profile__member-directory">
+      <div class="slds-form-element__control">
+        <div class="slds-checkbox">
+          <input
+            type="checkbox"
+            name="options"
+            id="Member_Directory__c"
+            value="Member_Directory__c"
+            checked="{!v.contact.Member_Directory__c}"
+            onchange="{!c.handleMemberUpdate}"
+          />
+          <label class="slds-checkbox__label" for="Member_Directory__c">
+            <span class="slds-checkbox_faux"></span>
+            <span class="slds-form-element__label">I'd like my information to be included in the Member Directory</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </aura:if>
+  <h2 class="contact-profile__section-title">Work Info</h2>
+  <section class="contact-profile__details">
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Primary Institutional Affiliation</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.Primary_Institutional_Affiliation__c}">
+          {!v.contact.Primary_Institutional_Affiliation__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Specialty</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.Specialty__c}">
+          {!v.contact.Specialty__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Primary Subspecialty</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.Primary_Subspecialty__c}">
+          {!v.contact.Primary_Subspecialty__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Primary Subspecialty Area</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.Primary_Subspecialty_Area__c}">
+          {!v.contact.Primary_Subspecialty_Area__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Academic Appointment</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.Academic_Appointment__c}">
+          {!v.contact.Academic_Appointment__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+  </section>
+  <h2 class="contact-profile__section-title">Contact Info</h2>
+  <section class="contact-profile__details">  
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Preferred Phone</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.npe01__PreferredPhone__c}">
+          {!v.contact.npe01__PreferredPhone__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Work Phone</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.npe01__WorkPhone__c}">
+          <lightning:formattedPhone value="{!v.contact.npe01__WorkPhone__c}" />
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Home Phone</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.HomePhone}">
+          <lightning:formattedPhone value="{!v.contact.HomePhone}" />
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Mobile Phone</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.MobilePhone}">
+          <lightning:formattedPhone value="{!v.contact.MobilePhone}" />
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Fax</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.Fax}">
+          <lightning:formattedPhone value="{!v.contact.Fax}" />
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">FAH Phone</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.OtherPhone}">
+          <lightning:formattedPhone value="{!v.contact.OtherPhone}" />
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field"></p>
+    <div class="contact-profile__separator" />
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Preferred Email</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.npe01__Preferred_Email__c}">
+          {!v.contact.npe01__Preferred_Email__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Work Email</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.npe01__WorkEmail__c}">
+          {!v.contact.npe01__WorkEmail__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Personal Email</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.npe01__HomeEmail__c}">
+          {!v.contact.npe01__HomeEmail__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+    <p class="contact-profile__field">
+      <span class="contact-profile__field-label">Alternate Email</span>
+      <span class="contact-profile__field-item">
+        <aura:if isTrue="{!v.contact.npe01__AlternateEmail__c}">
+          {!v.contact.npe01__AlternateEmail__c}
+          <aura:set attribute="else">
+            <span class="contact-profile__placeholder">
+              {!v.placeholder}
+            </span>
+          </aura:set>
+        </aura:if>
+      </span>
+    </p>
+  </section>
+  <h2 class="contact-profile__section-title">Approximate Effort</h2>
+  <p class="contact-profile__approx-text">The approximate effort should add up to 100%.</p>
+  <section class="contact-profile__details">
+    <aura:if isTrue="{!v.contact.Effort_Administration__c ||
+      v.contact.Effort_Patient_Care__c ||
+      v.contact.Effort_Research__c ||
+      v.contact.Effort_Teaching__c ||
+      v.contact.Effort_Other__c 
+      }">
+      <aura:set attribute="else">
+        <p>No approximate effort to show.</p>
+      </aura:set>
+      <figure>
+        <div class="graphic">
+          <div class="row">
+            <div class="chart">
+              <span class="block" title="Administration">
+                 <span class="value">{!v.contact.Effort_Administration__c}%</span>
+              </span>
+              <span class="block" title="Patient Care">
+                 <span class="value">{!v.contact.Effort_Patient_Care__c}%</span>
+              </span>
+              <span class="block" title="Research">
+                 <span class="value">{!v.contact.Effort_Research__c}%</span>
+              </span>
+              <span class="block" title="Teaching">
+                 <span class="value">{!v.contact.Effort_Teaching__c}%</span>
+              </span>
+              <span class="block" title="Other">
+                  <span class="value">{!v.contact.Effort_Other__c}%</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="x-axis">
+          <h3>Legend</h3>
+          <ul class="legend">
+            <li>Administration</li>
+            <li>Patient Care</li>
+            <li>Research</li>
+            <li>Teaching</li>
+            <li>Other</li>
+          </ul>
+        </div>
+      </figure>
+    </aura:if>
+  </section>
+    
+  <!-- START of EDIT Popup FORM -->
+  <div>
+    <aura:if isTrue="{!v.isModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-edit"
+        aria-modal="true"
+        aria-describedby="modal-content-id-edit"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-edit"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Edit Contact Details
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-edit"
+          >
+            <lightning:recordEditForm
+              recordId="{!v.contact.Id}"
+              objectApiName="Contact"
+              onerror="{!c.handleError}"
+              onload="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.closeModal}"
+            >
+              <!-- <lightning:messages /> -->
+              <div class="slds-grid slds-wrap">
+                <h2 class="contact-profile__title contact-profile__title--form slds-col slds-size_1-of-1">Work Info</h2>
+                <lightning:inputField class="slds-col slds-size_1-of-1" fieldName="Credential__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Primary_Institutional_Affiliation__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Specialty__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Primary_Subspecialty__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Primary_Subspecialty_Area__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Academic_Appointment__c" />
+
+                <h2 class="contact-profile__title contact-profile__title--form slds-col slds-size_1-of-1">Contact Info</h2>
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="npe01__PreferredPhone__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="npe01__WorkPhone__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="HomePhone" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="MobilePhone" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="Fax" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="OtherPhone" />
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12"></div>
+                <div class="slds-col slds-size_1-of-1" style="height: 20px;"></div>
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="npe01__Preferred_Email__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="npe01__WorkEmail__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="npe01__HomeEmail__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12" fieldName="npe01__AlternateEmail__c" />
+
+                <h2 class="contact-profile__title contact-profile__title--form slds-col slds-size_1-of-1">Approximate Effort</h2>
+                <p class="contact-profile__form-note slds-col slds-size_1-of-1">All of the fields below must add up to 100%.</p>
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Effort_Administration__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Effort_Patient_Care__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Effort_Research__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Effort_Teaching__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-large-size_6-of-12" fieldName="Effort_Other__c" />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="contact-profile__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <lightning:messages />
+              <div class="contact-profile__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of EDIT Popup FORM -->
+</div>
+</aura:component>

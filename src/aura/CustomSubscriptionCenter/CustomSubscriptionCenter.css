@@ -1,0 +1,547 @@
+.THIS.subscription-center {
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.THIS p {
+  font-size: 16px;
+  margin: 16px 0;
+}
+
+.THIS .intro__banner {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.THIS .intro__name {
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+.THIS .intro__updated {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.THIS .intro__updated-date {
+  font-size: 18px;
+  padding-right: 10px;
+}
+
+.THIS .intro__updated-time {
+  font-size: 18px;
+}
+
+.THIS .intro__updated-time > strong,
+.THIS .intro__updated-date > strong {
+  padding-right: 5px;
+}
+
+.THIS .intro__link {
+  color: #010f53;
+  font-size: 14px;
+  font-style: italic;
+  padding-left: 10px;
+  text-decoration: none;
+}
+
+.THIS .intro__link:hover,
+.THIS .intro__link:focus {
+  text-decoration: underline;
+}
+
+.THIS .intro__welcome {
+  font-size: 28px;
+}
+
+.THIS .bottom-border {
+  border-bottom: 1px solid #ccc;
+}
+
+.THIS .intro__bottom {
+  padding: 0 0 30px;
+}
+
+.THIS .intro__email {
+  font-size: 18px;
+  padding: 30px 0;
+}
+
+.THIS .intro__email .slds-form {
+  align-items: flex-start;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.THIS .intro__email-input {
+  width: 100%;
+}
+
+.THIS .intro__email-input input {
+  padding: 10px;
+}
+
+.THIS .intro__email-btn {
+  margin-left: 0;
+  margin-top: 10px;
+}
+
+.THIS .intro__description {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+@media only screen and (min-width: 768px) {
+  .THIS .intro__email .slds-form {
+    align-items: center;
+    flex-flow: row nowrap;
+  }
+
+  .THIS .intro__email-input {
+    width: 400px;
+  }
+
+  .THIS .intro__email-btn {
+    margin-left: 10px;
+    margin-top: 0;
+  }
+
+  .THIS .intro__email-msg {
+    margin-left: 20px;
+  }
+
+  .THIS .intro__banner {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding: 0 0 30px;
+    width: 100%;
+  }
+
+  .THIS .intro__name {
+    padding-bottom: 0;
+  }
+
+  .THIS .intro__updated {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  .THIS .intro__updated-date::after {
+    border-right: 2px solid #fff;
+    content: '';
+    padding-left: 10px;
+  }
+}
+
+.THIS .main {
+  padding: 0 0 30px;
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.THIS .bottom-border {
+  border-bottom: 2px solid #ccc;
+}
+
+.THIS .bottom-border.margin {
+  margin: 30px 0;
+}
+
+.THIS .underline {
+  text-decoration: underline;
+}
+
+.THIS .center {
+  text-align: center;
+}
+
+.THIS .italic {
+  font-style: italic;
+}
+
+.THIS .upper {
+  text-transform: uppercase;
+}
+
+.THIS .red {
+  color: #B7000F !important;
+}
+
+.THIS .green {
+  color: green !important;
+}
+
+.THIS .box-section {
+  background-color: rgba(224, 224, 224, .25);
+  border: 1px solid #ccc;
+  margin-top: 50px;
+  padding: 30px;
+}
+
+.THIS .box-section__container {
+  padding: 30px;
+}
+
+.THIS .box-section__title.red {
+  font-size: 28px;
+}
+
+.THIS .box-section__title {
+  font-size: 28px;
+}
+
+.THIS .hours {
+  padding-right: 5px;
+}
+
+.THIS .hours::after {
+  border-right: 1px solid black;
+  content: '';
+  padding-left: 5px;
+}
+
+.THIS .submit {
+  align-items: flex-start;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 14px 0 0;
+}
+
+.THIS .submit > p {
+  margin: 0;
+  padding-top: 20px;
+}
+
+.THIS button {
+  border: none;
+  border-radius: 5px;
+  background: #B7000F;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 20px;
+  text-transform: uppercase;
+}
+
+.THIS button:hover,
+.THIS button:focus {
+  background-color: #fd1e19 !important;
+  border-color: #fd1e19 !important;
+  border-bottom-color: #b7000f !important;
+  color: #fff;
+  cursor: pointer !important;
+}
+
+.THIS .form__group {
+  padding: 20px 0;
+}
+
+/* Customize the label (the container) */
+.THIS .form__label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 30px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.THIS .form__label:last-of-type {
+  margin-top: 20px;
+}
+
+/* Hide the browser's default checkbox */
+.THIS .form__label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.THIS .form__checkmark {
+  border: 2px solid #93d8ff;
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.THIS .form__checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.THIS .form__label input:checked ~ .form__checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.THIS .form__label .form__checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #010f53;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Create a custom radio button */
+.THIS .form__radio {
+  border: 2px solid #e7eaee;
+  position: absolute;
+  left: 0;
+  height: 23px;
+  width: 23px;
+  border-radius: 50%;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.THIS .form__radio:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.THIS .form__label input:checked ~ .form__radio {
+  border: 2px solid #93d8ff;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.THIS .form__label input:checked ~ .form__radio:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.THIS .form__label .form__radio:after {
+  background: #010f53;
+  border-radius: 50%;
+  height: 10px;
+  left: 4px;
+  top: 4px;
+  width: 10px;
+}
+
+.THIS .form__disclaimer a {
+  color: #010f53;
+  font-style: italic;
+  text-decoration: none;
+}
+
+.THIS .form__disclaimer a:hover,
+.THIS .form__disclaimer a:focus {
+  text-decoration: underline;
+}
+
+.THIS .toggle-switch .toggle {
+  position: relative;
+  /*padding: 6px 0 0;*/
+  text-transform: none;
+}
+
+.THIS .toggle-switch .toggle div {
+  color: #000;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.THIS .toggle-switch .toggle input {
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
+}
+
+.THIS .toggle-switch .toggle input {
+  background: #fff;
+  border: 2px solid #e7eaee;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #73849a;
+  display: block;
+  font-size: 14px;
+  padding: 17px 25px;
+  outline: none;
+  width: 100%;
+}
+
+.THIS .toggle-switch .toggle input:checked~div,
+.THIS .toggle-switch .toggle input:disabled~div {
+  color: #aeb7ba !important;
+}
+
+.THIS .toggle-switch .toggle input~div {
+  padding: 0 0 0 65px;
+}
+
+.THIS .toggle-switch .toggle input~div:hover {
+  cursor: pointer;
+}
+
+.THIS .toggle-switch .toggle input:disabled~div:hover {
+  cursor: not-allowed;
+}
+
+.THIS .toggle-switch .toggle input~div:hover::before {
+  border-color: #93d8ff;
+}
+
+.THIS .toggle-switch .toggle input:disabled~div:hover::before {
+  border-color: #aeb7ba;
+}
+
+.THIS .toggle-switch .toggle input ~ div:before {
+  border: 2px solid #cfd6d9;
+  border-radius: 20px;
+  height: 23px;
+  left: 0;
+  top: -2px;
+  width: 46px;
+}
+
+.THIS .toggle-switch .toggle input:checked ~ div:after {
+  -webkit-transform: translateX(23px);
+  transform: translateX(23px);
+}
+
+.THIS .toggle-switch .toggle input ~ div:after {
+  background: #010f53;
+  border-radius: 50%;
+  height: 13px;
+  left: 5px;
+  top: 3px;
+  width: 13px;
+}
+
+.THIS .toggle-switch .toggle input:disabled ~ div:after {
+  background: #aeb7ba;
+}
+
+.THIS .toggle-switch .toggle input ~ div:before, .THIS .toggle-switch .toggle input ~ div:after {
+  content: "";
+  display: block;
+  position: absolute;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+
+.THIS .subscriptions {
+  border-bottom: 1px solid #ccc;
+  margin: 0 0 30px;
+}
+
+.THIS .subscriptions:last-of-type,
+.THIS .subscriptions--newsletter {
+  border-bottom: none;
+  margin: 0;
+}
+
+.THIS .subscriptions__label {
+  color: #010f53;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.THIS .subscriptions__toggles {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.THIS .subscriptions__toggles .toggle-switch {
+  padding: 0 0 30px;
+}
+
+.THIS .bottom-section {
+  padding: 0 30px 30px;
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.THIS .contact {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 30px;
+  margin: 30px 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .THIS .main {
+    padding: 0 30px 30px;
+  }
+  
+  .THIS .box-section__title.red {
+    font-size: 36px;
+  }
+
+  .THIS .box-section__title {
+    font-size: 36px;
+  }
+  
+  .THIS .form--sub {
+    padding: 0 30px;
+  }
+
+  .THIS .form__group {
+    align-items: center;
+    display: flex;
+  }
+  
+  .THIS .form__label:last-of-type {
+    margin-top: 0;
+  }
+  
+  .THIS .subscriptions__toggles {
+    align-items: center;
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
+  
+  .THIS .subscriptions__toggles .toggle-switch {
+    width: 50%;
+  }
+
+  .THIS .submit {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+  
+  .THIS .submit > p {
+    padding-top: 0;
+    padding-left: 20px;
+  }
+
+  .THIS .contact {
+    border-bottom: none;
+    margin: 0;
+    padding-top: 20px;
+  }
+
+  .THIS .contact::after {
+    border-bottom: 1px solid #ccc;
+    content: '';
+    display: block;
+    margin: 30px auto 0;
+    width: 33%;
+  }
+}

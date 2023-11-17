@@ -1,0 +1,61 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="showHeadline" type="Boolean" default="false" />
+  <aura:attribute name="showLogo" type="Boolean" default="false" />
+  <aura:attribute name="message" type="String" />
+  <aura:attribute
+    name="messageField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="backgroundColor" type="String" default="#7095aa" />
+  <aura:attribute name="color" type="String" default="#fff" />
+  <aura:attribute name="showBanner" type="Boolean" default="true" />
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <aura:if isTrue="{!v.showBanner}">
+    <div
+      class="{! join(' ',
+        'alertBanner',
+        v.color == '#000' ? 'alertBanner--dark' : 'alertBanner--light'
+      )}"
+      aura:id="alertBanner"
+      style="{!'background-color:' + v.backgroundColor + '; color:' + v.color + ';'}"
+    >
+      <button class="alertBanner__close" onclick="{!c.handleClose}">
+        <img
+          class="alertBanner__close-icon"
+          src="{!$ContentAsset.Hamburger_Close_Icon}"
+          alt="banner_close_icon"
+        />
+      </button>
+      <div class="alertBanner__content">
+        <aura:if isTrue="{!v.showLogo}">
+          <img
+            class="alertBanner__logo"
+            src="{!$ContentAsset.ashrc_logo_mark_svg}"
+            alt="ashrc-logo"
+          />
+        </aura:if>
+        <div class="alertBanner__text">
+          <aura:if isTrue="{!v.showHeadline}">
+            <h3 class="alertBanner__headline">
+              <lightning:formattedRichText
+                class="h3"
+                value="{!v.record.contentNodes.Headline.value}"
+              />
+            </h3>
+          </aura:if>
+          <div class="alertBanner__message p">
+            <lightning:formattedRichText value="{!v.message}" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </aura:if>
+</aura:component>

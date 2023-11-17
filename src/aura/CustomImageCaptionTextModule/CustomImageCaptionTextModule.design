@@ -1,0 +1,93 @@
+<design:component label="Text and Image with Caption">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="imageField"
+    label="Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name of the image to display."
+  ></design:attribute>
+  <design:attribute
+    name="topDescriptionField"
+    label="Top Description Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for a description to display under the headline."
+  ></design:attribute>
+  <design:attribute
+    name="rightDescriptionField"
+    label="Right Description Field"
+    datasource="Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for a description to display to the right of the image."
+  ></design:attribute>
+  <design:attribute
+    name="textOnImageField"
+    label="Text on Image Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for text to display on the image."
+  ></design:attribute>
+  <design:attribute
+    name="textUnderImageField"
+    label="Text Under Image Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for text to display under the image."
+  ></design:attribute>
+  <design:attribute
+    name="linkColor"
+    label="Link Color"
+    datasource="#7095aa, #a30014"
+    description="Select a color for links in the content."
+  ></design:attribute>
+  <design:attribute
+    name="showTopButton"
+    label="Show Top Button"
+    description="Check to display button above the featured image."
+  ></design:attribute>
+  <design:attribute
+    name="openTopTab"
+    label="Open top button link in new tab"
+    description="Check to open the top button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="topButtonLabel"
+    label="Top Button Label"
+    description="Enter a label for the top button."
+  ></design:attribute>
+  <design:attribute
+    name="topButtonLink"
+    label="Top Button Link"
+    description="Enter a label for the top button."
+  ></design:attribute>
+  <design:attribute
+    name="showRightButton"
+    label="Show Right Button"
+    description="Check to display button in the right column at the end of the text."
+  ></design:attribute>
+  <design:attribute
+    name="rightButtonLabel"
+    label="Right Button Label"
+    description="Enter a label for the right button."
+  ></design:attribute>
+  <design:attribute
+    name="rightButtonLink"
+    label="Right Button Link"
+    description="Enter a link for the right button."
+  ></design:attribute>
+  <design:attribute
+    name="openRightTab"
+    label="Open right button link in new tab"
+    description="Check to open the right button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

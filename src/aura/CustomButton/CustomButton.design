@@ -1,0 +1,30 @@
+<design:component label="Custom Button">
+  <design:attribute
+    name="style"
+    label="Style"
+    datasource="brand, outline-brand, neutral, destructive, text-destructive, success"
+    description="Select a button style"
+  />
+  <design:attribute
+    name="size"
+    label="Size"
+    datasource="large, medium, small"
+  />
+  <design:attribute
+    name="align"
+    label="Alignment"
+    datasource="left, center, right"
+  />
+  <design:attribute
+    name="label"
+    label="Label"
+  />
+  <design:attribute
+    name="link"
+    label="Link Url"
+  />
+  <design:attribute
+    name="newTab"
+    label="Open link in new tab"
+  />
+</design:component>

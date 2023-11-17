@@ -1,0 +1,40 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute
+    name="baseLabel"
+    required="true"
+    type="String"
+    default="Home"
+  />
+  <aura:attribute name="basePath" required="true" type="String" default="/" />
+  <aura:attribute name="firstChildLabel" type="String" />
+  <aura:attribute name="firstChildPath" type="String" />
+  <aura:attribute name="secondChildLabel" type="String" />
+  <aura:attribute name="secondChildPath" type="String" />
+  <aura:attribute name="thirdChildLabel" type="String" />
+
+  <lightning:breadcrumbs class="customBreadcrumbs">
+    <lightning:breadcrumb
+      class="customBreadcrumb customBreadcrumb--link"
+      label="{!v.baseLabel}"
+      href="{!v.basePath}"
+    />
+    <lightning:breadcrumb
+      class="{!empty(v.secondChildLabel) ? 'customBreadcrumb' : 'customBreadcrumb customBreadcrumb--link'}"
+      label="{!v.firstChildLabel}"
+      href="{!v.firstChildPath}"
+    />
+    <aura:if isTrue="{! !empty(v.secondChildLabel)}">
+      <lightning:breadcrumb
+        class="{!empty(v.thirdChildLabel) ? 'customBreadcrumb' : 'customBreadcrumb customBreadcrumb--link'}"
+        label="{!v.secondChildLabel}"
+        href="{!v.secondChildPath}"
+      />
+    </aura:if>
+    <aura:if isTrue="{! !empty(v.thirdChildLabel)}">
+      <lightning:breadcrumb
+        class="customBreadcrumb"
+        label="{!v.thirdChildLabel}"
+      />
+    </aura:if>
+  </lightning:breadcrumbs>
+</aura:component>

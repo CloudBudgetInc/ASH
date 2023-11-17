@@ -1,0 +1,55 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute name="headline1Label" type="String" />
+  <aura:attribute name="headline1Link" type="String" />
+  <aura:attribute name="headline1AnchorId" type="String" />
+  <aura:attribute name="headline2Label" type="String" />
+  <aura:attribute name="headline2Link" type="String" />
+  <aura:attribute name="headline2AnchorId" type="String" />
+  <aura:attribute name="headline3Label" type="String" />
+  <aura:attribute name="headline3Link" type="String" />
+  <aura:attribute name="headline3AnchorId" type="String" />
+  <aura:attribute name="headline4Label" type="String" />
+  <aura:attribute name="headline4Link" type="String" />
+  <aura:attribute name="headline4AnchorId" type="String" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="true" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+   
+  <h2
+    class="{! join(' ',
+      'headline-links component-container--padding-horizontal',
+      v.showTopPadding ? 'headline-links--padding-top' : '',
+      v.showBottomPadding ? 'headline-links--padding-bottom' : ''
+    )}"
+  >
+    <aura:if isTrue="{!v.headline1AnchorId}">
+      <a class="headline-link" id="headline-link-1" href="javascript:void(0)" onclick="{!c.handleAnchor}">{!v.headline1Label}</a>
+      <aura:set attribute="else">
+        <a class="headline-link" id="headline-link-1" href="{!v.headline1Link}">{!v.headline1Label}</a>
+      </aura:set>
+    </aura:if>
+    <aura:if isTrue="{!v.headline2Label}">
+      <aura:if isTrue="{!v.headline2AnchorId}">
+      | <a class="headline-link" id="headline-link-2" href="javascript:void(0)" onclick="{!c.handleAnchor}">{!v.headline2Label}</a>
+        <aura:set attribute="else">
+          | <a class="headline-link" id="headline-link-2" href="{!v.headline2Link}">{!v.headline2Label}</a>
+        </aura:set>
+      </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.headline3Label}">
+      <aura:if isTrue="{!v.headline3AnchorId}">
+        | <a class="headline-link" id="headline-link-3" href="javascript:void(0)" onclick="{!c.handleAnchor}">{!v.headline3Label}</a>
+        <aura:set attribute="else">
+        | <a class="headline-link" id="headline-link-3" href="{!v.headline3Link}">{!v.headline3Label}</a>
+       </aura:set>
+     </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!v.headline4Label}">
+      <aura:if isTrue="{!v.headline4AnchorId}">
+        | <a class="headline-link" id="headline-link-4" href="javascript:void(0)" onclick="{!c.handleAnchor}">{!v.headline4Label}</a>
+        <aura:set attribute="else">
+        | <a class="headline-link" id="headline-link-4" href="{!v.headline4Link}">{!v.headline4Label}</a>
+       </aura:set>
+     </aura:if>
+    </aura:if>
+  </h2>
+</aura:component>

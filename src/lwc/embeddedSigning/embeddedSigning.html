@@ -1,0 +1,16 @@
+<template>
+    <template if:true={signed}>
+        <p>Current Document Status: {vcocstatus}</p>
+        <p>Click on the Documents tab to view the signed agreement</p>
+    </template>
+    <template if:false={signed}>
+        <template if:false={loaded}>
+            <p if:false={loaded}>Signing the Volunteer Code of Conduct is mandatory for all volunteers. Please click the button below to initiate the signing process.</p>
+            <lightning-button label="Open DocuSign" title="Sign The Code of Conduct" onclick={handleClick}></lightning-button>
+        </template>
+        <div if:true={loaded} class="spinner">
+        <p>Connecting to Docusign...</p>
+        <lightning-spinner variant="brand" alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+</template>

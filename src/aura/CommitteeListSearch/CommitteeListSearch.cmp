@@ -1,0 +1,44 @@
+<aura:component controller="CommitteeListSearchController">
+    <aura:registerEvent name="committeeListLoaded" type="c:CommitteeListLoaded"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    <aura:attribute name="searchTerm" type="String" default="" />
+    <aura:attribute name="customerClass" type="String" default="" />
+    <aura:attribute name="customerClasses" type="Committee_Customer_Class__mdt[]"/>
+    <aura:attribute name="commStatus" type="boolean" default="false" />
+
+
+    <lightning:card title="Committees"  iconName="standard:account">
+        <div class="slds-form slds-p-around_x-small committee-list-search" style="display: flex; flex-flow: row nowrap; gap: 10px">
+                <div class="committee-list-search__commName">
+                      <lightning:input
+                        label="Committee Name"
+                        value="{!v.searchTerm}"
+                        placeholder="Search by Committee Name"
+                        onchange="{!c.onSearchTermChange}"/>
+                </div>            
+           
+                <div class="committee-list-search__commClass">
+                    <lightning:select                         
+                        name="customerClass" 
+                        label="Customer Class" 
+                        aura:id="customerClass"
+                        onchange="{!c.onCustomerClassChanged}" >
+                        <option value="">All Classes</option>                                     
+                        <aura:iteration items="{!v.customerClasses}" var="class">
+                            <option text="{!class.MasterLabel}" value="{!class.MasterLabel}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+
+                <div class="committee-list-search__commStatus">
+                    <lightning:input                         
+                        label="Only Active"
+                        type="checkbox"
+                        variant="label-stacked"
+                        value="{!v.commStatus}"
+                        onchange="{!c.onStatusChange}"
+                    />
+                </div>
+        </div>
+    </lightning:card>
+</aura:component>

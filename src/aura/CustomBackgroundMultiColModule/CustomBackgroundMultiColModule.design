@@ -1,0 +1,97 @@
+<design:component label="Multi-Column Content with Background">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundImageField"
+    label="Background Image Field"
+    datasource="None, Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name of the background image to display."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingField"
+    label="Subheading Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the subheading to display under the headline."
+  ></design:attribute>
+  <design:attribute
+    name="col1ImageField"
+    label="Column 1 Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in the first column."
+  ></design:attribute>
+  <design:attribute
+    name="col1DescriptionField"
+    label="Column 1 Text Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the first column."
+  ></design:attribute>
+  <design:attribute
+    name="col2ImageField"
+    label="Column 2 Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in the second column."
+  ></design:attribute>
+  <design:attribute
+    name="col2DescriptionField"
+    label="Column 2 Text Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the second column."
+  ></design:attribute>
+  <design:attribute
+    name="col3ImageField"
+    label="Column 3 Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in the third column."
+  ></design:attribute>
+  <design:attribute
+    name="col3DescriptionField"
+    label="Column 3 Text Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the third column."
+  ></design:attribute>
+    <design:attribute
+    name="col4ImageField"
+    label="Column 4 Image Field"
+    datasource="None, Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in a fourth column."
+  ></design:attribute>
+  <design:attribute
+    name="col4DescriptionField"
+    label="Column 4 Text Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the fourth column."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter a label for the button."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColorRight"
+    label="Background color on the right"
+    description="Check to move background color to the right."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

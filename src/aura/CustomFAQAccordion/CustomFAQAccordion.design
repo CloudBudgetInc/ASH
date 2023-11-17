@@ -1,0 +1,32 @@
+<design:component label="Custom FAQ Accordion">
+  <design:attribute
+    name="title"
+    label="FAQ Section Title"
+  ></design:attribute>
+  <design:attribute
+    name="topic"
+    label="Topic"
+    datasource="apex://CustomTopicPickList"
+    description="Choose a topic name to show the corresponding faqs."
+  />
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+  <design:attribute
+    name="showLargeTopPadding"
+    label="Apply Large Top Padding"
+    description="Check to apply large top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showLargeBottomPadding"
+    label="Apply Large Bottom Padding"
+    description="Check to apply large bottom padding."
+  ></design:attribute>
+</design:component>

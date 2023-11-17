@@ -1,0 +1,76 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="showFacebook" default="true" type="Boolean" />
+    <aura:attribute name="showTwitter" default="true" type="Boolean" />
+    <aura:attribute name="showYouTube" default="true" type="Boolean" />
+    <aura:attribute name="showLinkedIn" default="true" type="Boolean" />
+    <aura:attribute name="facebookLink" default="https://www.facebook.com/AmericanSocietyofHematology" type="String" />
+    <aura:attribute name="twitterLink" default="https://twitter.com/ASH_hematology" type="String" />
+    <aura:attribute name="youTubeLink" default="https://www.youtube.com/user/ASHWebmaster/featured" type="String" />
+    <aura:attribute name="linkedInLink" default="https://www.linkedin.com/company/american-society-of-hematology" type="String" />
+    <aura:attribute name="addressTitle" default="Ash Headquarters" type="String" />
+    <aura:attribute name="copyrightYear" default="2020" type="Integer" />
+    <!-- <lightning:navigation aura:id="navService"/> -->
+
+	<footer class="footer">
+        <div class="footer__top">
+            <img class="footer__logo" src="{!$ContentAsset.ash_logo}" alt="ash_logo" />
+            <div class="footer__info">
+                <div class="footer__info-section">
+                    <h4 class="footer__info-heading">{!v.addressTitle}</h4>
+                    <p class="footer__info-text">
+                        2021 L Street NW, Suite 900
+                    </p>
+                    <p class="footer__info-text">
+                        Washington, DC 20036
+                    </p>
+                </div>
+                <div class="footer__info-section">
+                    <h4 class="footer__info-heading">Contact</h4>
+                    <p class="footer__info-text">
+                        Phone: 202-776-0544
+                    </p>
+                    <p class="footer__info-text">
+                        Fax: 202-766-0545
+                    </p>
+                </div>
+            </div>
+            <div class="footer__socialLinks">
+                <aura:if isTrue="{!v.showFacebook}">
+                    <a class="link link__facebook" href="{!v.facebookLink}" target="_blank">
+                        <img src="{!$ContentAsset.icon_facebook_2x}" alt="facebook" />
+                    </a>
+                </aura:if>
+                <aura:if isTrue="{!v.showTwitter}">
+                    <a class="link link__twitter" href="{!v.twitterLink}" target="_blank">
+                        <img src="{!$ContentAsset.icon_twitter_2x}" alt="twitter" />
+                    </a>
+                </aura:if>
+                <aura:if isTrue="{!v.showYouTube}">
+                    <a class="link link__youtube" href="{!v.youTubeLink}" target="_blank">
+                        <img src="{!$ContentAsset.icon_youtube_2x}" alt="youtube" />
+                    </a>
+                </aura:if>
+                <aura:if isTrue="{!v.showLinkedIn}">
+                    <a class="link link__linkedin" href="{!v.linkedInLink}" target="_blank">
+                        <img src="{!$ContentAsset.icon_linkedin_2x}" alt="linkedIn" />
+                    </a>
+                </aura:if>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <p class="footer__copyright">Copyright (c) {!v.copyrightYear} American Society of Hematology</p>
+            <span class="footer__divider"></span>
+            <ul class="footer__links">
+                <li class="footer__link">
+                    <a href="https://www.hematology.org/about/privacy-policy">Privacy Policy</a>
+                </li>
+                <li class="footer__link">
+                    <a href="https://hematology.org/about/careers">Careers</a>
+                </li>
+                <li class="footer__link">
+                    <a href="https://www.hematology.org/contact-us">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+</aura:component>

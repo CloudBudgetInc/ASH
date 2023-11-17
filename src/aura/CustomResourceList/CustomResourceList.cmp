@@ -1,0 +1,59 @@
+<aura:component controller="CustomResourceListController">
+  <!-- Design Attributes -->
+  <aura:attribute name="folderId" type="String" />
+  <aura:attribute name="showDate" type="Boolean" default="true" />
+  <aura:attribute name="showVersion" type="Boolean" default="true" />
+  
+  <!-- API Attributes -->
+  <aura:attribute name="docs" type="Object[]" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="resource-list">
+    <div class="resource-list__container">
+      <aura:if isTrue="{!empty(v.docs)}">
+        <img class="resource-list__icon-empty" src="{!$ContentAsset.time_gear}" alt="gear_icon" />
+        <aura:set attribute="else">
+          <table class="resource-list__table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <aura:if isTrue="{!v.showVersion}">
+                  <th>Version</th>
+                </aura:if>
+                <aura:if isTrue="{!v.showDate}">
+                  <th>Last Updated</th>
+                </aura:if>
+              </tr>
+            </thead>
+            <tbody>
+              <aura:iteration items="{!v.docs}" var="doc">
+                <tr>
+                  <td class="resource-list__col-1">
+                    <a class="resource-list__title" href="{!doc.DistributionPublicUrl}" target="_blank">
+                      <img class="resource-list__icon" src="{!$ContentAsset.doc_icon}" alt="doc_icon" />{!doc.Title}
+                    </a>
+                  </td>
+                  <aura:if isTrue="{!v.showVersion}">
+                    <td class="resource-list__col-2">Version {!doc.VersionNumber}.0</td>
+                  </aura:if>
+                  <aura:if isTrue="{!v.showDate}">
+                    <td class="resource-list__col-3">
+                      <lightning:formattedDateTime
+                        month="2-digit"
+                        day="2-digit"
+                        year="numeric"
+                        timezone="UTC"
+                        value="{!doc.LastModifiedDate}"
+                      />
+                    </td>
+                  </aura:if>
+                </tr>
+              </aura:iteration>
+            </tbody>
+          </table>
+        </aura:set>
+      </aura:if>
+    </div>
+  </div>
+</aura:component>

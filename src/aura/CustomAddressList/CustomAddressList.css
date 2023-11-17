@@ -1,0 +1,143 @@
+.THIS.custom-address {
+  padding: 20px 0 0;
+}
+
+.THIS .custom-address__empty {
+  align-items: center;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  font-size: 16px;
+  width: 100%;
+}
+
+.THIS .custom-address__btn--empty {
+  margin-top: 20px;
+}
+
+.THIS .custom-address__container {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.THIS .custom-address__header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.THIS .custom-address__title {
+  color: #000;
+  font-size: 18px;
+}
+
+.THIS .custom-address__btn--add {
+  align-self: flex-end;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.THIS .custom-address-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* .THIS .custom-address-item {
+  align-items: flex-start;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  font-size: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.THIS .custom-address__btns {
+  display: flex;
+  flex-flow: row nowrap;
+} */
+
+.THIS .custom-address-item {
+  align-items: flex-start;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  flex-flow: column nowrap;
+  font-size: 16px;
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.THIS .custom-address__btns {
+  align-self: flex-end;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.THIS .custom-address__btn {
+  align-self: flex-start;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.THIS .custom-address-item__street {
+  color: #84000b;
+  font-weight: bold;
+}
+
+.THIS .custom-address-item__pills {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.THIS .custom-address-item__pill {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+
+.THIS .custom-address__modal {
+  position: absolute;
+}
+
+.THIS .slds-modal__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.THIS .custom-address__spinner {
+  height: 50px;
+  margin: 0 auto;
+  position: relative;
+  width: 50px;
+}
+
+.THIS .custom-address__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 900px) {
+  .THIS .custom-address-item {
+    width: calc(50% - 20px);
+  }
+
+  .THIS .custom-address-item:nth-of-type(2n) {
+    margin-left: 20px;
+  }
+
+  .THIS .custom-address__btn {
+    margin-bottom: 0;
+    margin-left: 10px;
+  }
+}

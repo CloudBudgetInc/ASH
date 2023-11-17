@@ -1,0 +1,136 @@
+<design:component label="Custom Tile Menu">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="introField"
+    label="Introduction Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the introduction text to display."
+  ></design:attribute>
+  <design:attribute
+    name="tile1ImageField"
+    label="Tile 1 Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in the first tile."
+  ></design:attribute>
+  <design:attribute
+    name="tile1Title"
+    label="Tile 1 Title"
+    description="Enter a title for tile 1."
+  ></design:attribute>
+  <design:attribute
+    name="tile1Field"
+    label="Tile 1 Text Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the first tile."
+  ></design:attribute>
+  <design:attribute
+    name="tile2ImageField"
+    label="Tile 2 Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in the second tile."
+  ></design:attribute>
+  <design:attribute
+    name="tile2Title"
+    label="Tile 2 Title"
+    description="Enter a title for tile 2."
+  ></design:attribute>
+  <design:attribute
+    name="tile2Field"
+    label="Tile 2 Text Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the second tile."
+  ></design:attribute>
+  <design:attribute
+    name="tile3ImageField"
+    label="Tile 3 Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the image to display in the third tile."
+  ></design:attribute>
+  <design:attribute
+    name="tile3Title"
+    label="Tile 3 Title"
+    description="Enter a title for tile 3."
+  ></design:attribute>
+  <design:attribute
+    name="tile3Field"
+    label="Tile 3 Text Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the third tile."
+  ></design:attribute>
+  <design:attribute
+    name="tile1Label"
+    label="Tile 1 CTA Label"
+    description="Enter a label for the tile 1 button."
+  ></design:attribute>
+  <design:attribute
+    name="tile1Link"
+    label="Tile 1 Link"
+    description="Enter a link for the tile 1 button."
+  ></design:attribute>
+  <design:attribute
+    name="tile1OpenTab"
+    label="Open Tile 1 link in new tab"
+    description="Check to open the tile 1 link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="tile2Label"
+    label="Tile 2 CTA Label"
+    description="Enter a label for the tile 2 button."
+  ></design:attribute>
+  <design:attribute
+    name="tile2Link"
+    label="Tile 2 Link"
+    description="Enter a link for the tile 2 button."
+  ></design:attribute>
+  <design:attribute
+    name="tile2OpenTab"
+    label="Open Tile 2 link in new tab"
+    description="Check to open the tile 2 link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="tile3Label"
+    label="Tile 3 CTA Label"
+    description="Enter a label for the tile 3 button."
+  ></design:attribute>
+  <design:attribute
+    name="tile3Link"
+    label="Tile 3 Link"
+    description="Enter a link for the tile 3 button."
+  ></design:attribute>
+  <design:attribute
+    name="tile3OpenTab"
+    label="Open Tile 3 link in new tab"
+    description="Check to open the tile 3 link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="#fff, #f4f2e7, #e2eaee, #f8f8f8"
+    description="Choose a color to change the background."
+  ></design:attribute>
+  <design:attribute
+    name="buttonType"
+    label="Button Type"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-light, disabled"
+    description="Choose a style for the button."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadline"
+    label="Show Headline"
+    description="Check to show the headline."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

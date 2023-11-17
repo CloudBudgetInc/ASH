@@ -1,0 +1,123 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="records" type="Map[]" />
+  <aura:attribute name="maxItems" type="String" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'hero-carousel',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="custom-carousel slds-carousel">
+      <div class="slds-carousel__stage">
+        <lightning:buttonIcon
+          class="custom-carousel__icon--left custom-carousel__icon--left-hero"
+          iconName="utility:chevronleft"
+          variant="bare"
+          size="large"
+          onclick="{! c.handlePrev }"
+          alternativeText="chevronleft"
+          title="chevronleft"
+        />
+        <div
+          class="slds-carousel__panels"
+          id="carousel-panels"
+          style="transform:translateX(-0%)"
+        >
+          <aura:iteration items="{!v.records}" var="record" indexVar="index">
+            <div
+              id="{!'content-id-' + (index + 1)}"
+              class="hero-carousel-panel slds-carousel__panel"
+              role="tabpanel"
+              aria-hidden="false"
+              aria-labelledby="{!'indicator-id-' + (index + 1)}"
+            >
+              <div class="slds-carousel__image">
+                <div class="custom-carousel__image--overlay"></div>
+                <img
+                  src="{! '/sfsites/c' + record.contentNodes.IMG.url}"
+                  alt="{!record.contentNodes.IMG.altText}"
+                />
+              </div>
+              <div class="custom-carousel__content" style="{!'left: ' + (50 + 100 * index) + '%;'}">
+                <div class="hero-carousel__hero">
+                  <h2 class="hero-carousel__hero-title">
+                    <lightning:formattedRichText class="h3" value="{!record.contentNodes.Headline.value}" />
+                  </h2>
+                  <p class="hero-carousel__hero-subheading">
+                    <aura:if isTrue="{! not(empty(record.contentNodes.DescTXT.value)) }">
+                      <lightning:formattedRichText class="p" value="{!record.contentNodes.DescTXT.value}" />
+                      
+                      <aura:set attribute="else">
+                        <aura:if isTrue="{! not(empty(record.contentNodes.DescRTE.value)) }">
+                          <lightning:formattedRichText value="{!record.contentNodes.DescRTE.value}" />
+                        </aura:if>
+                      </aura:set>
+                    </aura:if>
+                  </p>
+                  <div class="custom-carousel__actions">
+                    <aura:if isTrue="{! !empty(record.contentNodes.Button1.value)}">
+                      <a
+                        class="hero-carousel__cta cta-button cta-button--secondary"
+                        href="{!record.contentNodes.URL1.value}"
+                        target="{!record.contentNodes.url1Target}"
+                      >
+                        {!record.contentNodes.Button1.value}
+                      </a>
+                    </aura:if>
+                    <aura:if isTrue="{! !empty(record.contentNodes.Button2.value)}">
+                      <a
+                        class="hero-carousel__cta cta-button cta-button--transparent-light"
+                        href="{!record.contentNodes.URL2.value}"
+                        target="{!record.contentNodes.url2Target}"
+                      >
+                        {!record.contentNodes.Button2.value}
+                      </a>
+                    </aura:if>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aura:iteration>
+        </div>
+        <lightning:buttonIcon
+          class="custom-carousel__icon--right custom-carousel__icon--right-hero"
+          iconName="utility:chevronright"
+          variant="bare"
+          size="large"
+          onclick="{! c.handleNext }"
+          alternativeText="chevronRight"
+          title="chevronRight"
+        />
+        <ul class="slds-carousel__indicators" role="tablist">
+          <aura:iteration items="{!v.records}" var="record" indexVar="index">
+            <li class="slds-carousel__indicator" role="presentation">
+              <a
+                id="{!'indicator-id-' + (index + 1)}"
+                class="{!index == 0 ? 'hero-carousel__indicator slds-carousel__indicator-action slds-is-active'
+                       : 'hero-carousel__indicator slds-carousel__indicator-action'}"
+                href="javascript:void(0);"
+                role="tab"
+                tabindex="0"
+                aria-selected="true"
+                aria-controls="{!'content-id-' + (index + 1)}"
+                title="{!record.title}"
+                onclick="{!c.handleIndicatorPress}"
+              >
+                <span class="slds-assistive-text">{!record.contentNodes.Headline.value}</span>
+              </a>
+            </li>
+          </aura:iteration>
+        </ul>
+      </div>
+    </div></div
+  >
+</aura:component>

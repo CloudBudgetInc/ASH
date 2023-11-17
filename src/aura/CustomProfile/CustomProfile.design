@@ -1,0 +1,32 @@
+<design:component label="Custom Profile">
+  <design:attribute
+    name="recordType"
+    label="Record Type"
+    datasource="User, Contact Junction"
+    description="Select a record type for this component."
+  />
+  <design:attribute
+    name="recordId"
+    label="Record Id"
+  />
+  <design:attribute
+    name="baseUrl"
+    label="Base Url"
+    description="Enter the base url of the site."
+  />
+  <design:attribute
+    name="myAccountUrl"
+    label="My Account Base Url"
+    description="Enter the base url of the member profile page."
+  />
+  <design:attribute
+    name="dashboardUrl"
+    label="Member Portal Homepage Url"
+    description="Enter the member portal home page url."
+  />
+  <design:attribute
+    name="subscriptionManagementUrl"
+    label="Subscription Management Url"
+    description="Enter the subscription management page url."
+  />
+</design:component>

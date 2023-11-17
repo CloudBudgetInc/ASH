@@ -1,0 +1,72 @@
+<design:component label="Custom Headline Links">
+  <design:attribute
+    name="headline1Label"
+    label="Headline 1 Label"
+    description="Enter a label for the first link headline."
+  ></design:attribute>
+  <design:attribute
+    name="headline1Link"
+    label="Headline 1 Link"
+    description="Enter a link for the first link headline to go to a url link."
+  ></design:attribute>
+  <design:attribute
+    name="headline1AnchorId"
+    label="Headline 1 Anchor Section"
+    description="Enter an anchor section name for the first link headline to scroll down to a section on the page."
+  ></design:attribute>
+  <design:attribute
+    name="headline2Label"
+    label="Headline 2 Label"
+    description="Enter a label for the second link headline."
+  ></design:attribute>
+  <design:attribute
+    name="headline2Link"
+    label="Headline 2 Link"
+    description="Enter a link for the second link headline to go to a url link."
+  ></design:attribute>
+  <design:attribute
+    name="headline2AnchorId"
+    label="Headline 2 Anchor Section"
+    description="Enter an anchor section name for the second link headline to scroll down to a section on the page."
+  ></design:attribute>
+  <design:attribute
+    name="headline3Label"
+    label="Headline 3 Label"
+    description="Enter a label for the third link headline."
+  ></design:attribute>
+  <design:attribute
+    name="headline3Link"
+    label="Headline 3 Link"
+    description="Enter a link for the third link headline to go to a url link."
+  ></design:attribute>
+  <design:attribute
+    name="headline3AnchorId"
+    label="Headline 3 Anchor Section"
+    description="Enter an anchor section name for the third link headline to scroll down to a section on the page."
+  ></design:attribute>
+  <design:attribute
+    name="headline4Label"
+    label="Headline 4 Label"
+    description="Enter a label for the fourth link headline."
+  ></design:attribute>
+  <design:attribute
+    name="headline4Link"
+    label="Headline 4 Link"
+    description="Enter a link for the fourth link headline to go to a url link."
+  ></design:attribute>
+  <design:attribute
+    name="headline4AnchorId"
+    label="Headline 4 Anchor Section"
+    description="Enter an anchor section name for the fourth link headline to scroll down to a section on the page."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

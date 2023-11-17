@@ -1,0 +1,155 @@
+.THIS.custom-staff {
+  padding: 20px 0 0;
+}
+
+.THIS .custom-staff__empty {
+  align-items: center;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  font-size: 16px;
+  width: 100%;
+}
+
+.THIS .custom-staff__btn--empty {
+  margin-top: 20px;
+}
+
+.THIS .custom-staff__container {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.THIS .custom-staff__header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.THIS .custom-staff__title {
+  color: #000;
+  font-size: 18px;
+}
+
+.THIS .custom-staff-item__dates {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 16px;
+}
+
+.THIS .custom-staff__btn--add {
+  align-self: flex-end;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.THIS .custom-staff-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.THIS .custom-staff-item {
+  align-items: flex-start;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  font-size: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+.THIS .custom-staff-item__phone a {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.THIS .custom-staff__btns {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.THIS .custom-staff__btn {
+  align-self: flex-start;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.THIS .custom-staff__add-person {
+  align-items: center;
+  display: flex;
+}
+
+.THIS .custom-staff__required-msg {
+  color: #b7000f;
+  padding-left: 20px;
+}
+
+.THIS .custom-staff-item__street {
+  color: #84000b;
+  font-weight: bold;
+}
+
+.THIS .custom-staff-item__tooltip .slds-form-element__icon {
+  padding-left: 2px;
+  padding-top: 1px;
+}
+
+.THIS .custom-staff__edit-pending-org {
+  font-size: 16px;
+}
+
+.THIS .custom-staff-item__pills {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.THIS .custom-staff-item__pill {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+
+.THIS .custom-staff__modal {
+  position: absolute;
+}
+
+.THIS .slds-modal__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.THIS .custom-staff__spinner {
+  height: 50px;
+  margin: 0 auto;
+  position: relative;
+  width: 50px;
+}
+
+.THIS .custom-staff__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (min-width: 900px) {
+  .THIS .custom-staff-item {
+    width: calc(50% - 20px);
+  }
+
+  .THIS .custom-staff-item:nth-of-type(2n) {
+    margin-left: 20px;
+  }
+
+  .THIS .custom-staff__btn {
+    margin-bottom: 0;
+    margin-left: 10px;
+  }
+}

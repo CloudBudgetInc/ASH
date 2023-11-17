@@ -1,0 +1,24 @@
+<design:component label="Custom Search">
+  <design:attribute
+    name="showClose"
+    label="Show Close Button"
+  ></design:attribute>
+  <design:attribute
+    name="showCancel"
+    label="Show Cancel Button"
+  ></design:attribute>
+  <design:attribute
+    name="centerSearch"
+    label="Center Search Bar"
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

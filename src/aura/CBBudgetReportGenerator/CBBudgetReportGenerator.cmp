@@ -1,0 +1,60 @@
+<aura:component description="CBBudgetReportGenerator" implements="lightning:actionOverride,lightning:isUrlAddressable,force:hasRecordId,force:hasSObjectName,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+				access="global" controller="CBBudgetApplication">
+	<ltng:require scripts="{!join(',', $Resource.cb4__exceljs, $Resource.cb4__fileSaver, $Resource.cb4__JS_CONST, $Resource.cb4__JS_UTILS)}"
+				  afterScriptsLoaded="{!c.doInit}"/>
+	<aura:attribute name="recordId" type="Id" default="" />
+	<aura:attribute name="headerTitle" type="String" access="global" />
+	<aura:attribute name="headers" type="String[]" description="list of headers for single table" />
+	<aura:attribute name="rootApp" type="cb4__CBTag__c" description="Root application of the sheet" />
+	<aura:attribute name="apps" type="cb4__CBTag__c[]" description="All applications" />
+	<aura:attribute name="app" type="cb4__CBTag__c" description="Head app" />
+	<aura:attribute name="totalData" type="cb4.CBRow[]" description="total lines" />
+	<aura:attribute name="incomeData" type="cb4.CBRow[]" description="income lines" />
+	<aura:attribute name="expenseData" type="cb4.CBRow[]" description="expense lines" />
+	<aura:attribute name="incomeDataOriginal" type="cb4.CBRow[]" description="income lines Original" />
+	<aura:attribute name="expenseDataOriginal" type="cb4.CBRow[]" description="expense lines Original" />
+	<aura:attribute name="allAccAndDims" type="Object" description="Map of all accounts and dimensions" />
+	<aura:attribute name="groupFilter" type="List" default="[{'title':'Account-Subaccount Code', 'value' : 'accTag5'},{'title':'Account', 'value':'accName'}]"/>
+	<aura:attribute name="selectedGroup" type="String" default="accTag5"
+					description="accName,accountST,product,employee" />
+	<aura:attribute name="groupByApps" type="Boolean" default="false" />
+	<aura:attribute name="showDetails" type="Boolean" default="true" />
+	<aura:attribute name="showDetailsDisabled" type="Boolean" default="false" />
+
+	<aura:attribute name="incomeRowsOfApps" type="Object" description="raw rows from server " />
+	<aura:attribute name="expenseRowsOfApps" type="Object" description="raw rows from server " />
+	<aura:attribute name="allApps" type="List" description="" />
+	<aura:attribute name="usersNameIdList" type="Object" description="" />
+
+	<!-- BA dimensions -->
+	<aura:attribute name="appDim4name" type="String" description="App Dimension 4 name" />
+	<aura:attribute name="appDim5name" type="String" description="App Dimension 5 name" />
+	<aura:attribute name="appDim6name" type="String" description="App Dimension 6 name" />
+	<aura:attribute name="appDim7name" type="String" description="App Dimension 7 name" />
+	<aura:attribute name="appDim8name" type="String" description="App Dimension 8 name" />
+	<aura:attribute name="appDim9name" type="String" description="App Dimension 9 name" />
+	<aura:attribute name="appDim10name" type="String" description="App Dimension 10 name" />
+
+	<aura:attribute name="appsStructure" type="List" description="All Apps list structured" />
+	<aura:attribute name="isConsolidated" type="Boolean" default="true" access="global" />
+
+	<!-- MODERN SPINNER -->
+	<div aura:id="sms" class="slds-spinner_container">
+		<div class="slds-spinner_brand  slds-spinner slds-spinner_large slds-is-relative" role="alert">
+			<span class="slds-assistive-text">Loading</span>
+			<div class="slds-spinner__dot-a"></div>
+			<div class="slds-spinner__dot-b"></div>
+
+			<p style="transform: translate(-32%, -50%) rotate(-90deg); width: 640px; text-align: justify; white-space: pre-line;">
+				Please wait while the Report is being prepared.
+				When the report is ready, the Excel will be automatically loaded.
+				The speed of generating a Report depends on the speed of the Internet, the amount of data in the Budgets, the performance of your computer and can take from a few seconds to several minutes.
+
+				<strong>Do not close the page until the Report has loaded.</strong>
+				After downloading the Report, you will be automatically redirected to the list of Budgets.
+				<aura:if isTrue="{!!v.isConsolidated}">The "Split by Sheets" Report takes longer to prepare than the "Consolidated" one.</aura:if>
+			</p>
+		</div>
+	</div>
+	<!-- MODERN SPINNER -->
+</aura:component>

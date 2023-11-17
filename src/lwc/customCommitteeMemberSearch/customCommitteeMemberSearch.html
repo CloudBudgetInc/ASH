@@ -1,0 +1,126 @@
+<template>
+  <div class="committee-search">
+    <div class="slds-page-header committee-search__header">
+      <div class="slds-page-header__row">
+        <div class="slds-page-header__col-title">
+          <div class="slds-media committee-search__title">
+            <div class="slds-media__figure">
+              <lightning-icon
+                icon-name="standard:contact_list"
+                alternative-text="contact_list"
+                title="contact_list"
+              >
+              </lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <div class="slds-page-header__name">
+                <div class="slds-page-header__name-title">
+                  <h1>
+                    <span
+                      class="slds-page-header__title slds-truncate"
+                      title="Search Committee Members"
+                      >Search Committee Members</span
+                    >
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slds-page-header__row">
+        <div class="slds-page-header__col-details committee-search__search">
+          <div>
+            <div onkeyup={handleKeyUp}>
+              <lightning-input
+                name="enter-search"
+                placeholder="Search for members..."
+                aria-label="Search committee members when user hits the 'enter' key"
+                type="search"
+              ></lightning-input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="committee-search__list slds-p-around_large">
+      <template if:true={loading}>
+        <div class="committee-search__loading">
+          <lightning-spinner
+            alternative-text="Loading"
+            size="small"
+            variant="brand"
+          ></lightning-spinner>
+        </div>
+      </template>
+      <template if:false={loading}>
+        <template if:true={showResults}>
+          <template if:true={results}>
+          <template for:each={results} for:item="result">
+            <div key={result.Id} class="committee-search__item">
+              <template if:true={result}>
+                <template if:true={result.Contact__r}>
+                  <a href={result.url} class="committee-search__name">{result.Contact__r.Name}</a>
+                </template>
+                <template if:true={result.Committee__r}>
+                  <p>{result.Committee__r.Name}</p>
+                </template>
+                <span class="committee-search__dates">
+                  <template if:true={result.Start__c}>
+                    <lightning-formatted-date-time
+                      value={result.Start__c}
+                      year="numeric"
+                      month="short"
+                      day="2-digit"
+                      time-zone="UTC"
+                    ></lightning-formatted-date-time>
+                    <template if:true={result.End__c}>
+                      &nbsp;-&nbsp;
+                      <lightning-formatted-date-time
+                        value={result.End__c}
+                        year="numeric"
+                        month="short"
+                        day="2-digit"
+                        time-zone="UTC"
+                      ></lightning-formatted-date-time>
+                    </template>
+                    <template if:false={result.End__c}>
+                      &nbsp;-&nbsp;Present
+                    </template>
+                  </template>
+                </span>
+                <template if:true={result.Sub_Category__c}>
+                  <p><strong>Position:</strong> {result.Sub_Category__c}</p>
+                </template>
+                <template if:true={result.Status__c}>
+                  <p><strong>Status:</strong> {result.Status__c}</p>
+                </template>
+              </template>
+            </div>
+          </template>
+        </template>
+        <template if:false={results}>
+          No results found. Please double check your search input.
+        </template>
+        </template>
+        <template if:false={showResults}>
+          <template if:true={error}>
+            <p class="slds-text-align_center slds-text-color_error">{error}</p>
+          </template>
+          <template if:false={error}>
+            <template if:true={searchTerm}>
+              <p class="slds-text-align_center">
+                No results found. Please double check your search input.
+              </p>
+            </template>
+            <template if:false={searchTerm}>
+              <p class="slds-text-align_center">
+                Please enter a name to search for members.
+              </p>
+            </template>
+          </template>
+        </template>
+      </template>
+    </div>
+  </div>
+</template>

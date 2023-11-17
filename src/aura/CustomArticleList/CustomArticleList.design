@@ -1,0 +1,101 @@
+<design:component label="Custom Article List">
+  <design:attribute
+    name="topic"
+    label="Topic"
+    datasource="apex://CustomTopicPickList"
+    description="Choose a topic name to show the corresponding articles."
+  />
+  <design:attribute
+    name="layout"
+    label="Layout"
+    datasource="List, Grid"
+    description="Select layout view to display articles."
+  />
+  <design:attribute
+    name="showGridMobile"
+    label="Show Grid on Mobile"
+    description="Show grid on tablet and mobile viewports."
+  />
+  <design:attribute
+    name="showBackground"
+    label="Show Background Color on Items"
+    description="Show background color on grid items."
+  />
+  <design:attribute name="limit" label="Number of Articles" />
+  <design:attribute name="title" label="Title" />
+  <design:attribute name="centerTitle" label="Center List Title" />
+  <design:attribute
+    name="showCategory"
+    label="Show Category"
+    description="Show category above title (News, Press Release, Webinar)."
+  />
+  <design:attribute name="italicizeCategory" label="Italicize Category" />
+  <design:attribute
+    name="articleCategorySize"
+    label="Category Size"
+    datasource="Regular, Small"
+  />
+  <design:attribute
+    name="articleTitleSize"
+    label="Article Title Size"
+    datasource="Large, Medium, Small"
+  />
+  <design:attribute
+    name="showSpeakers"
+    label="Show Speakers"
+    description="Show speakers for Event or Webinar."
+  />
+  <design:attribute
+    name="articleSpeakerSize"
+    label="Speakers Size"
+    datasource="Regular, Small"
+  />
+  <design:attribute
+    name="articleDateSize"
+    label="Date Size"
+    datasource="Regular, Small"
+  />
+  <design:attribute name="showDate" label="Show Date" />
+  <design:attribute name="italicizeDate" label="Italicize Date" />
+  <!-- <design:attribute
+    name="showAudience"
+    label="Show Audience"
+    description="Show audience below date (CTN, Data Hub)."
+  />
+  <design:attribute name="italicizeAudience" label="Italicize Audience" />
+  <design:attribute
+    name="articleAudienceSize"
+    label="Audience Size"
+    datasource="Regular, Small"
+  /> -->
+  <design:attribute
+    name="articleSnippetSize"
+    label="Snippet Size"
+    datasource="Regular, Small"
+  />
+  <design:attribute name="showSnippet" label="Show Snippet" />
+  <design:attribute name="readMoreLabel" label="Read More Link Label" />
+  <design:attribute
+    name="articleReadSize"
+    label="Read More Size"
+    datasource="Regular, Small"
+  />
+  <design:attribute name="showReadMore" label="Show Read More Link" />
+  <design:attribute name="showSeparator" label="Show Separator" />
+  <design:attribute name="showViewMore" label="Show View More Button" />
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+  <design:attribute
+    name="showSidePadding"
+    label="Apply Side Padding"
+    description="Check to apply side padding."
+  ></design:attribute>
+</design:component>

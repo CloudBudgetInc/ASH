@@ -1,0 +1,52 @@
+<apex:page showHeader="false" sidebar="false">
+  <style>
+    body {
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 30px 0;
+    }
+
+    #myViz {
+      padding: 0 20px;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 50px;
+      }
+
+      #myViz {
+        /* padding: 0 50px; */
+      }
+    }
+
+    @media (min-width: 1024px) {
+      body {
+        padding: 50px;
+      }
+
+      #myViz {
+        margin: 0 auto;
+        max-width: 1024px;
+        /* padding: 0 50px; */
+      }
+    }
+  </style>
+
+  <script type="text/javascript" src="https://tableau2.hematology.org/javascripts/api/tableau-2.js"></script>
+  <script type="text/javascript" src="https://tableau2.hematology.org/javascripts/api/tableau-2.js"></script>
+  <script type="text/javascript">var viz;
+    window.onload = function () {
+      var vizDiv = document.getElementById('myViz'); var vizURL = "https://tableau2.hematology.org/views/COVID19NewData_15919033962020/Malignant?:showAppBanner=false&:display_count=n&:showVizHome=n&:origin=viz_share_link&:isGuestRedirectFromVizportal=y&:embed=y"; var options =
+
+        { hideTabs: false, hideToolbar: true, showShareOptions: false, device: 'desktop' }
+        ; viz = new tableau.Viz(vizDiv, vizURL, options);    
+    };
+    function exportPDF() { viz.showExportPDFDialog(); }
+    function exportCrossTab() { viz.showExportCrossTabDialog(); }
+  </script>
+
+  <div id='myViz'></div>
+</apex:page>

@@ -1,0 +1,178 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="backgroundImage" type="String" />
+  <aura:attribute
+    name="backgroundImageField"
+    type="String"
+    default="None"
+  />
+  <aura:attribute name="subheading" type="String" />
+  <aura:attribute name="subheadingField" type="String" default="None" />
+  <aura:attribute name="col1Image" type="Object" />
+  <aura:attribute
+    name="col1ImageField"
+    type="String"
+    required="true"
+    default="Image 2"
+  />
+  <aura:attribute name="col2Image" type="Object" />
+  <aura:attribute
+    name="col2ImageField"
+    type="String"
+    required="true"
+    default="Image 3"
+  />
+  <aura:attribute name="col3Image" type="Object" />
+  <aura:attribute
+    name="col3ImageField"
+    type="String"
+    required="true"
+    default="Image 4"
+  />
+  <aura:attribute name="col4Image" type="Object" />
+  <aura:attribute name="col4ImageField" type="String" default="None" />
+  <aura:attribute name="col1Description" type="String" />
+  <aura:attribute
+    name="col1DescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="col2Description" type="String" />
+  <aura:attribute
+    name="col2DescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="col3Description" type="String" />
+  <aura:attribute
+    name="col3DescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 3"
+  />
+  <aura:attribute name="col4Description" type="String" />
+  <aura:attribute name="col4DescriptionField" type="String" default="None" />
+  <aura:attribute name="buttonLabel" type="String" default="Learn More" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="backgroundColorRight" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="true" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'background-image-columns',
+      v.backgroundColorRight ? ' background-image-columns--right' : 'background-image-columns--left',
+      v.showTopPadding ? 'margin-top' : '',
+      v.showBottomPadding ? 'margin-bottom' : ''
+    )}"
+  >
+    <div class="background-image-columns__max-container">
+      <div
+        class="{! v.backgroundImage ? 'background-image-columns__container--overlay'
+          : 'background-image-columns__container'}"
+        style="{! v.backgroundImage ? 'background-image:url(' + v.backgroundImage +')' : 'background: #919191'}"
+      >
+        <div class="background-image-columns__content">
+          <h2 class="background-image-columns__title">
+            <lightning:formattedRichText
+              class="h2"
+              value="{!v.record.contentNodes.Headline.value}"
+          /></h2>
+          <aura:if isTrue="{!v.subheadingField != 'None'}">
+            <p class="background-image-columns__subtitle">
+              <lightning:formattedRichText class="p" value="{!v.subheading}"
+            /></p>
+          </aura:if>
+
+          <div class="background-image-columns__cols">
+            <div
+              class="background-image-columns__col"
+              data-max-cols="{!v.col4DescriptionField == 'None' ? 3 : 4}"
+            >
+              <img
+                class="background-image-columns__col-image"
+                src="{!v.col1Image.src}"
+                alt="{!v.col1Image.alt}"
+              />
+              <lightning:formattedRichText
+                class="background-image-columns__col-text p"
+                value="{!v.col1Description}"
+              />
+            </div>
+            <div
+              class="background-image-columns__col"
+              data-max-cols="{!v.col4DescriptionField == 'None' ? 3 : 4}"
+            >
+              <img
+                class="background-image-columns__col-image"
+                src="{!v.col2Image.src}"
+                alt="{!v.col2Image.alt}"
+              />
+              <lightning:formattedRichText
+                class="background-image-columns__col-text p"
+                value="{!v.col2Description}"
+              />
+            </div>
+            <div
+              class="background-image-columns__col"
+              data-max-cols="{!v.col4DescriptionField == 'None' ? 3 : 4}"
+            >
+              <img
+                class="background-image-columns__col-image"
+                src="{!v.col3Image.src}"
+                alt="{!v.col3Image.alt}"
+              />
+              <lightning:formattedRichText
+                class="background-image-columns__col-text p"
+                value="{!v.col3Description}"
+              />
+            </div>
+            <aura:if isTrue="{!v.col4DescriptionField != 'None'}">
+              <div class="background-image-columns__col" data-max-cols="4">
+                <img
+                  class="background-image-columns__col-image"
+                  src="{!v.col4Image.src}"
+                  alt="{!v.col4Image.alt}"
+                />
+                <lightning:formattedRichText
+                  class="background-image-columns__col-text p"
+                  value="{!v.col4Description}"
+                />
+              </div>
+            </aura:if>
+          </div>
+          <aura:if isTrue="{! !empty(v.buttonLabel)}">
+            <aura:if isTrue="{!v.openTab}">
+              <a
+                class="{! v.backgroundImage ? 'background-image-columns__cta cta-button cta-button--secondary'
+                  : 'background-image-columns__cta cta-button cta-button--primary'}"
+                href="{!v.buttonLink}"
+                target="_blank"
+              >
+                {!v.buttonLabel}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! v.backgroundImage ? 'background-image-columns__cta cta-button cta-button--secondary'
+                    : 'background-image-columns__cta cta-button cta-button--primary'}"
+                  href="{!v.buttonLink}"
+                >
+                  {!v.buttonLabel}
+                </a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+        </div>
+      </div>
+    </div>
+  </div>
+</aura:component>

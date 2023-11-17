@@ -1,0 +1,21 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute name="style" type="String" default="brand" />
+  <aura:attribute name="label" type="String" default="Button Label" />
+  <aura:attribute name="link" type="String" />
+  <aura:attribute name="align" type="String" default="left" />
+  <aura:attribute name="size" type="String" default="medium" />
+  <aura:attribute name="newTab" type="Boolean" default="false" />
+
+  <div class="custom-button">
+    <a
+      class="{! join(' ',
+        'slds-button',
+        'slds-button_' + v.style,
+        v.size == 'large' ? 'custom-button--lg' : v.size == 'medium' ? 'custom-button--md' : '',
+        v.align == 'center' ? 'custom-button--center' : v.align == 'right' ? 'custom-button--right' : ''
+      )}"
+      href="{!v.link}" target="{!v.newTab ? '__blank' : undefined}">
+      {!v.label}
+    </a>
+  </div>
+</aura:component>

@@ -1,0 +1,156 @@
+<aura:component
+  implements="forceCommunity:themeLayout"
+  controller="CustomLoginController"
+>
+  <aura:attribute name="heroRegion" type="Aura.Component[]" />
+  <aura:attribute name="bannerRegion" type="Aura.Component[]" />
+  <aura:attribute name="aboutRegion" type="Aura.Component[]" />
+  <aura:attribute name="newsletterRegion" type="Aura.Component[]" />
+  <aura:attribute name="newsEventsHeading" type="Aura.Component[]" />
+  <aura:attribute name="newsEventsCarouselRegion" type="Aura.Component[]" />
+  <aura:attribute name="newsEventsTileRegion" type="Aura.Component[]" />
+  <aura:attribute name="contentFooterRegion" type="Aura.Component[]" />
+
+  <aura:attribute name="location" type="String" />
+  <aura:attribute name="loggedIn" type="Boolean" default="false" />
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="userId" type="String" />
+  <aura:attribute name="startUrl" type="String" default="/" />
+
+  <!-- Design Attributes -->
+  <aura:attribute name="baseUrl" type="String" default="/s/" />
+  <aura:attribute
+    name="facebookLink"
+    default="https://www.facebook.com/ASHResearchCollaborative"
+    type="String"
+  />
+  <aura:attribute
+    name="twitterLink"
+    default="https://twitter.com/ashcollab"
+    type="String"
+  />
+  <aura:attribute
+    name="instagramLink"
+    type="String"
+    default="https://www.instagram.com/ash_collab"
+  />
+  <aura:attribute name="youTubeLink" type="String" />
+  <aura:attribute name="copyrightYear" default="2020" type="Integer" />
+  <aura:attribute name="authBarLinkLabel" type="String" default="My Dashboard" />
+  <aura:attribute name="authBarLinkLabelMobile" type="String" default="Dashboard" />
+  <aura:attribute name="authBarLink" type="String" default="/s/portal" />
+  <aura:attribute name="homeLinkLabel" type="String" default="Return to ASHRC.ORG" />
+  <aura:attribute name="homeLinkLabelMobile" type="String" default="ASH RC" />
+  <aura:attribute name="homeBarLink" type="String" default="/" />
+  <aura:attribute name="mobileAccordionLabel" type="String" default="ASHRC.org" />
+  <aura:attribute name="navigationLinkSetId" type="String" default="Main_Navigation" />
+  <aura:attribute name="memberNavigationLinkSetId" type="String" default="Member_Navigation" />
+  <aura:attribute name="mobileMemberNavigationLinkSetId" type="String" default="Mobile_Member_Navigation" />
+  <aura:attribute name="mobileNavigationLinkSetId" type="String" default="Mobile_Navigation" />
+  <aura:attribute name="topNavigationLinkSetId" type="String" default="Top_Navigation" />
+  <aura:attribute name="footerNavigationLinkSetId" type="String" default="Footer_Navigation" />
+  <aura:attribute name="bottomNavigationLinkSetId" type="String" default="Bottom_Footer_Navigation" />
+  
+  <!-- Binded Attributes -->
+  <aura:attribute name="menuOpen" type="Boolean" default="false" />
+  <aura:handler name="change" value="{!v.menuOpen}" action="{!c.onMenuChange}"/>
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  <aura:handler
+    event="forceCommunity:routeChange"
+    action="{!c.handleRouteChange}"
+  />
+
+  <div class="slds-grid slds-grid_vertical homeTheme theme-layout">
+    <header class="slds-col theme-layout__header">
+      <c:CustomNavbar
+        loggedIn="{!v.loggedIn}"
+        loggedInNav="false"
+        navigationLinkSetId="{!v.navigationLinkSetId}"
+        member="{!v.member}"
+        menuOpen="{!v.menuOpen}"
+        startUrl="{!v.startUrl}"
+        baseUrl="{!v.baseUrl}"
+        topNavigationLinkSetId="{!v.topNavigationLinkSetId}"
+        memberLinkLabel="{!v.authBarLinkLabel}"
+        memberLinkMobileLabel="{!v.authBarLinkLabelMobile}"
+        memberLink="{!v.authBarLink}"
+        homeLinkLabel="{!v.homeLinkLabel}"
+        homeLinkMobileLabel="{!v.homeLinkLabelMobile}"
+        homeLink="{!v.homeBarLink}"
+        userId="{!v.userId}"
+      />
+      <!-- Mobile Navigation Sidebar -->
+      <c:CustomMobileNavigation
+        baseUrl="{!v.baseUrl}"
+        showMenu="{!v.menuOpen}"
+        accordionLabel="{!v.mobileAccordionLabel}"          
+        memberNavigationLinkSetId="{!v.mobileMemberNavigationLinkSetId}"
+        mobileNavigationLinkSetId="{!v.mobileNavigationLinkSetId}"
+        facebookLink="{!v.facebookLink}"
+        twitterLink="{!v.twitterLink}"
+        instagramLink="{!v.instagramLink}"
+        youTubeLink="{!v.youTubeLink}"
+        loggedIn="{!v.loggedIn}"
+        member="{!v.member}"
+        userId="{!v.userId}"
+      />
+    </header>
+    <div
+      class="{!v.loggedIn ? 'slds-col theme-layout__body theme-layout__body-auth' : 'slds-col theme-layout__body'}"
+      aura:id="homeTheme-hero"
+    >
+      <div class="homeTheme__hero-region">{!v.heroRegion}</div>
+    </div>
+    <div class="homeTheme__banner-region">{!v.bannerRegion}</div>
+    <div class="slds-col homeTheme__about"><div>{!v.aboutRegion}</div></div>
+    <div class="slds-col homeTheme__news-events">
+      <div class="homeTheme__newsletter">{!v.newsletterRegion}</div>
+      <div class="homeTheme__news-events-heading">
+        <span>{!v.newsEventsHeading}</span>
+        <a
+          class="cta-button cta-button--primary homeTheme__news-events-button-md"
+          href="{!v.baseUrl + 'news-and-events'}"
+        >
+          View All
+        </a>
+      </div>
+      <div class="homeTheme__news-events-region">
+        <div class="homeTheme__news-events-button-container">
+          <a
+            class="cta-button cta-button--primary homeTheme__news-events-button-lg"
+            href="{!v.baseUrl + 'news-and-events'}"
+          >
+            View All
+          </a>
+        </div>
+        <div class="homeTheme__news-events-carousel">
+          {!v.newsEventsCarouselRegion}
+        </div>
+        <div class="homeTheme__news-events-tiles">
+          {!v.newsEventsTileRegion}
+        </div>
+      </div>
+      <a
+        class="cta-button cta-button--primary homeTheme__news-events-button-sm"
+        href="{!v.baseUrl + 'news-and-events'}"
+      >
+        View All
+      </a>
+    </div>
+    <div class="slds-col">{!v.contentFooterRegion}</div>
+    <div class="slds-col theme-layout__footer">
+      <c:CustomASHRCFooter
+        facebookLink="{!v.facebookLink}"
+        twitterLink="{!v.twitterLink}"
+        instagramLink="{!v.instagramLink}"
+        youTubeLink="{!v.youTubeLink}"
+        copyrightYear="{!v.copyrightYear}"
+        homeLink="{!v.homeBarLink}"
+        footerNavigationLinkSetId="{!v.footerNavigationLinkSetId}"
+        bottomNavigationLinkSetId="{!v.bottomNavigationLinkSetId}"
+        baseUrl="{!v.baseUrl}"
+      />
+    </div>
+  </div>
+</aura:component>

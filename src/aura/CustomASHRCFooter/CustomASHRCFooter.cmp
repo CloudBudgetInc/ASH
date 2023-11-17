@@ -1,0 +1,116 @@
+<aura:component>
+  <aura:attribute name="facebookLink" type="String" />
+  <aura:attribute name="twitterLink" type="String" />
+  <aura:attribute name="instagramLink" type="String" />
+  <aura:attribute name="youTubeLink" type="String" />
+  <aura:attribute name="homeLink" type="String" />
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="copyrightYear" type="Integer" />
+  <aura:attribute name="footerNavigationLinkSetId" type="String" />
+  <aura:attribute name="bottomNavigationLinkSetId" type="String" />
+  
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__top">
+        <div class="footer__left">
+          <a class="footer__home-link" href="{!v.homeLink}">
+            <img
+              class="footer__logo"
+              src="{!$ContentAsset.ASHRC_Logo_Original_White}"
+              alt="ash_logo"
+            />
+          </a>
+          <div class="footer__info">
+            <div class="footer__location">
+              <img
+                class="footer__location-icon"
+                src="{!$ContentAsset.location_mobile}"
+                alt="location-icon"
+              />
+              <p class="footer__address">
+                ASH Research Collaborative <br/>
+                2021 L Street NW, Suite 900 <br/>
+                Washington, DC 20036
+              </p>
+            </div>
+            <div class="footer__phone">
+              <img
+                class="footer__phone-icon"
+                src="{!$ContentAsset.Phone_Icon}"
+                alt="phone-icon"
+              />
+              <a class="footer__phone-num footer__link" href="tel:1-866-828-1231">
+                Toll Free: +1 (866) 828.1231
+              </a>
+            </div>
+            <div class="footer__email">
+              <img
+                class="footer__email-icon"
+                src="{!$ContentAsset.Email_Icon}"
+                alt="email-icon"
+              />
+              <a class="footer__email-addr footer__link" href="mailto:info@ashrc.org">
+                Email: info@ashrc.org
+              </a>
+            </div>
+          </div>
+          <div class="footer__social">
+            <div class="footer__social-icons">
+              <a href="{!v.facebookLink}" target="_blank">
+                <img
+                  class="footer__social-icon"
+                  src="{!$ContentAsset.Facebook_Icon}"
+                  alt="facebook"
+                />
+              </a>
+              <a href="{!v.twitterLink}" target="_blank">
+                <img
+                  class="footer__social-icon"
+                  src="{!$ContentAsset.Twitter_Icon}"
+                  alt="twitter"
+                />
+              </a>
+              <a href="{!v.instagramLink}" target="_blank">
+                <img
+                  class="footer__social-icon"
+                  src="{!$ContentAsset.instagram_mobile_menu}"
+                  alt="instagram"
+                />
+              </a>
+              <!-- <a class="footer__social-icon" href="{!v.youTubeLink}" target="_blank">
+                <img
+                  class="footer__social-icon"
+                  src="{!$ContentAsset.Youtube_Icon}"
+                  alt="youtube"
+                />
+              </a> -->
+            </div>
+          </div>
+        </div>
+        <div class="footer__right">
+          <div class="footer__nav">
+            <c:CustomFooterNavigation baseUrl="{!v.baseUrl}" navigationLinkSetId="{!v.footerNavigationLinkSetId}" />
+          </div>
+          <div class="footer__bottom footer__bottom--lg">
+            <span class="footer__copyright">
+              <span class="footer__copyright-year">Copyright © {!v.copyrightYear}.</span>
+              All Rights Reserved.
+            </span>
+            <c:CustomBottomFooterNav baseUrl="{!v.baseUrl}" navigationLinkSetId="{!v.bottomNavigationLinkSetId}" />
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom footer__bottom--md">
+        <span class="footer__copyright">
+          <span class="footer__copyright-year">Copyright © {!v.copyrightYear}.</span>
+          All Rights Reserved.
+        </span>
+        <c:CustomBottomFooterNav
+			baseUrl="{!v.baseUrl}"
+			homeLink="{!v.homeLink}"
+			navigationLinkSetId="{!v.bottomNavigationLinkSetId}"
+		/>
+      </div>
+    </div>
+  </footer>
+</aura:component>

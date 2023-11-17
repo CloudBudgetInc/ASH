@@ -1,0 +1,26 @@
+<design:component label="Custom Article Detail">
+  <design:attribute
+    name="recordId"
+    label="Record Id"
+  ></design:attribute>
+  <design:attribute
+    name="showCategory"
+    label="Show Category"
+    description="Check to display category (News, Press Release, Event, Webinar) above the date."
+  ></design:attribute>
+  <design:attribute
+    name="showAudience"
+    label="Show Audience Category"
+    description="Check to display audience category (CTN, Data Hub) above the title."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

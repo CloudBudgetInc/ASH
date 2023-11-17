@@ -1,0 +1,188 @@
+<aura:component>
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="showMenu" type="Boolean" default="false" />
+  <aura:attribute name="memberNavigationLinkSetId" type="String" />
+  <aura:attribute name="mobileNavigationLinkSetId" type="String" />
+  <aura:attribute name="loggedIn" type="Boolean" default="false" />
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="userId" type="String" />
+  <aura:attribute name="scrolled" type="Boolean" />
+  <aura:attribute name="accordionLabel" type="String" />
+  <aura:attribute name="twitterLink" type="String" />
+  <aura:attribute name="facebookLink" type="String" />
+  <aura:attribute name="instagramLink" type="String" />
+  <aura:attribute name="youTubeLink" type="String" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      v.showMenu ? 'mobile-nav--open' : 'mobile-nav--close',
+      v.loggedIn ? 'mobile-nav mobile-nav__auth' : 'mobile-nav',
+      v.scrolled ? 'scroll' : ''
+    )}"
+    id="mobile-menu"
+   >
+    <aura:if isTrue="{!v.loggedIn}">
+      <section class="mobile-nav__section mobile-nav__auth-section">
+        <a href="/secur/logout.jsp" class="mobile-nav__logout">
+          Sign Out
+        </a>
+        <a href="{! v.baseUrl + 'profile/' + v.userId}">
+          <div class="mobile-nav__auth-user">
+            <img
+              class="mobile-nav__icon"
+              src="{!$ContentAsset.Profile_Icon}"
+              alt="avatar-icon"
+              id="mobile-nav-icon"
+            />
+            <span class="mobile-nav__label mobile-nav__auth-name">{!v.member}</span>
+          </div>
+        </a>
+        <c:CustomMobileMenu
+          baseUrl="{!v.baseUrl}"
+          navigationLinkSetId="{!v.memberNavigationLinkSetId}"
+          loggedIn="true"
+        />
+      </section>
+    </aura:if>
+    <section class="mobile-nav__section mobile-nav__links-section">
+      <c:CustomMobileMenu
+        baseUrl="{!v.baseUrl}"
+        navigationLinkSetId="{!v.mobileNavigationLinkSetId}"
+        loggedIn="false"
+        showAccord="{!v.loggedIn}"
+        accordLabel="{!v.accordionLabel}"
+      />
+    </section>
+    <section class="mobile-nav__section mobile-nav__section-col">
+      <div
+        class="mobile-nav__accordionSectionHeader"
+        id="accordion-container-contact"
+        onclick="{!c.handleAccordion}"
+      >
+        <span
+          class="mobile-nav__label"
+          id="accordion-label-0"
+          onclick="{!c.handleAccordion}"
+          data-label="our-Information"
+        >
+        Our Information:
+        </span>
+        <span
+          class="mobile-nav__label mobile-nav__icon-plus"
+          id="accordion-plus-contact"
+          onclick="{!c.handleAccordion}"
+          >+</span
+        >
+        <span
+          class="mobile-nav__label mobile-nav__icon-minus"
+          id="accordion-minus-contact"
+          onclick="{!c.handleAccordion}"
+          >-</span
+        >
+      </div>
+      <div
+        class="mobile-nav__accordionSection"
+        id="accordion-contact-section"
+        onclick="{!c.onClick}"
+      >
+      <!-- <span class="mobile-nav__label mobile-nav__label-contact">Our Information:</span> -->
+      <div class="mobile-nav__contacts">
+        <div class="mobile-nav__location">
+          <img
+            class="mobile-nav__location-icon"
+            src="{!$ContentAsset.location_mobile}"
+            alt="location-icon"
+          />
+          <span class="mobile-nav__address">
+            <span class="mobile-nav__address-name">
+              ASH RESEARCH <br /> COLLABORATIVE
+            </span>
+            <br />
+            <span class="mobile-nav__address-location">
+              2021 L Street NW, Suite 900 <br /> Washington, DC 20036
+            </span>
+          </span>
+        </div>
+        <div class="mobile-nav__phone">
+          <img
+            class="mobile-nav__phone-icon"
+            src="{!$ContentAsset.Phone_Icon}"
+            alt="phone-icon"
+          />
+          <span class="mobile-nav__phone-numbers">
+            <a class="mobile-nav__contact-link" href="tel:1-202-776-0544"
+              >Local +1 (202) 776.0544</a
+            >
+            <a class="mobile-nav__contact-link" href="tel:1-866-828-1231"
+              >Toll Free: +1 (866) 828.1231</a
+            >
+          </span>
+        </div>
+        <a
+          class="mobile-nav__contact-link"
+          href="mailto:info@ashrc.org"
+          target="_top"
+        >
+          <img
+            class="mobile-nav__contact-icon"
+            src="{!$ContentAsset.Email_Icon}"
+            alt="email-icon"
+          />
+          Email: <i>info@ashrc.org</i>
+        </a>
+        <a class="mobile-nav__contact-link" href="tel:1-202-776-0545">
+          <img
+            class="mobile-nav__contact-icon"
+            src="{!$ContentAsset.Fax_Icon}"
+            alt="fax-icon"
+          />
+          Fax: +1 (202) 776.0545
+        </a>
+      </div>
+    </div>
+    </section>
+    <section class="mobile-nav__section">
+      <span class="mobile-nav__label">Let's Stay Connected</span>
+      <div class="mobile-nav__social-links">
+        <a
+          class="mobile-nav__social-link"
+          href="{!v.facebookLink}"
+          target="_blank"
+        >
+          <img
+            class="mobile-nav__social-icon"
+            src="{!$ContentAsset.Facebook_Icon}"
+            alt="facebook"
+          />
+        </a>
+        <a class="mobile-nav__social-link" href="{!v.twitterLink}" target="_blank">
+          <img
+            class="mobile-nav__social-icon"
+            src="{!$ContentAsset.Twitter_Icon}"
+            alt="twitter"
+          />
+        </a>
+        <a
+          class="mobile-nav__social-link"
+          href="{!v.instagramLink}"
+          target="_blank"
+        >
+          <img
+            class="mobile-nav__social-icon"
+            src="{!$ContentAsset.instagram_mobile_menu}"
+            alt="instagram"
+          />
+        </a>
+        <!-- <a class="mobile-nav__social-link" href="{!v.youTubeLink}" target="_blank">
+          <img
+            class="mobile-nav__social-icon"
+            src="{!$ContentAsset.Youtube_Icon}"
+            alt="youtube"
+          />
+        </a> -->
+      </div>
+    </section>
+  </div>
+</aura:component>

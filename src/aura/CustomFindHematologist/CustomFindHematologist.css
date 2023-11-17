@@ -1,0 +1,118 @@
+.THIS.custom-fah {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 20px 0 0;
+}
+
+.THIS .custom-fah__header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.THIS .custom-fah__title {
+  color: #000;
+  font-size: 18px;
+}
+
+.THIS .custom-fah__section-header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.THIS .custom-fah__btn {
+  align-self: center;
+  font-size: 13px;
+}
+
+.THIS .custom-fah__section-title {
+  align-items: center;
+  color: #000;
+  display: flex;
+  font-size: 18px;
+  padding: 20px 0;
+}
+
+.THIS .custom-fah__section-title-service {
+  align-items: center;
+  color: #000;
+  display: flex;
+  font-size: 18px;
+}
+
+.THIS .custom-fah__intro {
+  font-size: 16px;
+  color: #84000b;
+}
+
+.THIS .custom-fah__msg {
+  font-size: 16px;
+  color: #000;
+}
+
+.THIS .custom-fah__msg a {
+  color: #84000b;
+}
+
+.THIS .custom-fah__opt-in {
+  margin: 20px 0;
+}
+
+.THIS .custom-fah__opt-in .slds-form-element__label {
+  color: #000;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.THIS .custom-fah__title--form {
+  padding: 30px 0 10px;
+}
+
+.THIS .custom-fah__msg--form {
+  padding: 0 0 10px; 
+}
+
+.THIS .custom-fah__title--form:first-of-type {
+  padding: 0 0 10px;
+}
+
+.THIS .slds-modal__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.THIS .custom-fah__spinner {
+  height: 50px;
+  margin: 0 auto;
+  position: relative;
+  width: 50px;
+}
+
+.THIS .custom-fah__msg--empty {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.6);
+  padding-top: 20px;
+}
+
+.THIS .custom-fah-item__pills {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.THIS .custom-fah-item__pill {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+
+.THIS .custom-fah__actions {
+  display: flex;
+  justify-content: flex-end;
+}

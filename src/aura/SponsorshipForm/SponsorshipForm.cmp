@@ -1,0 +1,82 @@
+<!--
+*__________________________________________________________________________________________________
+* @Name         SponsorshipForm
+* @Author       Max Paquin mpaquin@fionta.com
+* @CreatedDate  11/20/2017
+* @Controller   SponsorshipFormController
+*__________________________________________________________________________________________________
+* @Description
+*               LC used to collect information that will be used to create Opportunity and OLI records
+*               Component only retrieve information, it does not create records.
+*__________________________________________________________________________________________________
+-->
+
+<aura:component controller="SponsorshipFormController" implements="force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:hasRecordId">
+<!-- ATTRIBUTES -->
+    <aura:attribute name="cityList" type="Campaign[]" default="[]"/>
+        <c:SponsorshipCityList cityList="{!v.cityList}"/>
+    <aura:attribute name="finalAmount" type="Decimal" default="10000"/>
+    <aura:attribute name="amountPerCity" type="Decimal" default="0"/>
+    <aura:attribute name="dataTableColumns" type="List"/>
+    <aura:attribute name="isInvalid" type="Boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String"/>
+
+<!-- EVENT HANDLER -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+<!-- COMPONENT BODY -->
+    <lightning:card iconName="standard:opportunity" title="Bulk Exhibitor Registration">
+        <div class="slds-p-around_small">
+            <aura:if isTrue="{!v.isInvalid}">
+                <div class="slds-theme_error slds-p-around_x-small">
+                    {!v.errorMessage}
+                </div>
+            </aura:if>
+
+            <lightning:input aura:id="totalAmount"
+                             name="totalamount"
+                             label="Total Amount"
+                             type="number"
+                             formatter="currency"
+                             min="0"
+                             required="true"
+                             value="10000"
+                             onchange="{!c.amountChange}"
+                            />
+            <lightning:input aura:id="discountAmount"
+                             name="discountAmount"
+                             label="Discount Amount"
+                             type="number"
+                             formatter="currency"
+                             min="0"
+                             value="0"
+                             onchange="{!c.amountChange}"
+                            />
+
+            <lightning:datatable aura:id="cities"
+                                 class="slds-p-around_x-small"
+                                 data="{!v.cityList}"
+                                 columns="{!v.dataTableColumns}"
+                                 keyField="id"
+                                 onsort="{!c.updateColumnSorting}"
+                                 onrowselection="{!c.rowSelected}"
+                                />
+
+
+            <lightning:layout horizontalAlign="end" class="slds-p-around_x-small slds-border_top">
+                Final Amount:
+                <ui:outputCurrency aura:id="finalAmountDisplay" value="{!v.finalAmount}"/>
+            </lightning:layout>
+
+            <lightning:layout horizontalAlign="end" class="slds-p-around_x-small slds-border_top">
+                Sponsorship Amount per City:
+                <ui:outputCurrency aura:id="amountPerCity" value="{!v.amountPerCity}"/>
+            </lightning:layout>
+
+            <lightning:layout horizontalAlign="end" class="slds-p-around_x-small">
+                <lightning:button aura:id='cancelButton' label="Cancel" onclick="{!c.closeModal}" />
+                <lightning:button aura:id='createButton' label="Save" onclick="{!c.submitSponsorship}" variant="brand"/>
+            </lightning:layout>
+        </div>
+    </lightning:card>
+</aura:component>

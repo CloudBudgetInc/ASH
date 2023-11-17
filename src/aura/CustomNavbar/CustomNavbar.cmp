@@ -1,0 +1,962 @@
+<aura:component extends="forceCommunity:navigationMenuBase">
+  <!-- Page Attributes -->
+  <aura:attribute name="loggedIn" type="Boolean" />
+  <aura:attribute name="loggedInNav" type="Boolean" />
+  <aura:attribute name="navigationLinkSetId" type="String" />
+  <aura:attribute name="scrolled" type="Boolean" />
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="userId" type="String" />
+  <aura:attribute name="topNavigationLinkSetId" type="String" />
+  <aura:attribute name="memberLinkLabel" type="String" />
+  <aura:attribute name="memberLinkMobileLabel" type="String" />
+  <aura:attribute name="memberLink" type="String" />
+  <aura:attribute name="homeLinkLabel" type="String" />
+  <aura:attribute name="homeLinkMobileLabel" type="String" />
+  <aura:attribute name="homeLink" type="String" />
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="location" type="String" />
+
+  <!-- Login Attributes -->
+  <aura:attribute name="startUrl" type="String" />
+  
+  <!-- Binded Attributes -->
+  <aura:attribute name="menuOpen" type="Boolean" />
+  <aura:attribute name="searchOpen" type="Boolean" />
+  <aura:attribute name="loginOpen" type="Boolean" />
+ 
+  <!-- Handlers -->
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  <aura:handler name="change" value="{!v.menuOpen}" action="{!c.onMenuOpenChange}"/>
+  <aura:handler event="forceCommunity:routeChange" action="{!c.handleRouteChange}" />
+
+  <div class="navbar">
+    <!-- Top Navigation -->
+    <div
+      class="{! join(' ',
+        'navbar__top',
+        v.loggedIn ? 'navbar__top--auth' : ''
+      )}"
+    >
+      <div class="navbar__top-container">
+        <aura:if isTrue="{!v.loggedIn}">
+          <div class="navbar__top-user">
+			<a class="navbar__top-user-name" href="{! v.baseUrl + 'profile/' + v.userId}">
+              <img
+                class="navbar__top-user-icon"
+                src="{!$ContentAsset.Profile_Icon}"
+                alt="avatar-icon"
+              />
+              <p class="navbar__top-user-name-full">Welcome, {!v.member}</p>
+            </a>
+            <a href="/secur/logout.jsp" class="navbar__top-user-logout">
+              Sign Out
+            </a>
+          </div>
+        </aura:if>
+        <div class="navbar__top-actions">
+          <!-- Top Links -->
+          <div class="{!v.loggedIn ? 'navbar__top-links--auth' : 'navbar__top-links'}">
+            <aura:if isTrue="{!v.loggedIn}">
+              <aura:if isTrue="{! !v.loggedInNav}">
+                <div class="navbar__top-links-container">
+                  <c:CustomTopNavigation
+                    navigationLinkSetId="{!v.topNavigationLinkSetId}"
+                    baseUrl="{!v.baseUrl}"
+                  />
+                </div>
+              </aura:if>
+              <aura:if isTrue="{!v.memberLinkLabel}">
+                <a class="navbar__top-links-link nav-link" href="{!v.memberLink}">
+                  <img
+                    class="navbar__top-btn-icon"
+                    src="{!$ContentAsset.dashboard}"
+                    alt="dashboard-icon"
+                  />
+                  {!v.memberLinkLabel}
+                </a>
+              </aura:if>
+              <aura:if isTrue="{!v.homeLinkLabel}">
+                <a
+                  class="{! join(' ',
+                    'navbar__top-links-link nav-link',
+                    !v.loggedInNav ? 'navbar__top-links-home' : ''
+                  )}"
+                  href="{!v.homeLink}"
+                >
+                  <img
+                    class="navbar__top-btn-icon"
+                    src="{!$ContentAsset.ashrc_logo_blue}"
+                    alt="dashboard-icon"
+                  />
+                  {!v.homeLinkLabel}
+                </a>
+              </aura:if>
+              <aura:set attribute="else">
+                <c:CustomTopNavigation
+                  navigationLinkSetId="{!v.topNavigationLinkSetId}"
+                  baseUrl="{!v.baseUrl}"
+                />
+              </aura:set>
+            </aura:if>
+          </div>
+          <!-- Top Buttons -->
+          <div class="navbar__top-btns">
+            <!-- <button
+            class="{! join(' ',
+              'navbar__top-btn navbar__top-btn-search'
+            )}"
+            onclick="{!c.openSearch}"
+            id="search-btn"
+            >
+              <img
+                class="navbar__top-btn-icon"
+                src="{!$ContentAsset.Search_Icon}"
+                alt="avatar-icon"
+                id="search-btn"
+              />
+              <span
+                class="navbar__top-btn-label"
+                id="search-btn"
+              >
+                Search
+              </span>
+            </button> -->
+            <aura:if isTrue="{! !v.loggedIn}">
+              <button
+                class="{! join(' ',
+                  'navbar__top-btn navbar__top-btn-login'
+                )}"
+                onclick="{!c.openLogin}"
+                id="login-btn"
+              >
+                <img
+                  class="navbar__top-btn-icon"
+                  src="{!$ContentAsset.Profile_Icon}"
+                  alt="avatar-icon"
+                  id="login-btn"
+                />
+                <span
+                  class="navbar__top-btn-label"
+                  id="login-btn"
+                >
+                  Sign In
+                </span>
+              </button>
+            </aura:if>
+          </div>
+        </div>
+      </div>
+  </div>
+
+    <!-- Main Navigation -->
+    <nav class="navbar__container">
+      <a class="{!!v.loggedIn ? 'navbar__home-link nav-link' : 'navbar__home-link--hide nav-link'}" href="{!v.homeLink}">
+        <aura:if isTrue="{!v.scrolled}">
+          <img
+            class="navbar__logo--scroll md"
+            src="{!$ContentAsset.ASHRC_Logo_SVG}"
+            alt="ash_logo"
+          />
+          <aura:if isTrue="{! !v.loggedIn}">
+            <img
+              class="navbar__logo--scroll navbar__logo-mark"
+              src="{!$ContentAsset.ashrc_logo_mark_svg}"
+              alt="ash_logo"
+            />
+          </aura:if>
+          <aura:set attribute="else">
+            <img
+              class="navbar__logo md"
+              src="{!$ContentAsset.ASHRC_Logo_SVG}"
+              alt="ash_logo"
+            />
+            <aura:if isTrue="{! !v.loggedIn}">
+              <img
+                class="navbar__logo navbar__logo-mark"
+                src="{!$ContentAsset.ashrc_logo_mark_svg}"
+                alt="ash_logo"
+              />
+            </aura:if>
+          </aura:set>
+        </aura:if>
+      </a>
+
+      <aura:if isTrue="{!v.loggedInNav}">
+        <ul class="navbar__links">
+          <li
+            class="{! join(' ',
+              'navbar__link navbar__subnav navbar__link--auth',
+              v.location == 'portal-clinical-trials-network' || v.location == 'portal-scd-ctn-site' ? 'navbar__link--active' : ''
+            )}"
+          >
+            <a class="navbar__subnav-label" href="javascript:void()">
+              Clinical Trials Network <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+            </a>
+            <aura:if isTrue="{!v.scrolled}">
+              <div
+                class="{! join(' ',
+                  'navbar__subnav-links navbar__subnav-links--scroll navbar__subnav-links--auth'
+                )}"
+                id="subnav"
+              >
+                <ul class="navbar__subnav-links-container">
+                  <li class="{!v.location == 'portal-clinical-trials-network' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/clinical-trials-network'}">
+                      CTN Dashboard
+                    </a>
+                  </li>
+                  <li class="{!v.location == 'portal-scd-ctn-site-locations' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/scd-ctn-site-locations'}">
+                      CTN Site Locations
+                    </a>
+                  </li>
+                    <li class="{!v.location == 'portal-site-directory' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/site-directory'}">
+                      CTN Site Directory
+                    </a>
+                  </li>
+                  <li class="navbar__subnav-link">
+                    <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-network/faqs'}" target="_blank">
+                      CTN FAQs
+                    </a>
+                  </li>
+                  <!-- <li class="{!v.location == 'portal-ctn-news-and-events' ? 'navbar__subnav-link navbar__subnav-link-active' : 'navbar__subnav-link'}">
+                      <a class="nav-link" href="{!v.baseUrl + 'portal/ctn-news-and-events'}">
+                        CTN News &amp; Events
+                      </a>
+                    </li> -->
+                </ul>
+              </div>
+              <aura:set attribute="else">
+                <div
+                  class="{! join(' ',
+                    'navbar__subnav-links navbar__subnav-links--auth'
+                  )}"
+                  id="subnav"
+                >
+                  <ul class="navbar__subnav-links-container">
+                    <li class="{!v.location == 'portal-clinical-trials-network' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                      <a class="nav-link" href="{!v.baseUrl + 'portal/clinical-trials-network'}">
+                        CTN Dashboard
+                      </a>
+                    </li>
+                    <li class="{!v.location == 'portal-scd-ctn-site-locations' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/scd-ctn-site-locations'}">
+                      CTN Site Locations
+                    </a>
+                  </li>
+                    <li class="{!v.location == 'portal-site-directory' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/site-directory'}">
+                      CTN Site Directory
+                    </a>
+                  </li>
+                    <li class="navbar__subnav-link">
+                      <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-network/faqs'}" target="_blank">
+                        CTN FAQs
+                      </a>
+                    </li>
+                    <!-- <li class="{!v.location == 'members-ctn-news-and-events' ? 'navbar__subnav-link navbar__subnav-link-active' : 'navbar__subnav-link'}">
+                      <a class="nav-link" href="{!v.baseUrl + 'members/ctn-news-and-events'}">
+                        CTN News &amp; Events
+                      </a>
+                    </li> -->
+                  </ul>
+                </div>
+              </aura:set>
+            </aura:if>
+          </li>
+          <li
+            class="{! join(' ',
+              'navbar__link navbar__subnav navbar__link--auth',
+              v.location == 'members-data-hub' ? 'navbar__link--active' : ''
+            )}"
+          >
+            <a class="navbar__subnav-label" href="javascript:void()">
+              Data Hub <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+            </a>
+            <aura:if isTrue="{!v.scrolled}">
+              <div
+                class="{! join(' ',
+                  'navbar__subnav-links navbar__subnav-links--scroll navbar__subnav-links--auth'
+                )}"
+                id="subnav"
+              >
+                <ul class="navbar__subnav-links-container">
+                  <li class="{!v.location == 'portal-data-hub' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/data-hub'}">
+                      Data Hub Dashboard
+                    </a>
+                  </li>
+                  <li class="{!v.location == 'portal-site-directory' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/site-directory#data-hub'}">
+                      Data Hub Site Directory
+                    </a>
+                  </li>
+                  <li class="navbar__subnav-link">
+                    <a class="nav-link" href="{!v.baseUrl + 'data-hub/faqs'}" target="_blank">
+                      Data Hub FAQs
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <aura:set attribute="else">
+                <div
+                  class="{! join(' ',
+                    'navbar__subnav-links navbar__subnav-links--auth'
+                  )}"
+                  id="subnav"
+                >
+                  <ul class="navbar__subnav-links-container">
+                    <li class="{!v.location == 'portal-data-hub' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                      <a class="nav-link" href="{!v.baseUrl + 'portal/data-hub'}">
+                        Data Hub Dashboard
+                      </a>
+                    </li>
+                      <li class="{!v.location == 'portal-site-directory' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                    <a class="nav-link" href="{!v.baseUrl + 'portal/site-directory#data-hub'}">
+                      Data Hub Site Directory
+                    </a>
+                  </li>
+                    <li class="navbar__subnav-link">
+                      <a class="nav-link" href="{!v.baseUrl + 'data-hub/faqs'}" target="_blank">
+                        Data Hub FAQs
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </aura:set>
+            </aura:if>
+          </li>
+          <!-- <li
+            class="{! join(' ',
+              'navbar__link navbar__link-auth',
+              v.location == 'portal-site-directory' ? 'navbar__link-active' : ''
+            )}"
+          >
+            <a class="nav-link" href="{!v.baseUrl + 'portal/site-directory'}">Site Directory</a>
+          </li> -->
+          <li
+            class="{! join(' ',
+              'navbar__link navbar__link-auth',
+              v.location == 'portal-committees' ? 'navbar__link-active' : ''
+            )}"
+          >
+            <a class="nav-link" href="{!v.baseUrl + 'portal/committees'}">Committees</a>
+          </li>
+          <li
+            class="{! join(' ',
+              'navbar__link navbar__link--auth',
+              v.location == 'portal-resource-library' ? 'navbar__link-active' : ''
+            )}"
+          >
+            <a class="nav-link" href="{!v.baseUrl + 'portal/resource-library'}">
+              Resource Library
+            </a>
+          </li>
+        </ul>
+        <aura:set attribute="else">
+          <ul class="navbar__links">
+            <li
+                class="{! join(' ',
+                  'navbar__link navbar__subnav',
+                  v.location == 'covid-19-registry' || v.location == 'covid-19-registry-data-summaries'
+                  || v.location == 'covid-19-registry-acknowledgements' || v.location == 'covid-19-registry-faqs' ? 'navbar__link--active' : ''
+                )}"
+              >
+                <a class="navbar__subnav-label" href="javascript:void()">
+                  COVID-19 Registry <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+                </a>
+                <aura:if isTrue="{!v.scrolled}">
+                  <div
+                    class="{! join(' ',
+                      'navbar__subnav-links navbar__subnav-links--scroll'
+                    )}"
+                    id="subnav"
+                  >
+                    <ul class="navbar__subnav-links-container">
+                        <li class="{!v.location == 'covid-19-registry' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry'}">
+                            COVID-19 Home
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'covid-19-registry-data-summaries' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry/data-summaries'}">
+                            Data Summaries
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'covid-19-registry-acknowledgements' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry/acknowledgements'}">
+                            Acknowledgements
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'covid-19-registry-faqs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry/faqs'}">
+                            Registry FAQs
+                          </a>
+                        </li>
+                        <li class="navbar__subnav-link">
+                          <a class="nav-link" href="https://www.hematology.org/covid-19" target="_blank">
+                            ASH COVID-19 Resources
+                          </a>
+                        </li>
+                    </ul>
+                  </div>
+                  <aura:set attribute="else">
+                    <div
+                      class="{! join(' ',
+                        'navbar__subnav-links'
+                      )}"
+                      id="subnav"
+                    >
+                      <ul class="navbar__subnav-links-container">
+                        <li class="{!v.location == 'covid-19-registry' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry'}">
+                            COVID-19 Home
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'covid-19-registry-data-summaries' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry/data-summaries'}">
+                            Data Summaries
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'covid-19-registry-acknowledgements' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry/acknowledgements'}">
+                            Acknowledgements
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'covid-19-registry-faqs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'covid-19-registry/faqs'}">
+                            Registry FAQs
+                          </a>
+                        </li>
+                        <li class="navbar__subnav-link">
+                          <a class="nav-link" href="https://www.hematology.org/covid-19" target="_blank">
+                            ASH COVID-19 Resources
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </li>
+              <li
+                class="{! join(' ',
+                  'navbar__link navbar__subnav',
+                  v.location == 'participants-and-advocates' || v.location == 'clinical-trials-101' ? 'navbar__link--active' : ''
+                )}"
+              >
+                <a class="navbar__subnav-label" href="javascript:void()">
+                  Sickle Cell Disease Community <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+                </a>
+                <aura:if isTrue="{!v.scrolled}">
+                  <div
+                    class="{! join(' ',
+                      'navbar__subnav-links navbar__subnav-links--scroll'
+                    )}"
+                    id="subnav"
+                  >
+                    <ul class="navbar__subnav-links-container">
+                      <li class="{!v.location == 'sickle-cell-disease-community' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community'}">
+                          Sickle Cell Disease Community Home
+                        </a>
+                      </li>
+                      <li class="{!v.location == 'clinical-trials-101' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-101'}">
+                          Clinical Trials 101
+                        </a>
+                      </li>
+                      <li class="{!v.location == 'community-advisory-board' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community/community-advisory-board'}">
+                          Community Advisory Board
+                        </a>
+                      </li>
+                      <li class="{!v.location == 'data-hub-participation' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community/data-hub-participation'}">
+                          Data Hub Participation
+                      </a>
+                    </li>
+                    </ul>
+                  </div>
+                  <aura:set attribute="else">
+                    <div
+                      class="{! join(' ',
+                        'navbar__subnav-links'
+                      )}"
+                      id="subnav"
+                    >
+                      <ul class="navbar__subnav-links-container">
+                        <li class="{!v.location == 'participants-and-advocates' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community'}">
+                            Sickle Cell Disease Community Home
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'clinical-trials-101' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-101'}">
+                            Clinical Trials 101
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'community-advisory-board' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community/community-advisory-board'}">
+                            Community Advisory Boards
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'data-hub-participation' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'sickle-cell-disease-community/data-hub-participation'}">
+                            Data Hub Participation
+                        </a>
+                      </li>                       
+                      </ul>
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </li>
+              <li
+                class="{! join(' ',
+                  'navbar__link navbar__subnav',
+                  v.location == 'clinical-trials-network' || v.location == 'clinical-trials-network-researchers'
+                  || v.location == 'clinical-trials-network-clinicians' || v.location == 'clinical-trials-network-sponsors'
+                  || v.location == 'clinical-trials-network-faqs' ? 'navbar__link--active' : ''
+                )}"
+              >
+                <a class="navbar__subnav-label" href="javascript:void()">
+                  Clinical Trials Network <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+                </a>
+                <aura:if isTrue="{!v.scrolled}">
+                  <div
+                    class="{! join(' ',
+                      'navbar__subnav-links navbar__subnav-links--scroll'
+                    )}"
+                    id="subnav"
+                  >
+                    <ul class="navbar__subnav-links-container">
+                      <li class="{!v.location == 'clinical-trials-network' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-network'}">
+                          CTN Home
+                        </a>
+                      </li>
+                      <li class="{!v.location == 'clinical-trials-network-faqs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-network/faqs'}">
+                          CTN FAQs
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <aura:set attribute="else">
+                    <div
+                      class="{! join(' ',
+                        'navbar__subnav-links'
+                      )}"
+                      id="subnav"
+                    >
+                      <ul class="navbar__subnav-links-container">
+                        <li class="{!v.location == 'clinical-trials-network' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-network'}">
+                            CTN Home
+                          </a>
+                        </li>                        
+                         <li class="{!v.location == 'clinical-trials-network-faqs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                            <a class="nav-link" href="{!v.baseUrl + 'clinical-trials-network/faqs'}">
+                            CTN FAQs
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </li>
+              <li
+                class="{! join(' ',
+                  'navbar__link navbar__subnav',
+                  v.location == 'data-hub' || v.location == 'data-hub-faqs' ? 'navbar__link--active' : ''
+                )}"
+              >
+                <a class="navbar__subnav-label" href="javascript:void()">
+                  Data Hub <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+                </a>
+                <aura:if isTrue="{!v.scrolled}">
+                  <div
+                    class="{! join(' ',
+                      'navbar__subnav-links navbar__subnav-links--scroll'
+                    )}"
+                    id="subnav"
+                  >
+                    <ul id="topTier" class="navbar__subnav-links-container">
+                      <li class="{!v.location == 'about-data-hub' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub'}">
+                          Data Hub Home
+                        </a>
+                      </li>
+                      <li class="{!v.location == 'programs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}" id="dataHubPrograms">
+                        <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/programs'}">
+                          Data Hub Programs
+                        </a>
+                        <div id="bottomTierContainer">
+                          <ul id="bottomTier" >
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-program'}">
+                                Sickle Cell Disease Program
+                              </a>
+                            </li>
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/multiple-myeloma-program'}">
+                                Multiple Myeloma Program
+                              </a>
+                            </li>
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-learning-community'}">
+                                Learning Communities
+                              </a>
+                            </li>
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/real-world-evidence-initiative'}">
+                                Real-World Evidence Initiative
+                              </a>
+                            </li>                         
+                          </ul>
+                          </div>                        
+                      </li>
+                      <li class="{!v.location == 'data-quality' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/data-quality'}">
+                          Data Quality
+                        </a>
+                      </li> 
+                      <li class="{!v.location == 'research-and-analytics' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/research-and-analytics'}">
+                          Research and Analytics
+                        </a>
+                      </li> 
+                      <li class="{!v.location == 'data-submission' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/data-submission'}">
+                          Data Submission
+                        </a>
+                      </li>   
+                      <li class="{!v.location == 'data-hub-faqs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/faqs'}">
+                          Data Hub FAQs
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <aura:set attribute="else">
+                    <div
+                      class="{! join(' ',
+                        'navbar__subnav-links'
+                      )}"
+                      id="subnav"
+                    >
+                      <ul id="topTier" class="navbar__subnav-links-container">
+                        <li class="{!v.location == 'about-the-data-hub' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub'}">
+                            Data Hub Home
+                          </a>
+                        </li>
+                        <li class="{!v.location == 'programs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}" id="dataHubPrograms">
+                          <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/programs'}" >
+                            Data Hub Programs
+                          </a>
+                          <div id="bottomTierContainer">
+                          <ul id="bottomTier" >
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-program'}">
+                                Sickle Cell Disease Program
+                              </a>
+                            </li>
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/multiple-myeloma-program'}">
+                                Multiple Myeloma Program
+                              </a>
+                            </li>
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-learning-community'}">
+                                Learning Communities
+                              </a>
+                            </li>
+                            <li> 
+                              <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/real-world-evidence-initiative'}">
+                                Real-World Evidence Initiative
+                              </a>
+                            </li>                         
+                          </ul>
+                          </div>
+                        </li>
+                        <li class="{!v.location == 'data-quality' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/data-quality'}">
+                            Data Quality
+                          </a>
+                        </li> 
+                        <li class="{!v.location == 'research-and-analytics' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/research-and-analytics'}">
+                            Research and Analytics
+                          </a>
+                        </li> 
+                        <li class="{!v.location == 'data-submission' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/data-submission'}">
+                            Data Submission
+                          </a>
+                        </li>   
+                        <li class="{!v.location == 'data-hub-faqs' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'about-the-data-hub/faqs'}">
+                            Data Hub FAQs
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </li>
+              <li
+                class="{! join(' ',
+                  'navbar__link navbar__subnav',
+                  v.location == 'news-and-events' || v.location == 'newsletters' ? 'navbar__link--active' : ''
+                )}"
+              >
+                <a class="navbar__subnav-label" href="javascript:void()">
+                  News &amp; Events <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+                </a>
+                <aura:if isTrue="{!v.scrolled}">
+                  <div
+                    class="{! join(' ',
+                      'navbar__subnav-links navbar__subnav-links--scroll'
+                    )}"
+                    id="subnav"
+                  >
+                    <ul class="navbar__subnav-links-container">
+                      <li class="{!v.location == 'news-and-events' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                        <a class="nav-link" href="{!v.baseUrl + 'news-and-events'}">
+                          News &amp; Events Home
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <aura:set attribute="else">
+                    <div
+                      class="{! join(' ',
+                        'navbar__subnav-links'
+                      )}"
+                      id="subnav"
+                    >
+                      <ul class="navbar__subnav-links-container">
+                        <li class="{!v.location == 'news-and-events' ? 'navbar__subnav-link navbar__subnav-link--active' : 'navbar__subnav-link'}">
+                          <a class="nav-link" href="{!v.baseUrl + 'news-and-events'}">
+                            News &amp; Events Home
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </aura:set>
+                </aura:if>
+              </li>
+          </ul>
+        </aura:set>
+      </aura:if>
+    
+      <!-- <ul class="navbar__links" onclick="{!c.onNavClick}">
+        <aura:iteration items="{!v.menuItems}" var="item">
+          <aura:if isTrue="{!item.subMenu}">
+            <li
+              class="{! join(' ',
+                'navbar__link navbar__subnav',
+                item.active ? 'navbar__link-active' : '',
+                v.loggedInNav ? 'navbar__link-auth' : ''
+              )}"
+              data-label="{!item.label}"
+            >
+              <a class="navbar__subnav-label" href="{!item.target}" target="{!item.tab}" data-menu-item-id="{!item.id}">
+                {!item.label} <img class="navbar__subnav-icon" src="{!$ContentAsset.down_caret}" alt="down-caret" />
+              </a>
+              <aura:if isTrue="{!v.scrolled}">
+                <div
+                  class="{! join(' ',
+                    'navbar__subnav-links navbar__subnav-links-scroll',
+                    v.loggedInNav ? 'navbar__subnav-links-auth' : ''
+                  )}"
+                  onclick="{!c.onNavClick}"
+                  id="subnav"
+                >
+                  <ul class="navbar__subnav-links-container">
+                    <aura:iteration items="{!item.subMenu}" var="subItem">
+                      <li class="{!subItem.active ? 'navbar__subnav-link navbar__subnav-link-active' : 'navbar__subnav-link'}" data-label="{!subItem.label}">
+                        <a class="nav-link" href="{!subItem.target}" target="{!subItem.tab}" data-menu-item-id="{!subItem.id}">{!subItem.label}</a>
+                      </li>
+                    </aura:iteration>
+                  </ul>
+                </div>
+                <aura:set attribute="else">
+                  <div
+                    class="{! join(' ',
+                      'navbar__subnav-links',
+                      v.loggedInNav ? 'navbar__subnav-links-auth' : ''
+                    )}"
+                    onclick="{!c.onNavClick}"
+                    id="subnav"
+                  >
+                    <ul class="navbar__subnav-links-container">
+                      <aura:iteration items="{!item.subMenu}" var="subItem">
+                        <li class="{!subItem.active ? 'navbar__subnav-link navbar__subnav-link-active' : 'navbar__subnav-link'}" data-label="{!subItem.label}">
+                          <a class="nav-link" href="{!subItem.target}" target="{!subItem.tab}" data-menu-item-id="{!subItem.id}">{!subItem.label}</a>
+                        </li>
+                      </aura:iteration>
+                    </ul>
+                  </div>
+                </aura:set>
+              </aura:if>
+            </li>
+            <aura:set attribute="else">
+              <aura:if isTrue="{!item.label != 'Home'}">
+                <li
+                  class="{! join(' ',
+                    'navbar__link',
+                    item.active ? 'navbar__link-active' : '',
+                    v.loggedInNav ? 'navbar__link-auth' : ''
+                  )}"
+                  data-label="{!item.label}">
+                  <a class="nav-link" href="{!item.target}" target="{!item.tab}" data-menu-item-id="{!item.id}">{!item.label}</a>
+                </li>
+              </aura:if>
+            </aura:set>
+          </aura:if>
+        </aura:iteration>
+      </ul> -->
+
+      <div class="{!!v.loggedIn ? 'navbar__actions' : 'navbar__actions navbar__actions--auth'}">
+        <aura:if isTrue="{!v.loggedIn}">
+          <a
+            class="{! join(' ',
+              'navbar__btn sm navbar__btn-ashrc nav-link'
+            )}"
+            href="{!v.homeLink}"
+          >
+          <img
+            class="navbar__btn-icon"
+            src="{!$ContentAsset.ashrc_logo_blue}"
+            alt="avatar-icon"
+          />
+          <span
+            class="navbar__btn-label"
+          >
+            {!v.homeLinkMobileLabel}
+          </span>
+        </a>
+        <a
+          class="{! join(' ',
+            'navbar__btn sm navbar__btn-dashboard nav-link'
+          )}"
+          href="{!v.memberLink}"
+        >
+          <img
+            class="navbar__btn-icon"
+            src="{!$ContentAsset.dashboard}"
+            alt="avatar-icon"
+          />
+          <span
+            class="navbar__btn-label"
+          >
+            {!v.memberLinkMobileLabel}
+          </span>
+        </a>
+        </aura:if>
+        <!-- <button
+          class="{! join(' ',
+            'navbar__btn navbar__btn-search'
+          )}"
+          onclick="{!c.openSearch}"
+          id="search-btn"
+        >
+          <img
+            class="navbar__btn-icon"
+            src="{!$ContentAsset.Search_Icon}"
+            alt="avatar-icon"
+            id="search-btn"
+          />
+          <span
+            class="navbar__btn-label"
+            id="search-btn"
+          >
+            Search
+          </span>
+        </button> -->
+        <aura:if isTrue="{! !v.loggedIn}">
+          <button
+            class="{! join(' ',
+              'navbar__btn navbar__btn-login'
+            )}"
+            onclick="{!c.openLogin}"
+            id="login-btn"
+          >
+            <img
+              class="navbar__btn-icon"
+              src="{!$ContentAsset.Profile_Icon}"
+              alt="avatar-icon"
+              id="login-btn"
+            />
+            <span
+              class="navbar__btn-label"
+              id="login-btn"
+            >
+              Sign In
+            </span>
+          </button>
+        </aura:if>
+        <button
+          class="{! join(' ',
+            'navbar__btn navbar__btn-menu'
+          )}"
+          onclick="{!c.openMenu}"
+          id="menu-btn"
+        >
+          <aura:if isTrue="{!v.menuOpen}">
+            <img
+              class="navbar__btn-icon"
+              src="{!$ContentAsset.Hamburger_Close_Icon}"
+              alt="avatar-icon"
+              id="menu-btn"
+            />
+            <aura:set attribute="else">
+              <img
+                class="navbar__btn-icon"
+                src="{!$ContentAsset.Hamburger_Menu_Icon}"
+                alt="avatar-icon"
+                id="menu-btn"
+              />
+            </aura:set>
+          </aura:if>
+          <span
+            class="navbar__btn-label"
+            id="menu-btn"
+          >
+            <aura:if isTrue="{!v.menuOpen}">
+              Close
+              <aura:set attribute="else">
+                Menu
+              </aura:set>
+            </aura:if>
+          </span>
+        </button>
+      </div>
+    </nav>
+    
+    <!-- Search Component -->
+    <div
+      class="{! join(' ',
+        'navbar__search',
+        v.searchOpen ? 'open' : '',
+        v.loggedInNav ? 'navbar__search--auth' : ''
+      )}"
+    >
+      <c:CustomSearch cancel="{!c.handleSearchClose}" />
+    </div>
+
+    <!-- Login Component -->
+    <aura:if isTrue="{! !v.loggedIn}">
+      <div
+        class="{! join(' ',
+          'navbar__login',
+          v.loginOpen ? 'open' : ''
+        )}"
+      >
+        <c:CustomLogin startUrl="{!v.startUrl}" cancel="{!c.handleLoginClose}" />
+      </div>
+    </aura:if>
+  </div>
+</aura:component>

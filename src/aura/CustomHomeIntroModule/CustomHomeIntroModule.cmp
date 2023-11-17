@@ -1,0 +1,78 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="image" type="Object" />
+  <aura:attribute name="description" type="String" />
+  <aura:attribute
+    name="descriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="leftButtonLabel" type="String" default="Learn More" />
+  <aura:attribute name="leftButtonLink" type="String" />
+  <aura:attribute name="openLeftTab" type="Boolean" default="false" />
+  <aura:attribute name="rightButtonLabel" type="String" default="Learn More" />
+  <aura:attribute name="rightButtonLink" type="String" />
+  <aura:attribute name="openRightTab" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="true" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="home-intro">
+    <div
+      class="{! join(' ',
+        'home-intro__container',
+        v.showTopPadding ? 'padding-top' : '',
+        v.showBottomPadding ? 'padding-bottom' : ''
+      )}"
+    >
+      <div class="home-intro__left">
+        <span class="home-intro__heading">
+          <h2 class="home-intro__title">
+            <lightning:formattedRichText
+              class="h2"
+              value="{!v.record.contentNodes.Headline.value}"
+            />
+          </h2>
+        </span>
+        <div class="home-intro__body p">
+          <lightning:formattedRichText
+            class="home-intro__body-text"
+            value="{!v.description}"
+          />
+        </div>
+        <div class="home-intro__links">
+          <aura:if isTrue="{! !empty(v.leftButtonLabel)}">
+            <aura:if isTrue="{!v.openLeftTab}">
+              <a class="home-intro__cta cta-button cta-button--primary" href="{!v.leftButtonLink}" target="_blank">{!v.leftButtonLabel}</a>
+              <aura:set attribute="else">
+                <a class="home-intro__cta cta-button cta-button--primary" href="{!v.leftButtonLink}">{!v.leftButtonLabel}</a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+          <aura:if isTrue="{! !empty(v.rightButtonLabel)}">
+            <aura:if isTrue="{!v.openRightTab}">
+              <a class="home-intro__cta cta-button cta-button--primary" href="{!v.rightButtonLink}" target="_blank">{!v.rightButtonLabel}</a>
+              <aura:set attribute="else">
+                <a class="home-intro__cta cta-button cta-button--primary" href="{!v.rightButtonLink}">{!v.rightButtonLabel}</a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+        </div>
+      </div>
+      <div class="home-intro__right">
+        <img
+          class="home-intro__featured-image"
+          src="{!v.image.src}"
+          alt="{!v.image.alt}"
+        />
+        <div class="home-intro__background"></div>
+      </div>
+    </div>
+  </div>
+</aura:component>

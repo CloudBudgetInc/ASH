@@ -1,0 +1,523 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomAffiliationController"
+>
+  <aura:attribute name="affiliations" type="Affiliate__c[]" />
+  <aura:attribute name="contactId" type="String" />
+  <aura:attribute name="isModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="isAddModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="isOrgModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="showRequiredMsg" type="Boolean" default="false" />
+  <aura:attribute name="isAddConfirmationModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="editId" type="String" />
+  <aura:attribute name="loading" type="Boolean" default="false" />
+  <aura:attribute name="disableEndDate" type="Boolean" default="true" />
+  <aura:attribute name="newOrg" type="PenRec__c" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="custom-staff">
+    <div class="custom-staff__container">
+      <div class="custom-staff__header">
+        <h2 class="custom-staff__title">
+          Staff
+        </h2>
+        <aura:if isTrue="{! !empty(v.affiliations)}">
+          <lightning:button
+            class="custom-staff__btn--add"
+            variant="neutral"
+            label="Add Staff"
+            title="Add Staff"
+            onclick="{! c.openAddModal }"
+          />
+        </aura:if>
+      </div>
+      <aura:if isTrue="{!empty(v.affiliations)}">
+      <div class="custom-staff__empty">
+        <p>
+          There are no staff to display.
+        </p>
+        <!-- Add Button -->
+        <lightning:button
+          class="custom-staff__btn--empty"
+          variant="neutral"
+          label="Add Staff"
+          title="Add Staff"
+          onclick="{! c.openAddModal }"
+        />
+      </div>
+      <aura:set attribute="else">
+          <ul class="custom-staff-list">
+            <aura:iteration items="{!v.affiliations}" var="affiliation">
+              <li class="custom-staff-item">
+                <div class="custom-staff-item__container">
+                  <p class="custom-staff-item__street">
+                    <aura:if isTrue="{! !empty(affiliation.Related_Contact__r.LastName)}">
+                      {!affiliation.Related_Contact__r.FirstName}&nbsp;{!affiliation.Related_Contact__r.LastName}
+                      <aura:set attribute="else">
+                        <aura:if isTrue="{! !empty(affiliation.Pending_Record__r.Last_Name__c)}">
+                          <span>{!affiliation.Pending_Record__r.First_Name__c}&nbsp;{!affiliation.Pending_Record__r.Last_Name__c}
+                            <lightning:helptext
+                              class="custom-staff-item__tooltip"
+                              content="Person is Pending"
+                              iconName="utility:priority"
+                            />
+                          </span>
+                        </aura:if>
+                      </aura:set>
+                    </aura:if>
+                  </p>
+                  <aura:if isTrue="{! !empty(affiliation.Related_Contact__r.npe01__WorkEmail__c)}">
+                    <p>{!affiliation.Related_Contact__r.npe01__WorkEmail__c}</p>
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{! !empty(affiliation.Pending_Record__r.Email__c)}">
+                          <p>{!affiliation.Pending_Record__r.Email__c}</p>
+                        </aura:if>
+                    </aura:set>
+                  </aura:if>
+                  <aura:if isTrue="{! !empty(affiliation.Related_Contact__r.npe01__WorkPhone__c)}">
+                    <lightning:formattedPhone class="custom-staff-item__phone" value="{!affiliation.Related_Contact__r.npe01__WorkPhone__c}" />
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{! !empty(affiliation.Pending_Record__r.Phone__c)}">
+                          <lightning:formattedPhone class="custom-staff-item__phone" value="{!affiliation.Pending_Record__r.Phone__c}" />
+                        </aura:if>
+                    </aura:set>
+                  </aura:if>
+                  <aura:if isTrue="{! !empty(affiliation.Start_Date__c)}">
+                    <div class="custom-staff-item__dates">
+                      <p>
+                        <lightning:formattedDateTime
+                          value="{!affiliation.Start_Date__c}"
+                          year="numeric"
+                          month="short"
+                          day="2-digit"
+                          timeZone="UTC"
+                        />
+                        <aura:if isTrue="{!affiliation.Active__c}">
+                          - Present
+                          <aura:set attribute="else">
+                            <aura:if isTrue="{! !empty(affiliation.End_Date__c)}">
+                              - <lightning:formattedDateTime
+                                value="{!affiliation.End_Date__c}"
+                                year="numeric"
+                                month="short"
+                                day="2-digit"
+                                timeZone="UTC"
+                              />
+                            </aura:if>
+                          </aura:set>
+                        </aura:if>
+                      </p>
+                    </div>
+                  </aura:if>
+                  <span class="custom-staff-item__pills">
+                    <aura:if isTrue="{!affiliation.Active__c}">
+                      <p class="custom-staff-item__pill">Active</p>
+                    </aura:if>
+                  </span>
+                </div>
+                <span class="custom-staff__btns">
+                  <!-- Edit Button -->
+                  <lightning:button
+                    class="custom-staff__btn"
+                    variant="neutral"
+                    label="Edit"
+                    name="{!affiliation.Id}"
+                    title="Edit"
+                    onclick="{! c.openModal }"
+                  />
+                </span>
+
+                <!-- START of EDIT Popup FORM -->
+                <div class="custom-staff__modal">
+                  <aura:if
+                    isTrue="{!v.isModalOpen &amp;&amp; v.editId == affiliation.Id}"
+                  >
+                    <!-- Modal/Popup Box starts here-->
+                    <section
+                      role="dialog"
+                      tabindex="-1"
+                      aria-labelledby="modal-heading-edit"
+                      aria-modal="true"
+                      aria-describedby="modal-content-id-edit"
+                      class="slds-modal slds-fade-in-open"
+                    >
+                      <div class="slds-modal__container">
+                        <!-- Modal/Popup Box Header Starts here-->
+                        <header class="slds-modal__header">
+                          <h2
+                            id="modal-heading-edit"
+                            class="slds-text-heading_medium slds-hyphenate"
+                          >
+                            Edit Staff
+                          </h2>
+                          <lightning:buttonIcon
+                            iconName="utility:close"
+                            size="large"
+                            variant="bare"
+                            onclick="{! c.closeModal }"
+                            alternativeText="Close"
+                            title="Close"
+                          />
+                        </header>
+                        <div
+                          class="slds-modal__content slds-p-around_medium"
+                          id="modal-content-id-edit"
+                        >
+                          <lightning:recordEditForm
+                            recordId="{!affiliation.Id}"
+                            objectApiName="Affiliate__c"
+                            onload="{!c.setLoadingFalse}"
+                            onerror="{!c.setLoadingFalse}"
+                            onsubmit="{!c.submitDetails}"
+                            onsuccess="{!c.closeModal}"
+                          >
+                            <lightning:messages />
+                            <div class="slds-grid slds-wrap">
+                              <aura:if isTrue="{! !empty(affiliation.Pending_Record__r.Last_Name__c)}">
+                                <p class="slds-col slds-size_1-of-1 slds-form-element slds-form-element_stacked">
+                                  <label class="slds-form-element__label slds-no-flex">Related Contact</label>
+                                  <br />
+                                  <strong class="custom-affiliations__edit-pending-org">
+                                    {!affiliation.Pending_Record__r.First_Name__c}&nbsp;{!affiliation.Pending_Record__r.Last_Name__c}
+                                  </strong>{!' '}
+                                  <br />
+                                  This new person will be reviewed internally. Initially you will see it as pending, but this will update automatically after the review is complete.
+                                </p>
+                                <aura:set attribute="else">
+                                  <lightning:inputField
+                                    class="slds-col slds-size_1-of-1"
+                                    fieldName="Related_Contact__c"
+                                    disabled="true"
+                                  />
+                                </aura:set>
+                              </aura:if>
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Start_Date__c"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                aura:id="endDate"
+                                disabled="{!v.disableEndDate}"
+                                fieldName="End_Date__c"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                aura:id="active"
+                                onchange="{!c.disableFields}"
+                                fieldName="Active__c"
+                                variant="inline"
+                              />
+                            </div>
+                            <aura:if isTrue="{!v.loading}">
+                              <div class="custom-staff__spinner">
+                                <lightning:spinner
+                                  alternativeText="Loading"
+                                  size="small"
+                                  variant="brand"
+                                />
+                              </div>
+                            </aura:if>
+                            <div
+                              class="custom-staff__actions slds-m-top_medium"
+                            >
+                              <lightning:button
+                                variant="neutral"
+                                label="Cancel"
+                                title="Cancel"
+                                onclick="{! c.closeModal }"
+                              />
+                              <lightning:button
+                                variant="brand"
+                                type="submit"
+                                name="save"
+                                label="Save"
+                              />
+                            </div>
+                          </lightning:recordEditForm>
+                        </div>
+                      </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                  </aura:if>
+                </div>
+                <!-- END of EDIT Popup FORM -->
+              </li>
+            </aura:iteration>
+          </ul>
+        </aura:set>
+      </aura:if>
+    </div>
+    <!-- START of ADD Popup FORM -->
+    <div class="custom-staff__modal">
+      <aura:if isTrue="{!v.isAddModalOpen}">
+        <!-- Modal/Popup Box starts here-->
+        <section
+          role="dialog"
+          tabindex="-1"
+          aria-labelledby="modal-heading-add"
+          aria-modal="true"
+          aria-describedby="modal-content-id-add"
+          class="slds-modal slds-fade-in-open"
+        >
+          <div class="slds-modal__container">
+            <!-- Modal/Popup Box Header Starts here-->
+            <header class="slds-modal__header">
+              <h2
+                id="modal-heading-add"
+                class="slds-text-heading_medium slds-hyphenate"
+              >
+                Add Staff
+              </h2>
+              <lightning:buttonIcon
+                iconName="utility:close"
+                size="large"
+                variant="bare"
+                onclick="{! c.closeAddModal }"
+                alternativeText="Close"
+                title="Close"
+              />
+            </header>
+            <div
+              class="slds-modal__content slds-p-around_medium"
+              id="modal-content-id-add"
+            >
+              <lightning:recordEditForm
+                aura:id="staffAddForm"
+                objectApiName="Affiliate__c"
+                onload="{!c.setLoadingFalse}"
+                onerror="{!c.setLoadingFalse}"
+                onsubmit="{!c.submitAddDetails}"
+                onsuccess="{!c.handleAddSuccess}"
+              >
+                <lightning:messages />
+                <div class="slds-grid slds-wrap">
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-hide"
+                    fieldName="Contact__c"
+                    value="{!v.contactId}"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-hide"
+                    fieldName="Type__c"
+                    value="Staff"
+                  />
+                  <aura:if isTrue="{! !empty(v.newOrg.Id)}">
+                    <lightning:inputField
+                      class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-hide"
+                      fieldName="Pending_Record__c"
+                      disabled="true"
+                      value="{!v.newOrg.Id}"
+                    />
+                  </aura:if>
+                  <aura:if isTrue="{! !empty(v.newOrg.Last_Name__c)}">
+                    <p class="slds-col slds-size_1-of-1">
+                      Thank you for the information. An email confirmation will be sent when the person, 
+                      <strong>
+                        <aura:if isTrue="{! !empty(v.newOrg.First_Name__c)}">
+                          {!v.newOrg.First_Name__c + ' '}
+                        </aura:if>
+                        {!v.newOrg.Last_Name__c}</strong>, is added to the list.
+                    </p>
+                    <aura:set attribute="else">
+                      <div class="slds-col slds-size_1-of-1 custom-staff__add-person">
+                        <lightning:button
+                          class="custom-staff__add-person-btn"
+                          variant="brand"
+                          type="button"
+                          name="Add Person"
+                          label="Add Person"
+                          onclick="{! c.openOrgModal }"
+                        />
+                        <aura:if isTrue="{!v.showRequiredMsg}">
+                          <p class="custom-staff__required-msg">
+                            * Person is required
+                          </p>
+                        </aura:if>
+                      </div>
+                    </aura:set>
+                  </aura:if>
+                  <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Start_Date__c" />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    aura:id="endDate"
+                    disabled="{!v.disableEndDate}"
+                    fieldName="End_Date__c"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    aura:id="active"
+                    onchange="{!c.disableFields}"
+                    fieldName="Active__c"
+                    variant="inline"
+                  />
+                </div>
+                <aura:if isTrue="{!v.loading}">
+                  <div class="custom-staff__spinner">
+                    <lightning:spinner
+                      alternativeText="Loading"
+                      size="small"
+                      variant="brand"
+                    />
+                  </div>
+                </aura:if>
+                <div class="custom-staff__actions slds-m-top_medium">
+                  <lightning:button
+                    variant="neutral"
+                    label="Cancel"
+                    title="Cancel"
+                    onclick="{! c.closeAddModal }"
+                  />
+                  <lightning:button
+                    variant="brand"
+                    type="submit"
+                    name="save"
+                    label="Save"
+                  />
+                </div>
+              </lightning:recordEditForm>
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+      </aura:if>
+    </div>
+    <!-- END of ADD Popup FORM -->
+
+    <!-- START of ADD CONFIRMATION Popup FORM -->
+  <div class="custom-staff__modal">
+    <aura:if isTrue="{!v.isAddConfirmationModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-add-confirmation"
+        aria-modal="true"
+        aria-describedby="modal-content-id-add-confirmation"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-add-confirmation"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Staff Submitted
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeAddConfirmationModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-add-confirmation"
+          >
+            <p class="custom-staff__modal-content">
+              Thank you for creating your staff.
+              <aura:if isTrue="{! !empty(v.newOrg.Id)}">
+                If we find that an existing person matches one in our system, this record will be updated.
+              </aura:if>
+            </p>
+            <div class="custom-staff__actions slds-m-top_medium">
+              <lightning:button
+                variant="brand"
+                name="Ok"
+                label="Ok"
+                title="Ok"
+                onclick="{! c.closeAddConfirmationModal }"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of ADD CONFIRMATION Popup FORM -->
+
+  <!-- START of ADD ORG Popup FORM -->
+  <div class="custom-staff__modal">
+    <aura:if isTrue="{!v.isOrgModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-add-confirmation"
+        aria-modal="true"
+        aria-describedby="modal-content-id-add-confirmation"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-add-confirmation"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Create Pending Person
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeOrgModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-add-confirmation"
+          >
+            <lightning:recordEditForm
+              aura:id="recordEditForm"
+              objectApiName="PenRec__c"
+              onload="{!c.setLoadingFalse}"
+              onerror="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.handleOrgSuccess}"
+            >
+              <lightning:messages />
+              <div class="slds-grid slds-wrap">
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="First_Name__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" required="true" fieldName="Last_Name__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" required="true" fieldName="Email__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Phone__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1" required="true" fieldName="Related_Organization__c" />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="custom-staff__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <div class="custom-staff__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeOrgModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of ADD ORG Popup FORM -->
+  </div>
+</aura:component>

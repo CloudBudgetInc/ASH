@@ -1,0 +1,91 @@
+<design:component label="Custom Resources">
+  <design:attribute
+    name="folderId"
+    label="Resources Library"
+    datasource="apex://CustomLibraryPickList"
+    description="Choose a folder to show the corresponding resources."
+  />
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="iconImageField"
+    label="Icon Field"
+    datasource="None, Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name for the icon to display next to the headline when two column layout is chosen."
+  ></design:attribute>
+  <design:attribute
+    name="headlineField"
+    label="Headline Field"
+    datasource="Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the headline to display."
+  ></design:attribute>
+  <design:attribute
+    name="descriptionField"
+    label="Description Field"
+    datasource="Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the description to display."
+  ></design:attribute>
+  <design:attribute
+    name="resourcesField"
+    label="Additional Resources Field"
+    datasource="None, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name that contains resource links to display when Two Column layout is chosen."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter a label for the button."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+   <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="buttonStyle"
+    label="Button Style"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Select a button type to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonSize"
+    label="Button Size"
+    datasource="small, medium, large"
+    description="Select a button size."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="#fff, #f4f2e7, #e2eaee"
+    description="Choose a color to change the background in one column mode."
+  ></design:attribute>
+  <design:attribute
+    name="twoColumns"
+    label="Two Column Layout"
+    description="Check to apply two column layout."
+  ></design:attribute>
+  <design:attribute
+    name="linkColor"
+    label="Additional Resources Links Color"
+    datasource="white, black, red"
+    description="Choose a color to change the link color when Two Column layout is chosen."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,22 @@
+<design:component label="Custom Current User Profile">
+  <design:attribute
+    name="renewalLabel"
+    label="Membership Renewal Label"
+    description="Enter a label to show for the membership renewal link."
+  />
+  <design:attribute
+    name="renewalLink"
+    label="Membership Renewal Link"
+    description="Enter link to membership renewal."
+  />
+  <design:attribute
+    name="joinLabel"
+    label="Membership Join Label"
+    description="Enter a label to show for the membership join link."
+  />
+  <design:attribute
+    name="joinLink"
+    label="Membership Join Link"
+    description="Enter link to membership join."
+  />
+</design:component>

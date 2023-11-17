@@ -1,0 +1,112 @@
+<design:component label="Custom CMS Rich Text">
+ <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="contentField"
+    label="Content Field"
+    datasource="None, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the content to display."
+  ></design:attribute>
+  <design:attribute
+    name="textSize"
+    label="Text Size"
+    datasource="normal, large"
+    description="Select a text size for the content."
+  ></design:attribute>
+  <design:attribute
+    name="textColor"
+    label="Text Color"
+    datasource="#333, #fff"
+    description="Select a text color for the content."
+  ></design:attribute>
+  <design:attribute
+    name="linkColor"
+    label="Link Color"
+    datasource="#7095aa, #a30014, #fff"
+    description="Select a color for links in the content."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundImageField"
+    label="Background Image Field"
+    datasource="None, Image"
+    description="Select the CMS field name of the background image to display."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="none, #e2eaee, #f4f2e7, #f8f8f8"
+    description="Add a background color to show. If a background image is selected, it will have to be changed to None to see the background color."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter a label for a button to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="buttonStyle"
+    label="Button Style"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Select a button style."
+  ></design:attribute>
+  <design:attribute
+    name="buttonAlignment"
+    label="Button Alignment"
+    datasource="left, center, right"
+    description="Select a button alignment."
+  ></design:attribute>
+  <design:attribute
+    name="bottomTextField"
+    label="Bottom Text Field"
+    datasource="None, Subheading, RichText Field 1, RichText Field 2, RichText Field 3, RichText Field 4"
+    description="Select the CMS field name for text to display at the bottom of the section under a button. This should be a short line of text (100 characters or less)."
+  ></design:attribute>
+  <design:attribute
+    name="bottomTextAlignment"
+    label="Bottom Text Alignment"
+    datasource="left, center, right"
+    description="Select an alignment for the bottom text content."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomTextPadding"
+    label="Apply Bottom Text Top Padding"
+    description="Check to apply extra top padding to the bottom text content."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadline"
+    label="Show Headline"
+    description="Check to display headline from CMS."
+  ></design:attribute>
+  <design:attribute
+    name="centerHeadline"
+    label="Center Headline"
+    description="Check to center the headline text."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadlineBorder"
+    label="Show Headline Bottom Border"
+    description="Check to show a headline bottom border when the headline is centered."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

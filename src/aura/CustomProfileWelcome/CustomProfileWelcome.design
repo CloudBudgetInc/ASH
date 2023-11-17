@@ -1,0 +1,4 @@
+<design:component label="Custom Profile Welcome">
+  <design:attribute name="userId" label="User ID" />
+  <design:attribute name="message" label="Intro Message" />
+</design:component>

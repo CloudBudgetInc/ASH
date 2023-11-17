@@ -1,0 +1,203 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+<aura:attribute name="contentSlug" type="String" required="true" />
+<aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+<aura:attribute name="intro" type="String" />
+<aura:attribute
+  name="introField"
+  type="String"
+  default="Rich Text Field 1"
+/>
+<aura:attribute name="tile1" type="String" />
+<aura:attribute
+  name="tile1Field"
+  type="String"
+  default="Rich Text Field 2"
+/>
+<aura:attribute name="tile2" type="String" />
+<aura:attribute
+  name="tile2Field"
+  type="String"
+  default="Rich Text Field 3"
+/>
+<aura:attribute name="tile3" type="String" />
+<aura:attribute
+  name="tile3Field"
+  type="String"
+  default="Rich Text Field 4"
+/>
+<aura:attribute name="tile1Image" type="Object" />
+  <aura:attribute
+    name="tile1ImageField"
+    type="String"
+    required="true"
+    default="Image 1"
+  />
+  <aura:attribute name="tile2Image" type="Object" />
+  <aura:attribute
+    name="tile2ImageField"
+    type="String"
+    required="true"
+    default="Image 2"
+  />
+  <aura:attribute name="tile3Image" type="Object" />
+  <aura:attribute
+    name="tile3ImageField"
+    type="String"
+    required="true"
+    default="Image 3"
+  />
+<aura:attribute name="tile1Title" type="String" />
+<aura:attribute name="tile1Label" type="String" default="Log Into" />
+<aura:attribute name="tile1Link" type="String" />
+<aura:attribute name="tile1OpenTab" type="Boolean" default="false" />
+<aura:attribute name="tile2Title" type="String" />
+<aura:attribute name="tile2Label" type="String" default="Log Into" />
+<aura:attribute name="tile2Link" type="String" />
+<aura:attribute name="tile2OpenTab" type="Boolean" default="false" />
+<aura:attribute name="tile3Title" type="String" />
+<aura:attribute name="tile3Label" type="String" default="Log Into" />
+<aura:attribute name="tile3Link" type="String" />
+<aura:attribute name="tile3OpenTab" type="Boolean" default="false" />
+<aura:attribute name="backgroundColor" type="String" default="#fff" />
+<aura:attribute name="buttonType" type="String" default="primary" />
+<aura:attribute name="showHeadline" type="Boolean" default="true" />
+<aura:attribute name="showTopPadding" type="Boolean" default="false" />
+<aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div
+  class="{! join(' ',
+    'custom-tile-menu',
+    v.showTopPadding ? 'padding-top' : '',
+    v.showBottomPadding ? 'padding-bottom' : ''
+  )}"
+>
+  <div
+    class="{! join(' ',
+      'custom-tile-menu__container',
+      !empty(v.backgroundColor) ? 'custom-tile-menu__container--background' : ''
+    )}"
+    style="{! empty(v.backgroundColor) ? '' : 'background:' + v.backgroundColor + ';'}"
+  >
+    <div class="component-container--padding-horizontal">
+      <aura:if isTrue="{!v.showHeadline}">
+        <h1 class="custom-tile-menu__title">{!v.record.contentNodes.Headline.value}</h1>
+      </aura:if>
+      <aura:if isTrue="{!v.intro}">
+        <lightning:formattedRichText value="{!v.intro}" />
+      </aura:if>
+      <div class="custom-tile-menu__tiles">
+        <div class="custom-tile-menu__tile">
+          <div
+            class="custom-tile-menu__tile-top"
+            style="{!'background-image:url(' + v.tile1Image.src +')'}"
+          >
+            <img class="custom-tile-menu__logo" src="{!$ContentAsset.ashrc_logo_mark_white}" alt="ash_logo" />
+            <h3 class="custom-tile-menu__tile-title">{!v.tile1Title}</h3>
+          </div>
+          <div class="custom-tile-menu__tile-content">
+            <lightning:formattedRichText class="custom-tile-menu__tile-desc" value="{!v.tile1}" />
+            <aura:if isTrue="{!v.tile1OpenTab}">
+              <a
+                class="{! join(' ',
+                  'custom-tile-menu__tile-cta cta-button',
+                  'cta-button--' + v.buttonType
+                )}"
+                href="{!v.tile1Link}"
+                target="_blank"
+              >
+                {!v.tile1Label}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'custom-tile-menu__tile-cta cta-button',
+                    'cta-button--' + v.buttonType
+                  )}"
+                  href="{!v.tile1Link}"
+                >
+                  {!v.tile1Label}
+                </a>
+              </aura:set>
+            </aura:if>
+          </div>
+        </div>
+        <div class="custom-tile-menu__tile">
+          <div
+            class="custom-tile-menu__tile-top"
+            style="{!'background-image:url(' + v.tile2Image.src +')'}"
+          >
+            <img class="custom-tile-menu__logo" src="{!$ContentAsset.ashrc_logo_mark_white}" alt="ash_logo" />
+            <h3 class="custom-tile-menu__tile-title">{!v.tile2Title}</h3>
+          </div>
+          <div class="custom-tile-menu__tile-content">
+            <lightning:formattedRichText class="custom-tile-menu__tile-desc" value="{!v.tile2}" />
+            <aura:if isTrue="{!v.tile2OpenTab}">
+              <a
+                class="{! join(' ',
+                  'custom-tile-menu__tile-cta cta-button',
+                  'cta-button--' + v.buttonType
+                )}"
+                href="{!v.tile2Link}"
+                target="_blank"
+              >
+                {!v.tile2Label}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'custom-tile-menu__tile-cta cta-button',
+                    'cta-button--' + v.buttonType
+                  )}"
+                  href="{!v.tile2Link}"
+                >
+                  {!v.tile2Label}
+                </a>
+              </aura:set>
+            </aura:if>
+          </div>
+        </div>
+        <div class="custom-tile-menu__tile">
+          <div
+            class="custom-tile-menu__tile-top"
+            style="{!'background-image:url(' + v.tile3Image.src +')'}"
+          >
+            <img class="custom-tile-menu__logo" src="{!$ContentAsset.ashrc_logo_mark_white}" alt="ash_logo" />
+            <h3 class="custom-tile-menu__tile-title">{!v.tile3Title}</h3>
+          </div>
+          <div class="custom-tile-menu__tile-content">
+            <lightning:formattedRichText class="custom-tile-menu__tile-desc" value="{!v.tile3}" />
+            <aura:if isTrue="{!v.tile3OpenTab}">
+              <a
+                class="{! join(' ',
+                  'custom-tile-menu__tile-cta cta-button',
+                  'cta-button--' + v.buttonType
+                )}"
+                href="{!v.tile3Link}"
+                target="_blank"
+              >
+                {!v.tile3Label}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'custom-tile-menu__tile-cta cta-button',
+                    'cta-button--' + v.buttonType
+                  )}"
+                  href="{!v.tile3Link}"
+                >
+                  {!v.tile3Label}
+                </a>
+              </aura:set>
+            </aura:if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</aura:component>

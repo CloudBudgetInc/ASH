@@ -1,0 +1,57 @@
+<design:component label="ASH RC Directory Tabs">
+  <design:attribute
+    name="title"
+    label="Title"
+    description="Enter a title for the section."
+  ></design:attribute>
+  <design:attribute
+    name="tab1Label"
+    label="Tab 1 Label"
+    description="Enter a label for the first tab."
+  ></design:attribute>
+  <design:attribute
+    name="tab2Label"
+    label="Tab 2 Label"
+    description="Enter a label for the second tab."
+  ></design:attribute>
+  <design:attribute
+    name="ctuLabel"
+    label="Clinical Trials Unit Label"
+    description="Enter a label for the Clinical Trials Unit."
+  ></design:attribute>
+  <design:attribute
+    name="learningCommLabel"
+    label="Learning Community Label"
+    description="Enter a label for the Learning Community."
+  ></design:attribute>
+  <design:attribute
+    name="ctnIntro"
+    label="CTN Directory Intro"
+    description="Enter introductory text for the CTN tab."
+  ></design:attribute>
+  <design:attribute
+    name="dataHubIntro"
+    label="Data Hub Directory Intro"
+    description="Enter introductory text for the Data Hub tab."
+  ></design:attribute>
+  <design:attribute
+    name="baseUrl"
+    label="Base Url"
+    description="Enter the base url of the site."
+  />
+  <design:attribute
+    name="detailUrl"
+    label="Profile Detail Url"
+    description="Enter the url of the profile detail page."
+  />
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

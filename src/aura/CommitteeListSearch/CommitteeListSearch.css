@@ -1,0 +1,9 @@
+.THIS .committee-list-search{
+    display: flex;
+    flex-direction: row;
+}
+
+.THIS .committee-list-search__commName,
+.THIS .committee-list-search__commClass {
+    flex: 1;
+}

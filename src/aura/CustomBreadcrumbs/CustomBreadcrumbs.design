@@ -1,0 +1,37 @@
+<design:component label="Custom Breadcrumbs">
+  <design:attribute
+    name="baseLabel"
+    label="First Page Label"
+    description="Add a label for the first page link."
+  ></design:attribute>
+  <design:attribute
+    name="basePath"
+    label="First Page Path"
+    description="Add a link for the first page link."
+  ></design:attribute>
+  <design:attribute
+    name="firstChildLabel"
+    label="Second Page Label"
+    description="Add a label for the second breadcrumb."
+  ></design:attribute>
+  <design:attribute
+    name="firstChildPath"
+    label="Second Page Link"
+    description="Add a link for the second breadcrumb."
+  ></design:attribute>
+  <design:attribute
+    name="secondChildLabel"
+    label="Third Page Label"
+    description="Add a label for a third breadcrumb."
+  ></design:attribute>
+  <design:attribute
+    name="secondChildPath"
+    label="Third Page Link"
+    description="Add a link for a third breadcrumb."
+  ></design:attribute>
+  <design:attribute
+    name="thirdChildLabel"
+    label="Fourth Page Label"
+    description="Add a label for a fourth breadcrumb."
+  ></design:attribute>
+</design:component>

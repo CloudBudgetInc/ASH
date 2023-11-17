@@ -1,0 +1,54 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="leftHeadline" type="String" />
+  <aura:attribute name="leftHeadlineField" type="String" required="true" default="Headline" />
+  <aura:attribute name="leftDescription" type="String" />
+  <aura:attribute name="leftDescriptionField" type="String" required="true" default="Rich Text Field 1" />
+  <aura:attribute name="rightHeadline" type="String" />
+  <aura:attribute name="rightHeadlineField" type="String" required="true" default="Subheading" />
+  <aura:attribute name="rightDescription" type="String" />
+  <aura:attribute name="rightDescriptionField" type="String" required="true" default="Rich Text Field 2" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+  
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div class="{!v.showBottomPadding ? 'two-col-cards two-col-cards--padding-bottom' : 'two-col-cards'}">
+    <div class="two-col-cards__container">
+      <div class="two-col-cards__card">
+        <div class="two-col-cards__card-header">
+          <h2 class="two-col-cards__card-title">
+            <lightning:formattedRichText
+              class="two-col-cards__card-title"
+              value="{!v.leftHeadline}"
+            />
+          </h2>
+        </div>
+        <p class="two-col-cards__card-body">
+            <lightning:formattedRichText
+              class="two-col-cards__card-text p"
+              value="{!v.leftDescription}"
+            />
+        </p>
+      </div>
+      <div class="two-col-cards__card">
+        <div class="two-col-cards__card-header">
+          <h2 class="two-col-cards__card-title">
+            <lightning:formattedRichText
+              class="two-col-cards__card-title h2"
+              value="{!v.rightHeadline}"
+            />
+          </h2>
+        </div>
+        <p class="two-col-cards__card-body">
+          <lightning:formattedRichText
+              class="two-col-cards__card-text p"
+              value="{!v.rightDescription}"
+            />
+        </p>
+      </div>
+    </div>
+  </div>
+</aura:component>

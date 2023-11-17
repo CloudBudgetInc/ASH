@@ -1,0 +1,82 @@
+<design:component label="Base Theme Layout">
+	<design:attribute
+    name="baseUrl"
+    label="Home Url"
+    description="Enter the home url."
+  />
+  <design:attribute
+    name="navigationLinkSetId"
+    label="Main Navigation Menu Name"
+    description="Enter the name of the navigation menu to use with underscores for spaces."
+  />
+  <design:attribute
+    name="mobileNavigationLinkSetId"
+    label="Mobile Navigation Menu Name"
+    description="Enter the name of the mobile navigation menu to use with underscores for spaces."
+  />
+  <design:attribute
+    name="memberNavigationLinkSetId"
+    label="Member Navigation Menu Name"
+    description="Enter the name of the member portal navigation menu to use with underscores for spaces."
+  />
+  <design:attribute
+    name="mobileMemberNavigationLinkSetId"
+    label="Mobile Member Navigation Menu Name"
+    description="Enter the name of the mobile member navigation menu to use with underscores for spaces."
+  />
+  <design:attribute
+    name="topNavigationLinkSetId"
+    label="Top Navigation Menu Name"
+    description="Enter the name of the top navigation menu to use with underscores for spaces."
+  />
+  <design:attribute
+    name="footerNavigationLinkSetId"
+    label="Footer Navigation Menu Name"
+    description="Enter the name of the footer navigation links to use with underscores for spaces."
+  />
+  <design:attribute
+    name="bottomNavigationLinkSetId"
+    label="Bottom Footer Navigation Menu Name"
+    description="Enter the name of the bottom footer navigation links to use with underscores for spaces."
+  />
+  <design:attribute
+    name="homeLinkLabel"
+    label="Home Link Label"
+    description="Enter a label for the top bar public home link when logged in."
+  />
+  <design:attribute
+    name="homeLinkLabelMobile"
+    label="Home Link Label Mobile"
+    description="Enter a label for the top bar public home link on mobile when logged in."
+  />
+  <design:attribute
+    name="homeBarLink"
+    label="Home Link Url"
+    description="Enter a url for the top bar public home link when logged in."
+  />
+  <design:attribute
+    name="authBarLinkLabel"
+    label="Portal Home Link Label"
+    description="Enter a label for the top bar portal home link when logged in."
+  />
+  <design:attribute
+    name="authBarLinkLabelMobile"
+    label="Portal Home Link Label Mobile"
+    description="Enter a url for the top bar portal home link on mobile when logged in."
+  />
+  <design:attribute
+    name="authBarLink"
+    label="Portal Home Link Url"
+    description="Enter a url for the top bar portal home link when logged in."
+  />
+  <design:attribute
+    name="mobileAccordionLabel"
+    label="Mobile Accordion Public Links Label"
+    description="Enter a label for the public links accordion on mobile.."
+  />
+  <design:attribute
+    name="copyrightYear"
+    label="Copyright Year"
+    description="Enter the copyright year for the footer."
+  />
+</design:component>

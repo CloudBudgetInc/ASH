@@ -1,0 +1,90 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="ArticleController">
+  <aura:attribute name="article" type="Knowledge__kav" />
+  <aura:attribute name="recordId" type="String" required="true" />
+  <aura:attribute name="showCategory" type="Boolean" default="false" />
+  <aura:attribute name="showAudience" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <article
+    class="{! join(' ',
+      'article-detail component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+    id="{! 'article-detail-' + v.title}"
+  >
+    <aura:if isTrue="{!v.showCategory &amp;&amp; v.article.Category}">
+      <p class="article-detail__item">
+        {!v.article.Category}
+      </p>
+    </aura:if>
+    <aura:if isTrue="{!v.article.Publication_Date__c}">
+      <p class="article-detail__item">
+        Published On: {!' '}
+        <lightning:formattedDateTime
+		  month="long"
+          day="2-digit"
+          year="numeric"
+          timeZone="UTC"
+          value="{!v.article.Publication_Date__c}"
+        />
+      </p>
+    </aura:if>
+    <h1 class="article-detail__item">{!v.article.Title}</h1>
+    <aura:if isTrue="{!v.article.Subheading__c}">
+      <p class="article-detail__subheading">{!v.article.Subheading__c}</p>
+    </aura:if>
+    <aura:if isTrue="{!v.article.Body__c}">
+      <lightning:formattedRichText value="{!v.article.Body__c}" />
+    </aura:if>
+    <aura:if isTrue="{!v.article.Boilerplate__c}">
+      <lightning:formattedRichText
+        class="article-detail__boilerplate"
+        value="{!v.article.Boilerplate__c}"
+      />
+    </aura:if>
+    <aura:if isTrue="{!v.article.RecordType == 'Event'}">
+      <div class="article-detail__event">
+        <aura:if isTrue="{!v.showAudience &amp;&amp; v.article.Audience}">
+          <p class="article-detail__item">
+            {!v.article.Audience}
+          </p>
+        </aura:if>
+        <aura:if isTrue="{!v.article.Speakers__c}">
+          <p class="article-detail__item">{!v.article.Speakers__c}</p>
+        </aura:if>
+        <aura:if isTrue="{!v.article.Event_Date__c}">
+          <p class="article-detail__item">
+            <lightning:formattedDateTime
+              value="{!v.article.Event_Date__c}"
+              month="short"
+              day="2-digit"
+              year="numeric"
+              weekday="long"
+              hour="2-digit"
+              minute="2-digit"
+              timeZoneName="short"
+              hour12="true"
+            />
+          </p>
+        </aura:if>
+        <aura:if isTrue="{!v.article.Snippet__c}">
+          <p class="article-detail__item">{!v.article.Snippet__c}</p>
+        </aura:if>
+      </div>
+      <div title="Add to Calendar" class="addeventatc cta-button cta-button--primary calendar-btn">
+        Add to Calendar
+        <span class="start">{!v.article.Event_Date__c}</span>
+        <!-- <span class="end">{!v.article.End_Date__c}</span> -->
+        <span class="timezone">{!$Locale.timezone}</span>
+        <span class="title">{!v.article.Title}</span>
+        <span class="description">{!v.article.Snippet__c}</span>
+        <!-- <span class="location">{!v.article.Location__c}</span> -->
+        <!-- <span class="all_day_event">false</span> -->
+      </div>
+    </aura:if>
+  </article>
+</aura:component>

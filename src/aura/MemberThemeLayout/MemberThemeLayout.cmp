@@ -1,0 +1,115 @@
+<aura:component
+  implements="forceCommunity:themeLayout"
+  controller="CustomLoginController"
+>
+  <aura:attribute name="heroRegion" type="Aura.Component[]" />
+  <aura:attribute name="bannerRegion" type="Aura.Component[]" />
+
+  <aura:attribute name="location" type="String" />
+  <aura:attribute name="loggedIn" type="Boolean" default="false" />
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="userId" type="String" />
+  <aura:attribute name="startUrl" type="String" default="/" />
+
+  <!-- Design Attributes -->
+  <aura:attribute name="baseUrl" type="String" default="/s/" />
+  <aura:attribute
+    name="facebookLink"
+    default="https://www.facebook.com/ASHResearchCollaborative"
+    type="String"
+  />
+  <aura:attribute
+    name="twitterLink"
+    default="https://twitter.com/ashcollab"
+    type="String"
+  />
+  <aura:attribute
+    name="instagramLink"
+    type="String"
+    default="https://www.instagram.com/ash_collab"
+  />
+  <aura:attribute name="youTubeLink" type="String" />
+  <aura:attribute name="copyrightYear" default="2020" type="Integer" />
+  <aura:attribute name="authBarLinkLabel" type="String" default="My Dashboard" />
+  <aura:attribute name="authBarLinkLabelMobile" type="String" default="Dashboard" />
+  <aura:attribute name="authBarLink" type="String" default="/s/portal" />
+  <aura:attribute name="homeLinkLabel" type="String" default="Return to ASHRC.ORG" />
+  <aura:attribute name="homeLinkLabelMobile" type="String" default="ASH RC" />
+  <aura:attribute name="homeBarLink" type="String" default="/" />
+  <aura:attribute name="mobileAccordionLabel" type="String" default="ASHRC.org" />
+  <aura:attribute name="navigationLinkSetId" type="String" default="Main_Navigation" />
+  <aura:attribute name="memberNavigationLinkSetId" type="String" default="Member_Navigation" />
+  <aura:attribute name="mobileMemberNavigationLinkSetId" type="String" default="Mobile_Member_Navigation" />
+  <aura:attribute name="mobileNavigationLinkSetId" type="String" default="Mobile_Navigation" />
+  <aura:attribute name="topNavigationLinkSetId" type="String" default="Top_Navigation" />
+  <aura:attribute name="footerNavigationLinkSetId" type="String" default="Footer_Navigation" />
+  <aura:attribute name="bottomNavigationLinkSetId" type="String" default="Bottom_Footer_Navigation" />
+  
+  <!-- Binded Attributes -->
+  <aura:attribute name="menuOpen" type="Boolean" default="false" />
+  <aura:handler name="change" value="{!v.menuOpen}" action="{!c.onMenuChange}"/>
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  <aura:handler
+    event="forceCommunity:routeChange"
+    action="{!c.handleRouteChange}"
+  />
+
+  <div
+    class="slds-grid slds-grid_vertical baseTheme theme-layout"
+    data-location="{!v.location}"
+  >
+    <header class="slds-col theme-layout__header">
+      <c:CustomNavbar
+        loggedIn="{!v.loggedIn}"
+        loggedInNav="true"
+        navigationLinkSetId="{!v.memberNavigationLinkSetId}"
+        member="{!v.member}"
+        menuOpen="{!v.menuOpen}"
+        startUrl="{!v.startUrl}"
+        baseUrl="{!v.baseUrl}"
+        topNavigationLinkSetId="{!v.topNavigationLinkSetId}"
+        memberLinkLabel="{!v.authBarLinkLabel}"
+        memberLinkMobileLabel="{!v.authBarLinkLabelMobile}"
+        memberLink="{!v.authBarLink}"
+        homeLinkLabel="{!v.homeLinkLabel}"
+        homeLinkMobileLabel="{!v.homeLinkLabelMobile}"
+        homeLink="{!v.homeBarLink}"
+        userId="{!v.userId}"
+      />
+      <!-- Mobile Navigation Sidebar -->
+      <c:CustomMobileNavigation
+        baseUrl="{!v.baseUrl}"
+        showMenu="{!v.menuOpen}"
+        accordionLabel="{!v.mobileAccordionLabel}"  
+        memberNavigationLinkSetId="{!v.mobileMemberNavigationLinkSetId}"
+        mobileNavigationLinkSetId="{!v.mobileNavigationLinkSetId}"
+        facebookLink="{!v.facebookLink}"
+        twitterLink="{!v.twitterLink}"
+        instagramLink="{!v.instagramLink}"
+        youTubeLink="{!v.youTubeLink}"
+        loggedIn="{!v.loggedIn}"
+        member="{!v.member}"
+        userId="{!v.userId}"
+      />
+    </header>
+    <div
+      class="{!v.loggedIn ? 'slds-col baseTheme__body theme-layout__body theme-layout__body-auth baseTheme__body-auth' : 'slds-col baseTheme__body theme-layout__body'}"
+    >
+      {!v.body}
+    </div>
+    <div class="slds-col theme-layout__footer">
+      <c:CustomASHRCFooter
+        facebookLink="{!v.facebookLink}"
+        twitterLink="{!v.twitterLink}"
+        instagramLink="{!v.instagramLink}"
+        youTubeLink="{!v.youTubeLink}"
+        copyrightYear="{!v.copyrightYear}"
+        homeLink="{!v.homeBarLink}"
+        footerNavigationLinkSetId="{!v.footerNavigationLinkSetId}"
+        bottomNavigationLinkSetId="{!v.bottomNavigationLinkSetId}"
+        baseUrl="{!v.baseUrl}"
+      />
+    </div>
+  </div>
+</aura:component>

@@ -1,0 +1,935 @@
+<apex:page showHeader="false" sidebar="false" controller="CTNMapController">
+  <html>
+  <head>
+    <apex:slds />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwaJH_4FOLz0MwcXoSaBsa_twMi0CAFk4&callback=initMap&libraries=places,geometry&v=weekly"
+      defer="defer"></script>
+    <style type="text/css">
+      body{height:100%;margin:0;overflow:hidden}#goCenterUI{background-color:#fff;border:2px solid #fff;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,0.3);cursor:pointer;float:left;margin-bottom:22px;text-align:center}#goCenterText{color:#191919;font-family:"Roboto", Arial, sans-serif;font-size:15px;line-height:25px;padding-left:5px;padding-right:5px}#map{border:3px solid #fff;border-radius:10px;height:350px;width:100%}@media (min-width: 768px){#map{height:440px}}@media (min-width: 1024px){#map{max-width:920px}}#firstHeading,#bodyContent,#bodyContent .popup__phone a{color:#333}.map__top{background-position:center !important;background-repeat:no-repeat !important;background-size:cover !important;display:flex;height:620px;flex-direction:column;margin-top:30px;padding:30px 20px;position:relative;z-index:1}@media (min-width: 768px){.map__top{height:681px;padding:50px 30px}}@media (min-width: 1024px){.map__top{margin:50px auto 0;padding:50px}}.map__top::before{content:"";background:rgba(0,0,0,0.4);height:100%;left:0;position:absolute;top:0;width:100%;z-index:-1}.map__wrapper{bottom:-30px;left:50%;position:absolute;margin-right:-50%;transform:translateX(-50%);width:calc(100% - 40px)}@media (min-width: 768px){.map__wrapper{bottom:-50px;width:calc(100% - 60px)}}@media (min-width: 1024px){.map__wrapper{width:924px}}.map__title{align-items:center;color:#fff;display:flex !important;font-family:"DroidSerif-Bold","Droid Serif Bold","Droid Serif",sans-serif;font-size:24px !important;justify-content:center;text-align:center}@media (min-width: 768px){.map__title{font-size:32px !important}}.map__title>img{margin-right:20px}.map__intro{color:#fff;font-family:"DroidSerif","Droid Serif",sans-serif;font-size:22px;margin:0 auto !important;max-width:450px;padding:20px 0 30px !important;text-align:center}.map__footer{color:#333;font-family:"Helvetica-Light","Helvetica Light","Helvetica",sans-serif;font-size:18px;margin:0 auto;max-width:768px;text-align:center}.map__footer p{margin:0}.map__footer a,.map__footer a:focus,.map__footer a:hover{color:#446f82;font-weight:bold}.map-container{display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding:30px 20px}@media (min-width: 768px){.map-container{padding:50px 30px}}@media (min-width: 1024px){.map-container{margin:0 auto;max-width:1024px;padding:50px}}.map-container__listing{height:680px;list-style:none;margin:0;overflow-y:auto;padding:0}@media (min-width: 768px){.map-container__listing{height:740px}}.map-container__listing li{border-bottom:1px solid #aaa;margin:0;padding:20px}.map-container__list--empty{border-top:1px solid #fff;height:400px;padding:30px 0 !important;text-align:center}@media (min-width: 768px){.map-container__list--empty{height:250px}}.map-container__list-container{color:#333;font-size:16px;padding-top:30px;width:100%}@media (min-width: 768px){.map-container__list-container{padding-top:0}}.map-container__list-name{align-items:center;display:flex;font-family:"DroidSerif-Bold","Droid Serif Bold","Droid Serif",sans-serif;font-size:18px;font-weight:bold;justify-content:space-between}@media (min-width: 768px){.map-container__list-name{font-size:22px}}.map-container__list-name:hover{cursor:pointer}.map-container__list-toggle{display:flex;font-family:"DroidSerif-Bold","Droid Serif Bold","Droid Serif",sans-serif;font-size:16px;font-weight:bold}.map-container__list-toggle-label{display:none}@media (min-width: 768px){.map-container__list-toggle-label{display:block;padding-right:10px}}.map-container__list-address{padding:20px 0 !important}.map-container__list-phone{padding:0 0 20px}.map-container__list-phone:last-of-type{padding:0}.map-container__list-phone a{color:#333}.map-container__list-phone a:focus,.map-container__list-phone a:hover{color:#333}.map-container__list-links a{color:#446f82}.map-container__list-links a:hover,.map-container__list-links a:focus{color:#446f82;text-decoration:underline}.map-container__list-fields{display:flex;flex-direction:column;font-family:"Helvetica-Light","Helvetica Light","Helvetica",sans-serif;font-size:18px;height:auto;max-height:350px;overflow-y:auto;transition:all 500ms ease-in-out}.map-container__list-fields.hidden{max-height:0;overflow:hidden;transition:all 500ms ease-in-out}.search{align-items:center;display:flex;flex-flow:row nowrap;margin:0 auto;max-width:600px;width:100%}#submitBtn{border:none;border-radius:10px;border-bottom-left-radius:0;border-top-left-radius:0;background:#68b8b8;color:#fff;font-family:"Helvetica-Bold","Helvetica Bold","Helvetica",sans-serif;font-size:16px;height:40px;line-height:1.3;padding:10px 20px;text-align:center;width:136px}#submitBtn:hover{background:teal;color:#fff;cursor:pointer}#submitBtn:focus{background:#014e4e;color:#fff}.search-form{border-bottom:1px solid #aaa;padding:0 20px 10px}.search-form__field{border:1px solid #fff;border-radius:10px;border-bottom-right-radius:0;border-top-right-radius:0;color:#333 !important;font-family:"Helvetica-Light","Helvetica Light","Helvetica",sans-serif !important;font-size:12px !important;height:40px;padding:10px 25px 10px 30px;width:100%}.search-form__field::-webkit-input-placeholder,.search-form__field::-moz-placeholder,.search-form__field:-moz-placeholder,.search-form__field:-ms-input-placeholder{font-style:italic}.search-form__field-wrapper{position:relative;width:100%}.search-form__field-wrapper img{position:absolute;transform:translate(50%, 75%)}.search-form__field-group{align-items:center;display:flex;flex-flow:row wrap;justify-content:flex-start;max-width:100%}@media (min-width: 768px){.search-form__field-group{max-width:300px}}.search-form__radio-label{font-family:"ArialMT", "Arial", sans-serif;font-size:16px;padding:0 10px 10px 0}.search-form__radio-label:hover{cursor:pointer}.search-form__label{font-family:"DroidSerif-Bold","Droid Serif Bold","Droid Serif",sans-serif;font-size:22px;font-weight:bold;padding:0 0 20px !important}@media (min-width: 768px){.search-form__label{padding:30px 0 !important}}.search-form__filter-label{font-family:"DroidSerif","Droid Serif",sans-serif;font-size:12px}.search-form__filter-label:last-of-type{padding-bottom:10px}.search-form__filters{align-items:center;display:flex;flex-flow:row wrap;justify-content:space-between;padding:10px 0 0}.search-form__error{border:1px solid #d41f30}.search-form__error-msg{color:#fff;font-size:14px;margin:0 auto !important;max-width:600px;width:100%}.search-form .required{color:#d41f30}.pagination{align-items:center;display:flex;flex-flow:row wrap;padding:20px 20px 0 20px !important}.pagination li{font-family:"DroidSerif","Droid Serif",sans-serif;font-size:16px;margin-right:10px}.pagination li:last-of-type{margin-right:0}.pagination li:hover,.pagination li:focus{color:#446f82;cursor:pointer}.pagination li.active{font-weight:bold}
+    </style>
+    <script>
+      "use strict";
+
+      var map;
+      var organizations = [];
+      var markers = [];
+      var infowindow = null;
+      var zoom = 4;
+      var centerCoords = {
+        lat: 39.8283,
+        lng: -96,
+      };
+      var geocoder;
+      var mapMarkerIcon = '{!URLFOR($Resource.CTNMapMarker)}';
+      var currentPage = 1;
+      var numOfPages = 1;
+      const pageSize = 10;
+
+      /* Class to create reset center button on map */
+      class CenterControl {
+        constructor(controlDiv, map, center) {
+          this.map_ = map; // Set the center property upon construction
+
+          this.center_ = new google.maps.LatLng(center);
+          controlDiv.style.clear = "both"; // Set CSS for the control border
+
+          const goCenterUI = document.createElement("div");
+          goCenterUI.id = "goCenterUI";
+          goCenterUI.title = "Click to recenter the map";
+          controlDiv.appendChild(goCenterUI); // Set CSS for the control interior
+
+          const goCenterText = document.createElement("div");
+          goCenterText.id = "goCenterText";
+          goCenterText.innerHTML = "Reset Map";
+          goCenterUI.appendChild(goCenterText); // Set CSS for the setCenter control border
+
+          goCenterUI.addEventListener("click", function () {
+            markers = [];
+            const currentCenter = this.center_;
+            const located = geolocate(map);
+            if (!located) {
+              this.map_.setCenter(currentCenter);
+            }
+
+            createListItems(organizations);
+            createPagination(organizations);
+          }); // Set up the click event listener for 'Set Center': Set the center of
+          // the control to the current center of the map.
+        }
+      }
+
+      function formatPhoneNumber(phoneNumberString) {
+        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+        if (match) {
+          return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+        }
+        return `(${phoneNumberString.slice(0, 3)}) ${phoneNumberString.slice(3, 6)}-${phoneNumberString.slice(6)}`;
+      }
+
+      /* Create info window content template */
+      function createInfoWindowContent(org) {
+        const content = document.createElement('div');
+        content.id = 'content';
+        content.innerHTML = `
+          <div id="siteNotice"></div>
+          <h1 id="firstHeading" class="firstHeading"><strong>${org.Name}</strong></h1>
+          <br />
+        `;
+
+        const bodyContent = document.createElement('div');
+        bodyContent.id = 'bodyContent';
+        bodyContent.innerHTML = `
+          ${org.ShippingAddress && `
+            <p>Address: ${org.ShippingAddress.street}, ${org.ShippingAddress.city}, ${org.ShippingAddress.state} ${org.ShippingAddress.postalCode}</p>
+            <br />
+          `}
+        `;
+
+        if (org.Sites.length > 0) {
+          org.Sites.forEach(function(site) {
+            const div = document.createElement('div');
+            div.className = "popup__phone";
+            div.innerHTML = `
+              <p>${site.Name ? `Site Coordinator: ${site.Name}` : ''}</p>
+              <p>${site.Phone ? `Phone: <a href="tel:${site.Phone}">${formatPhoneNumber(site.Phone)}</a>` : ''}</p>
+              <br />
+            `;
+            bodyContent.append(div);
+          });
+        }
+
+        const links = document.createElement('div');
+        links.className = 'map-container__list-links';
+        const address = org.ShippingAddress ? `${org.ShippingAddress.street}, ${org.ShippingAddress.city}, ${org.ShippingAddress.state} ${org.ShippingAddress.postalCode}` : '';
+        const destination = encodeURI(address);
+        links.innerHTML = `<a href="#">Site Member Directory</a><br/>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${destination}" target="_blank">Get Directions</a>`;
+        bodyContent.append(links);
+
+        content.append(bodyContent);
+        return content;
+      }
+
+      /* Handle item click */
+      function handleItemClick(ev) {
+        let id = ev.target.id;
+
+        if (ev.target.tagName.toLowerCase() === 'span' && ev.target.classList[0] === 'map-container__list-toggle') {
+          id = ev.target.id;
+        } else if (ev.target !== ev.currentTarget && ev.target.tagName.toLowerCase() !== 'a') {  // child element
+          id = ev.target.parentNode.id;
+        } else {
+          return;
+        }
+
+        const item = document.getElementById(id);
+        if (item) {
+          const el = document.querySelector(`#${id} .map-container__list-fields`);
+          el.classList.toggle('hidden');
+          
+          // const fields = document.querySelectorAll('.map-container__list-fields');
+          // const hiddenFields = document.querySelectorAll('.map-container__list-fields.hidden');
+          // const openFields = fields.length - hiddenFields.length;
+
+          // if (openFields > 0) {
+          //   resetiFrameHeight(document.body.offsetHeight + (openFields * 100));
+          // } else {
+          //   resetiFrameHeight((document.body.offsetHeight + 50)  - el.clientHeight);
+          // }
+
+          const toggle = document.querySelector(`#${id} .map-container__list-toggle`);
+          if (toggle) {
+            if (toggle.classList[1] === 'map-container__list-toggle--collapse') {
+              toggle.innerHTML = '<span class="map-container__list-toggle-label">Show Details</span> {+}';
+            } else {
+              toggle.innerHTML = '<span class="map-container__list-toggle-label">Hide Details</span> {-}';
+            }
+            toggle.classList.toggle('map-container__list-toggle--collapse');
+          }
+        }
+      }
+
+      /* Render empty message if no data */
+      function handleControllerError() {
+        const mapContainertDiv = document.getElementById('map-container');
+        const emptyText = document.createElement('p');
+        emptyText.innerHTML = "No Clinical Trial Networks found.";
+        mapContainertDiv.appendChild(emptyText);
+      }
+
+      /* Create map marker and click listener on marker */
+      function createMarker(org) {
+        const position = {
+          lat: org.ShippingLatitude,
+          lng: org.ShippingLongitude
+        };
+        var marker = new google.maps.Marker({
+          map,
+          position,
+          icon: mapMarkerIcon,
+          tag: org,
+          title: name,
+        });
+        infowindow = new google.maps.InfoWindow({
+          content: createInfoWindowContent(org),
+          maxWidth: 200,
+          pixelOffset: new google.maps.Size(0, 0)
+        });
+        google.maps.event.addListener(marker, "click", (function (marker, org) {
+          return function() {
+            if (infowindow) {
+              infowindow.close();
+            }
+            infowindow.setContent(createInfoWindowContent(org));
+            infowindow.open(map, marker);
+            map.panTo(position);
+          }
+        })(marker, org));
+        // Add marker to array
+        markers.push(marker);
+      }
+
+      /* Create organization list items */
+      function createListItems(orgs, addMarkers = true, subtitleHtml) {
+        const mapListIntroDiv = document.getElementById('map-list-intro');
+        const mapListDiv = document.getElementById('map-list');
+        const currentOrgsMsg = document.getElementById('orgs-shown');
+        mapListIntroDiv.innerHTML = '';
+        mapListDiv.innerHTML = '';
+        if (orgs) {
+          const numberofOrgs = Object.keys(orgs).length;
+          currentOrgsMsg.innerText = `(Results Found: ${numberofOrgs} ${numberofOrgs > 1 ? 'Locations' : 'Location'})`;
+
+          if (addMarkers) {
+            for (const key of Object.keys(orgs)) {
+              let org = {};
+              const sites = [];
+              orgs[key].forEach(function (o) {
+                if (o.SiteName) {
+                  sites.push({Name: o.SiteName, Phone: o.Phone});
+                }
+              });
+              if (subtitleHtml) {
+                org = orgs[key][0];
+              } else {
+                org = {
+                  Id: orgs[key][0].Id,
+                  Name: orgs[key][0].Name,
+                  ShippingAddress: orgs[key][0].ShippingAddress,
+                  ShippingLatitude: orgs[key][0].ShippingLatitude,
+                  ShippingLongitude: orgs[key][0].ShippingLongitude,
+                  Sites: sites,
+                }
+              }
+              createMarker(org);
+            }
+          }
+              
+          const startOffset = currentPage === 1 ? 0 : (currentPage - 1) * pageSize;
+          const endOffset = currentPage * pageSize;
+          for (const key of Object.keys(orgs).slice(startOffset, endOffset)) {
+            let org = {};
+            const sites = [];
+            orgs[key].forEach(function (o) {
+              if (o.SiteName) {
+                sites.push({Name: o.SiteName, Phone: o.Phone});
+              }
+            });
+            if (subtitleHtml) {
+              org = orgs[key][0];
+            } else {
+              org = {
+                Id: orgs[key][0].Id,
+                Name: orgs[key][0].Name,
+                ShippingAddress: orgs[key][0].ShippingAddress,
+                ShippingLatitude: orgs[key][0].ShippingLatitude,
+                ShippingLongitude: orgs[key][0].ShippingLongitude,
+                Sites: sites,
+              }
+            }
+            const li = document.createElement('li');
+            li.classList = ['map-container__list-item'];
+            li.id = `item-${org.Id}`;
+            li.innerHTML = `
+              <p class="map-container__list-name">${org.Name} <span class="map-container__list-toggle" id=item-${org.Id}>
+                <span class="map-container__list-toggle-label">Show Details</span> {+}</span>
+              </p>
+              <div class="map-container__list-fields hidden">
+                ${org.ShippingAddress && `
+                  <p class="map-container__list-address">Address: ${org.ShippingAddress.street}, ${org.ShippingAddress.city}, ${org.ShippingAddress.state} ${org.ShippingAddress.postalCode}</p>
+            `}`;
+            if (org.Sites.length > 0) {
+              org.Sites.forEach(function(site) {
+                const div = document.createElement('div');
+                div.className = 'map-container__list-phone';
+                div.innerHTML = `
+                  <p>${site.Name ? `Site Coordinator: ${site.Name}` : ''}</p>
+                  <p>${site.Phone ? `Phone: <a href="tel:${site.Phone}">${formatPhoneNumber(site.Phone)}</a>` : ''}</p>
+                `;
+                li.lastChild.appendChild(div);
+              });
+            }
+
+            const links = document.createElement('div');
+            links.className = 'map-container__list-links';
+            const address = org.ShippingAddress ? `${org.ShippingAddress.street}, ${org.ShippingAddress.city}, ${org.ShippingAddress.state} ${org.ShippingAddress.postalCode}` : '';
+            const destination = encodeURI(address);
+            links.innerHTML = `<a href="#">Site Member Directory</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://www.google.com/maps/dir/?api=1&destination=${destination}" target="_blank">Get Directions</a>`;
+            li.lastChild.appendChild(links);
+
+            li.onclick = handleItemClick;
+            mapListDiv.appendChild(li);
+          };
+        } else {
+          createEmptyResultsMessage('No Clinical Trial Networks found.');
+        }
+      }
+
+      /* Create Pagination Numbers */
+      function createPagination(orgs, found) {
+        const paginationList = document.getElementById('pagination');
+        paginationList.innerHTML = '';
+        if (orgs) {
+          const totalOrgs = Object.keys(orgs).length;
+          numOfPages = Math.ceil(totalOrgs / pageSize);
+
+          // Create prev
+          const prevLi  = document.createElement('li');
+          prevLi.className = 'pagination__arrow';
+          prevLi.innerText = '<';
+          paginationList.append(prevLi);
+
+          prevLi.addEventListener('click', function(e) {
+            handlePrevClick(orgs, found);
+          });
+
+          // Create pagination list items
+          for (let i = 1; i < numOfPages + 1; i++) {
+            const li  = document.createElement('li');
+            if (i === 1) {
+              li.className = 'active';
+            }
+            li.innerText = i;
+            li.setAttribute('data-index', i);
+            paginationList.append(li);
+
+            li.addEventListener('click', function(e) {
+              handlePaginationClick(e, orgs, found);
+            });
+          }
+
+          // Create next
+          const nextLi  = document.createElement('li');
+          nextLi.className = 'pagination__arrow';
+          nextLi.innerText = '>';
+          paginationList.append(nextLi);
+
+          nextLi.addEventListener('click', function(e) {
+            handleNextClick(orgs, found);
+          });
+          
+        }
+      }
+
+      /* Handle pagination number click */
+      function handlePaginationClick(e, orgs, found) {
+        const index = e.target.getAttribute('data-index');
+        const paginationNums = document.body.querySelectorAll('.pagination li');
+        if (paginationNums) {
+          paginationNums.forEach(function(numEl) {
+            numEl.className = '';
+          });
+        }
+        e.target.className = 'active';
+        currentPage = Number(index);
+
+        createListItems(orgs, false, found);
+        const scrollEl = document.getElementById('map-container');
+        scrollEl.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+
+      function setActivePagination(currPage) {
+        const paginationNums = document.body.querySelectorAll('.pagination li');
+        if (paginationNums) {
+          paginationNums.forEach(function(numEl, index) {
+            if (index === currPage) {
+              numEl.className = 'active';
+            } else {
+              numEl.className = '';
+            }
+          });
+        }
+      }
+
+      /* Handle Prev pagination click */
+      function handlePrevClick(orgs, found) {
+        if (currentPage > 1) {
+          currentPage -= 1;
+          setActivePagination(currentPage);
+          createListItems(orgs, false, found);
+          const scrollEl = document.getElementById('map-container');
+          scrollEl.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+      }
+
+      /* Handle Next pagination click */
+      function handleNextClick(orgs, found) {
+        if (currentPage < numOfPages) {
+          currentPage += 1;
+          setActivePagination(currentPage);
+          createListItems(orgs, false, found);
+          const scrollEl = document.getElementById('map-container');
+          scrollEl.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+      }
+
+      /* Create empty results message */
+      function createEmptyResultsMessage(message) {
+        const mapListIntroDiv = document.getElementById('map-list-intro');
+        const mapListDiv = document.getElementById('map-list');
+        mapListIntroDiv.innerHTML = '';
+        mapListDiv.innerHTML = '';
+
+        const addressInput = document.getElementById('search-query');
+        const radiusBtns = document.getElementsByName('search-radius');
+        const [selectedRadius] = Array.from(radiusBtns).filter(function (radiusBtn) {
+          return radiusBtn.checked ? radiusBtn : undefined;
+        });
+
+        const p = document.createElement('p');
+        p.classList = ['map-container__list--empty'];
+        if (message) {
+          p.innerHTML = message;
+        } else {
+          p.innerHTML = 
+            `No Clinical Trial Networks found within a <br /><strong>${selectedRadius.value} mile</strong> radius of <strong>${addressInput.value}</strong>.`;
+        }
+        mapListIntroDiv.appendChild(p);
+      }
+
+      function initAutocomplete() {
+        const input = document.getElementById("search-query");
+        const searchBox = new google.maps.places.SearchBox(input);
+        // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); // Bias the SearchBox results towards current map's viewport.
+
+        map.addListener("bounds_changed", function () {
+          searchBox.setBounds(map.getBounds());
+        });
+        // var markers = []; // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+
+        searchBox.addListener("places_changed", function () {
+          const places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          } // Clear out the old markers.
+
+          // markers.forEach(marker => {
+          //   marker.setMap(null);
+          // });
+          // markers = []; // For each place, get the icon, name and location.
+
+          const bounds = new google.maps.LatLngBounds();
+          places.forEach(place => {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+
+            const icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            }; // Create a marker for each place.
+
+            // markers.push(
+            //   new google.maps.Marker({
+            //     map,
+            //     icon,
+            //     title: place.name,
+            //     position: place.geometry.location
+            //   })
+            // );
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+
+          handleSubmit();
+        });
+      }
+
+      /* Load data from apex controller CTNMapController */
+      function loadData() {
+        Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.CTNMapController.getCTUs}',
+          function (res, event) {
+            if (event.status) {
+              organizations = res.map(function(org) {
+                return {
+                  Id: org.Primary_Site__r?.Id,
+                  Name: org.Primary_Site__r?.Name,
+                  ShippingAddress: org.Primary_Site__r?.ShippingAddress,
+                  ShippingLatitude: org.Primary_Site__r?.ShippingLatitude,
+                  ShippingLongitude: org.Primary_Site__r?.ShippingLongitude,
+                  SiteName: org.Site_Coordinator__r?.Name,
+                  Phone: org.Site_Coordinator__r?.Phone,
+                }
+              })
+              .reduce(function(acc, curr) {
+                const arr = [];
+                acc[curr.Name] = [...acc[curr.Name] || [], curr];
+                return acc;
+              }, {});
+              createListItems(organizations);
+              createPagination(organizations);
+            } else if (event.type === 'exception') {
+              handleControllerError()
+            } else {
+              handleControllerError()
+            }
+          },
+          { escape: true }
+        );
+      }
+
+      /* Handler for geolocation error */
+      function handleLocationError(browserHasGeolocation) {
+        if (browserHasGeolocation) {
+          console.log('Error: The Geolocation service failed.');
+        } else {
+          console.log('Error: Your browser doesn\'t support geolocation.');
+        }
+        // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        // infoWindow.setPosition(pos);
+        // infoWindow.setContent(browserHasGeolocation ?
+        //   'Error: The Geolocation service failed.' :
+        //   'Error: Your browser doesn\'t support geolocation.');
+        // infoWindow.open(map);
+      }
+
+      /* Geolocate the user's location and set map center */
+      function geolocate(map) {
+        // Try HTML5 geolocation.
+        var located = false;
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            // infoWindow.setPosition(pos);
+            // infoWindow.setContent('Location found.');
+            // infoWindow.open(map);
+            centerCoords = pos;
+            var myLocation = new google.maps.Marker({ map, position: pos });
+            var myInfo = new google.maps.InfoWindow({
+              content: 'Your location',
+              pixelOffset: new google.maps.Size(0, 0),
+            });
+            myLocation.addListener("click", function () {
+              if (myInfo) {
+                myInfo.close();
+              }
+              myInfo.open(map, myLocation);
+              map.panTo(position);
+            });
+            map.setCenter(pos);
+            map.setZoom(6);
+            located = true;
+          }, function () {
+            handleLocationError(true);
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false);
+        }
+        return located;
+      }
+
+      /* Geocode address query within the radius */
+      function codeAddress(address, radius) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+          var searchCenter = results[0].geometry.location;
+          if (status == 'OK') {
+            map.setCenter(searchCenter);
+
+            // Get locations within radius
+            const boundary = new google.maps.LatLngBounds();
+            let foundOrgs = [];
+            markers.forEach(function (marker) {
+              const metersDistance = google.maps.geometry.spherical.computeDistanceBetween(marker.getPosition(), searchCenter);
+              const milesDistance = metersDistance * 0.000621371;
+              if (milesDistance < radius) {
+                boundary.extend(marker.getPosition());
+                marker.setMap(map);
+                foundOrgs.push(marker.tag);
+              }
+            });
+            if (foundOrgs.length > 0) {
+              map.fitBounds(boundary);
+
+              foundOrgs = foundOrgs.reduce(function(acc, curr) {
+                const arr = [];
+                acc[curr.Name] = [...acc[curr.Name] || [], curr];
+                return acc;
+              }, {});
+              const subtitle = document.createElement('p');
+              const innerSpan = document.createElement('span');
+              innerSpan.className = 'map-container__listing-subtitle-number';
+              innerSpan.innerText = `(${Object.keys(foundOrgs).length})`;
+              subtitle.className = 'map-container__listing-subtitle';
+              subtitle.innerText = 'Locations Found: ';
+              subtitle.appendChild(innerSpan);
+              createListItems(foundOrgs, false, subtitle);
+              createPagination(foundOrgs, true);
+            } else {
+              if (
+                address === 'USA'
+                || address === 'U.S.A'
+                || address === 'United States'
+                || address === 'United States of America'
+                || address === 'United States America'
+                || address === 'America'
+              ) {
+                createListItems(organizations, false);
+                createPagination(organizations);
+              } else {
+                createEmptyResultsMessage();
+              }
+            }
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+
+      /* Remove error messages and styles */
+      function removeErrors() {
+        const addressInput = document.getElementById('search-query');
+        const addressErrorMsg = document.getElementById('address-error-msg');;
+
+        addressInput.classList.remove('search-form__error');
+        addressErrorMsg.classList.add('hidden');
+      }
+
+      /* Validate input fields */
+      function isValid() {
+        const addressInput = document.getElementById('search-query');
+        const radiusBtns = document.getElementsByName('search-radius');
+        const [selectedRadius] = Array.from(radiusBtns).filter(function (radiusBtn) {
+          return radiusBtn.checked ? radiusBtn : undefined;
+        });
+
+        const addressErrorMsg = document.getElementById('address-error-msg');
+        const radiusErrorMsg = document.getElementById('radius-error-msg');
+
+        var isValid = true;
+
+        if (!addressInput.value) {
+          isValid = false;
+          if (selectedRadius.value !== 'all') {
+            addressInput.classList.add('search-form__error');
+            addressErrorMsg.classList.remove('hidden');
+          }
+        }
+        if (!selectedRadius.value) {
+          isValid = false;
+          selectedRadius.classList.add('search-form__error');
+          radiusErrorMsg.classList.remove('hidden');
+        }
+
+        return isValid;
+      }
+
+      /* Reset map center and listing */
+      function resetMap() {
+        markers = [];
+        // document.getElementById('search-query').value = '';
+        const center = new google.maps.LatLng(centerCoords);
+        // const located = geolocate(map);
+        map.setZoom(zoom);
+        // if (!located) {
+        map.setCenter(center);
+        // }
+        createListItems(organizations);
+        createPagination(organizations);
+      }
+
+      /* Submit address and radius fields and update listing and map */
+      function handleSubmit() {
+        const address = document.getElementById('search-query').value;
+        const radiusBtns = document.getElementsByName('search-radius');
+
+        const [selectedRadius] = Array.from(radiusBtns).filter(function (radiusBtn) {
+          return radiusBtn.checked ? radiusBtn : undefined;
+        });
+
+        if (isValid()) {
+          if (selectedRadius.value === 'all') {
+            resetMap();
+          } else {
+            codeAddress(address, selectedRadius.value);
+          }
+        } else if (selectedRadius.value === 'all') {
+          resetMap();
+        }
+      }
+
+      /* Add event listeners */
+      function addEventListeners() {
+        const addressInput = document.getElementById('search-query');
+        const radiusBtns = document.getElementsByName('search-radius');
+
+        document.addEventListener('click', function (ev) {
+          if (ev.target.id === 'submitBtn') {
+            handleSubmit();
+          }
+        });
+
+        addressInput.addEventListener('keydown', function (event) {
+          removeErrors();
+          if (event.keyCode === 13) { // enter
+            handleSubmit();
+          }
+        });
+
+        addressInput.addEventListener('focus', function (event) {
+          removeErrors();
+        });
+
+        Array.from(radiusBtns).forEach(function (radiusBtn) {
+          radiusBtn.addEventListener('keydown', function (event) {
+            removeErrors();
+            if (event.keyCode === 13) { // enter
+              handleSubmit();
+            }
+          });
+
+          radiusBtn.addEventListener('click', function (event) {
+            removeErrors();
+            handleSubmit();
+          });
+
+          radiusBtn.addEventListener('focus', function (event) {
+            removeErrors();
+          });
+        });
+      }
+
+      /* Initialize Google map */
+      function initMap() {
+        geocoder = new google.maps.Geocoder();
+
+        const center = centerCoords;
+        map = new google.maps.Map(document.getElementById('map'), {
+          center,
+          zoom,
+          maxZoom: 10,
+          streetViewControl: false,
+        });
+
+        // Get user location to start map there
+        // geolocate(map);
+
+        // const bounds = {
+        //   north: -68.01197
+        //   south: -161.75583,
+        //   east: 19.50139,
+        //   west: 64.85694,
+        // }; // Display the area between the location southWest and northEast.
+
+        // map.fitBounds(bounds);
+
+        // const centerControlDiv = document.createElement("div");
+        // const control = new CenterControl(centerControlDiv, map, center);
+        // centerControlDiv.index = 1;
+        // centerControlDiv.style.paddingLeft = "10px";
+        // map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(
+        //   centerControlDiv
+        // );
+
+        loadData();
+        initAutocomplete();
+        addEventListeners();
+      }
+
+      /* Reset iFrame height */
+      function resetiFrameHeight(defaultHeight) {
+        var me = window.name;
+        var height = 0;
+
+        if (me) {
+          var iframes = parent.document.getElementsByName(me);
+          if (iframes && iframes.length == 1) {
+            height = document.body.offsetHeight + 30;
+
+            if (height > 32768) {
+              // Maximum iframe height is 32768. Setting any larger value will result in a very large
+              // parent window height, and still a scrollbar on the iframe itself. The bottom of the window
+              // will be a huge expanse of blankness. It's pretty ugly.
+              height = 32768;
+            }
+
+            if (defaultHeight) {
+              iframes[0].style.height = defaultHeight + "px";
+            } else {
+              iframes[0].style.height = height + "px";
+            }
+          }
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', function(e) {
+        window.onload = function() {
+          if (document.body.offsetWidth < 768) {
+            resetiFrameHeight();
+          } else {
+            const height = document.body.offsetHeight < 1600 ? 1680 : document.body.offsetHeight;
+            resetiFrameHeight(height + 80);
+          }
+        }
+
+        var windowOnresize = window.onresize;
+        window.onresize = function() {
+          if (windowOnresize) windowOnresize(); //don’t trample the handler; intercept it
+          if (document.body.offsetWidth < 768) {
+            resetiFrameHeight();
+          } else {
+            resetiFrameHeight(document.body.offsetHeight + 100);
+          }
+        };
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class="map">
+      <div class="map__top" style="background: url({!$Resource.CTNMapBackgroundImage});">
+        <header class="map__title">
+          <apex:image id="map_icon" value="{!$Resource.CTNMapIcon}" width="50" height="50" alt="Map Icon"/>
+          <h2>CTN Site Locations</h2>
+        </header>
+        <p class="map__intro">
+          Use our Network sites locator to see a listing of participating Network sites near you.
+        </p>
+        <div class="search">
+          <div class="search-form__field-wrapper">
+            <apex:image id="map_search_icon" value="{!$Resource.MapSearchIcon}" width="15" height="15" alt="Map Search Icon"/>
+            <input
+              class="search-form__field"
+              id="search-query"
+              name="search-query"
+              type="search"
+              placeholder="Enter City, State or Zip"
+              required="true"
+            />
+          </div>
+          <button id="submitBtn">Search</button>
+        </div>
+        <p class="search-form__error-msg hidden" id="address-error-msg">*Required</p>
+        <div class="map__wrapper">
+          <div id="map"></div>
+        </div>
+      </div>
+      <div class="map-container">
+        <div class="map-container__list-container" id="map-container">
+          <div class="search-form">
+            <!-- <div class="search-form__field-wrapper">
+              <apex:image id="map_search_icon" value="{!$Resource.MapSearchIcon}" width="15" height="15" alt="Map Search Icon"/>
+              <input
+                class="search-form__field"
+                id="search-query"
+                name="search-query"
+                type="search"
+                placeholder="Enter City, State or Zip"
+                required="true"
+              />
+              <p class="search-form__error-msg hidden" id="address-error-msg">*Required</p>
+            </div> -->
+            <div>
+              <p class="search-form__label">
+                Search Results:
+              </p>
+              <p class="search-form__filter-label">Filter Results by Radius</p>
+              <div class="search-form__filters">
+                <div class="search-form__field-group">
+                  <label class="search-form__radio-label" for="radius-50">
+                    <input
+                      class="search-form__radio"
+                      checked="checked"
+                      name="search-radius"
+                      id="radius-50"
+                      type="radio"
+                      value="50"
+                    />
+                    <span>50 mi</span>
+                  </label>
+                  <label class="search-form__radio-label" for="radius-100">
+                    <input
+                      class="search-form__radio"
+                      name="search-radius"
+                      id="radius-100"
+                      type="radio"
+                      value="100"
+                    />
+                    <span>100 mi</span>
+                  </label>
+                  <label class="search-form__radio-label" for="radius-200">
+                    <input
+                      class="search-form__radio"
+                      name="search-radius"
+                      id="radius-200"
+                      type="radio"
+                      value="200"
+                    />
+                    <span>200 mi</span>
+                  </label>
+                  <label class="search-form__radio-label" for="radius-all">
+                    <input
+                      class="search-form__radio"
+                      checked="checked"
+                      name="search-radius"
+                      id="radius-all"
+                      type="radio"
+                      value="all"
+                    />
+                    <span>All</span>
+                  </label>
+                </div>
+                <p class="search-form__filter-label" id="orgs-shown"></p>
+              </div>
+              <p class="search-form__error-msg hidden" id="radius-error-msg">*Required</p>
+            </div>
+          </div>
+          <div id="map-list-intro"></div>
+          <!-- Listing -->
+          <ul class="map-container__listing" id="map-list"></ul>
+          <!-- Pagination -->
+          <nav aria-label="pagination">
+            <ul class="pagination" id="pagination"></ul>
+          </nav>
+        </div>
+      </div>
+      <footer class="map__footer">
+        <p>
+          For a complete list of locations, contact information or additional site information, please contact ASH RC 
+          <a href="tel:1-866-828-1231">Toll Free: +1 (866) 828.1231</a>
+          or via email at <a href="mailto:info@ashrc.org">info@ashrc.org</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+  </html>
+</apex:page>

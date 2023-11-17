@@ -1,0 +1,51 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+	<aura:attribute name="shareText" type="String" />
+	<aura:attribute name="pageUrl" type="String" required="true" />
+	<aura:attribute name="showTwitter" default="true" type="Boolean" />
+	<aura:attribute name="showFacebook" default="true" type="Boolean" />
+	<aura:attribute name="showLinkedIn" default="true" type="Boolean" />
+	<aura:attribute name="showEmail" default="false" type="Boolean" />
+	<aura:attribute name="emailSubject" type="String" />
+	<aura:attribute name="emailBody" type="String" />
+  
+	<div class="socialShare component-container--padding-horizontal">
+		<aura:if isTrue="{!v.showFacebook}">
+			<a
+				class="socialShare__link"
+				href="{!'https://www.facebook.com/sharer/sharer.php?u=https://www.ashresearchcollaborative.org/s' + v.pageUrl}"
+				target="__blank"
+			>
+				<img class="socialShare__icon" src="{!$ContentAsset.Facebook_Share_Icon}" alt="facebook" />
+			</a>
+		</aura:if>
+		<aura:if isTrue="{!v.showTwitter}">
+			<a
+				class="socialShare__link"
+				href="{!'http://twitter.com/share?text=' + v.shareText + '&amp;url=https://www.ashresearchcollaborative.org/s' + v.pageUrl}"
+				target="__blank"
+			>
+				<img class="socialShare__icon" src="{!$ContentAsset.Twitter_Share_Icon}" alt="twitter" />
+			</a>
+		</aura:if>
+		<aura:if isTrue="{!v.showLinkedIn}">
+			<a
+				class="socialShare__link"
+				href="{!'https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.ashresearchcollaborative.org/s' + v.pageUrl}"
+				target="__blank"
+			>
+				<img class="socialShare__icon" src="{!$ContentAsset.Linkedin_Share}" alt="linkedIn" />
+			</a>
+		</aura:if>
+		<aura:if isTrue="{!v.showEmail}">
+			<a
+				class="socialShare__link"
+				href="{!'mailto:?subject=' + v.emailSubject + '&amp;' + 'body=' + v.emailBody + ' https://www.ashresearchcollaborative.org/s' + v.pageUrl}"
+   			title="Share by Email"
+				target="__blank"
+			>
+				<img class="socialShare__icon" src="{!$ContentAsset.email_share}" alt="email_icon" />
+			</a>
+		</aura:if>
+		<img class="socialShare__icon" src="{!$ContentAsset.Share_Icon}" alt="share icon" />
+	</div>
+</aura:component>

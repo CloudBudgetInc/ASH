@@ -1,0 +1,43 @@
+.contact-search__header {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .contact-search__title {
+    align-items: center;
+  }
+  
+  .contact-search__search {
+    padding: 0;
+  }
+  
+  .contact-search__list {
+    background-color: #fff;
+    max-height: 800px;
+    overflow-y: auto;
+  }
+  
+  .contact-search__item {
+    border-bottom: 1px solid #dddbda;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  
+  .contact-search__item:first-of-type {
+    padding-top: 0;
+  }
+  
+  .contact-search__item:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .contact-search__name {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .contact-search__loading {
+    height: 30px;
+    position: relative;
+  }

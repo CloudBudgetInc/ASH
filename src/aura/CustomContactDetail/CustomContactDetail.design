@@ -1,0 +1,8 @@
+<design:component label="Custom Contact Detail">
+  <design:attribute
+    name="placeholder"
+    label="Placeholder Field Text"
+    description="Enter text to show when a field is empty."
+  />
+
+</design:component>

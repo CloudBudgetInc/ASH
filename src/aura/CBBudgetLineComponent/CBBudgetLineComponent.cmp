@@ -1,0 +1,121 @@
+<aura:component description="CBBudgetLineComponent" controller="CBASHController" access="global"
+				implements="lightning:actionOverride,lightning:isUrlAddressable,force:hasSObjectName,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome">
+	<ltng:require scripts="{!join(',', $Resource.cb4__JS_CONST, $Resource.cb4__JS_UTILS)}"/>
+	<aura:attribute name="app"            type="cb4__CBTag__c" access="global" />
+	<aura:attribute name="row"            type="cb4.CBRow"         access="global" />
+	<aura:attribute name="oldRow"         type="cb4.CBRow"/>
+	<aura:attribute name="allSubRows"     type="cb4.CBRow[]"/>
+	<aura:attribute name="subRows"        type="cb4.CBRow[]"/>
+	<aura:attribute name="editDisabled"   type="Boolean"       access="global" default="true" />
+	<aura:attribute name="localEditDisabled" type="Boolean" default="true" access="global"/>
+	<aura:attribute name="isSubRowsEmpty" type="Boolean"       default="true" />
+	<aura:attribute name="showSpinner"    type="Boolean"       default="false" />
+	<aura:attribute name="adminAccess" type="Boolean" default="false" access="global"/>
+	<aura:attribute name="showDescrModal" type="Boolean" default="false" />
+	<aura:attribute name="descrValue" type="String" default="" />
+	<aura:attribute name="subRowIndex" type="Integer" />
+	<aura:attribute name="disableCloseButton"  type="Boolean" default="false" access="global"/>
+	<aura:attribute name="disableApplyButton"  type="Boolean" default="true"  access="global"/>
+	<aura:attribute name="disableDeleteButton" type="Boolean" default="false" access="global"/>
+
+	<aura:method name="saveSubRows" action="{!c.saveSubLines}" access="public" />
+	<aura:method name="resetOldRow" action="{!c.resetOldRow}"  access="public" />
+
+	<aura:handler name="change" value="{!v.row}" action="{!c.setData}" />
+
+	<div class="slds-text-align_right slds-p-top_small slds-p-bottom_xxx-small">
+		<lightning:button variant="brand" label="Add" onclick="{!c.addNewSubLine}" disabled="{!or(and(!v.adminAccess, v.editDisabled), v.localEditDisabled, v.disableApplyButton, v.app.cb4__Status__c == 'Approved')}"/>
+	</div>
+	<div class="slds-box_border" style="border: 2px solid lightblue;">
+		<aura:if isTrue="{!!v.showSpinner}">
+			<div class="slds-grid slds-wrap slds-scrollable_y" style="max-height: 280px;">
+				<aura:if isTrue="{!v.subRows.length == 0}">
+					<div style="width: 100%; text-align: center;">{!if(v.localEditDisabled, 'No items to display.', 'No items to display. Click the Add button to add a new item.')}</div>
+				</aura:if>
+				<table class="slds-table slds-table_cell-buffer slds-table_bordered">
+					<tbody>
+					<aura:iteration items="{!v.subRows}" var="subRow" indexVar="i">
+						<tr style="{!if((i+1)%2 == 0, 'background-color: #F8F8FF;','')}">
+							<th class="slds-grid_vertical-align-center slds-align-middle">
+								<p>{!i + 1}.</p>
+							</th>
+							<th colspan="4" class="{!i + ' slds-p-around_none'}" onclick="{!c.descriptionHandler}">
+								<lightning:input disabled="{!or(v.localEditDisabled, and(!v.adminAccess, v.editDisabled), v.app.cb4__Status__c == 'Approved')}" maxlength="250" label="Description" class="descrField"
+												 messageWhenTooLong="You cannot use more than 250 characters" placeholder="Description"
+												 variant="label-hidden" value="{!subRow.description}"/>
+							</th>
+							<th class="slds-p-around_none slds-text-align_right">
+								<lightning:button
+										iconName="utility:macros" disabled="{!or(v.localEditDisabled, and(!v.adminAccess, v.editDisabled), v.app.cb4__Status__c == 'Approved')}"
+										class="slds-p-around_none"
+										variant="base" title="Copy Q1 value to all Quarters"
+										iconPosition="left" value="{!subRow.key}"
+										onclick="{!c.spreadAmount}" />
+								<lightning:button
+										iconName="utility:rules" disabled="{!or(v.localEditDisabled, and(!v.adminAccess, v.editDisabled), v.app.cb4__Status__c == 'Approved')}"
+										class="slds-p-around_none"
+										variant="base" title="Split Q1 value between Quarters"
+										iconPosition="left" value="{!subRow.key}"
+										onclick="{!c.splitAmount}" />
+								<lightning:button
+										iconName="utility:delete" disabled="{!or(and(!v.adminAccess, v.editDisabled), v.localEditDisabled, v.disableDeleteButton, v.app.cb4__Status__c == 'Approved')}"
+										class="slds-p-around_none"
+										variant="base" title="Delete Line"
+										iconPosition="left" value="{!subRow.key}"
+										onclick="{!c.deleteSubLine}" />
+							</th>
+						</tr>
+						<tr style="{!if((i+1)%2 == 0, 'background-color: #F8F8FF;','')}">
+							<th>
+								<lightning:icon iconName="utility:money" alternativeText="Money" title="Money"
+												size="small" variant="success" />
+							</th>
+							<aura:iteration items="{!subRow.rowValues}" var="item">
+								<th class="slds-p-around_none">
+									<lightning:input variant="label-hidden" maxlength="9" class="{!if(item.t == 'disabled', 'dec total', 'dec')}" step="0.01"
+													 placeholder="Enter a number" label="SubLine Amount" onblur="{!c.handleInputOnBlur}" onfocus="{!c.selectAllAmount}"
+													 disabled="{!or(item.t == 'disabled', v.localEditDisabled, and(!v.adminAccess, v.editDisabled), v.app.cb4__Status__c == 'Approved')}"
+													 onchange="{!c.calculateTotals}" value="{!item.v}" type="number"/>
+								</th>
+							</aura:iteration>
+						</tr>
+						<tr>
+							<th colspan="6"></th>
+						</tr>
+					</aura:iteration>
+
+					</tbody>
+				</table>
+			</div>
+
+			<aura:set attribute="else">
+				<div style="height:6rem;background-color:rgb(240, 240, 240, 25%);position:relative;">
+					<div role="status" class="slds-spinner slds-spinner_medium">
+						<span class="slds-assistive-text">Loading</span>
+						<div class="slds-spinner__dot-a"></div>
+						<div class="slds-spinner__dot-b"></div>
+					</div>
+				</div>
+			</aura:set>
+		</aura:if>
+	</div>
+	<div role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="{!if(v.showDescrModal,'slds-modal slds-fade-in-open', 'slds-hide')}">
+		<div class="slds-modal__container" style="z-index: 9001;">
+			<lightning:buttonIcon class="slds-modal__close slds-button_icon-inverse"
+								  iconName="utility:close" disabled="{!or(v.localEditDisabled, and(!v.adminAccess, v.editDisabled), v.app.cb4__Status__c == 'Approved')}"
+								  size="large"
+								  variant="bare"
+								  onclick="{!c.closeDescriptionModal}"
+								  alternativeText="Close"
+								  title="Close"
+			/>
+			<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+				<lightning:textarea maxlength="250" label="Description" variant="label-hidden" value="{!v.descrValue}" />
+			</div>
+			<div class="slds-modal__footer">
+				<button class="slds-button slds-button_brand" onclick="{!c.closeDescriptionModal}">Close</button>
+			</div>
+		</div>
+		<div class="slds-backdrop slds-backdrop_open" style="background:rgba(8, 7, 7, 0.1) !important;"></div>
+	</div>
+</aura:component>

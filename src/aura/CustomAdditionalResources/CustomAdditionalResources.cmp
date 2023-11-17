@@ -1,0 +1,157 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="showHeading" type="Boolean" default="true" />
+  <aura:attribute name="image" type="Object" />
+  <aura:attribute name="imageField" type="String" default="None" />
+  <aura:attribute name="subheading" type="String" />
+  <aura:attribute
+    name="subheadingField"
+    type="String"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="subheadingFontSize" type="String" default="Large" />
+  <aura:attribute name="linkColor" type="String" default="#d41f30" />
+  <aura:attribute name="link1Label" type="String" required="true" />
+  <aura:attribute name="link1Path" type="String" required="true" />
+  <aura:attribute name="open1Tab" type="Boolean" default="false" />
+  <aura:attribute name="link2Label" type="String" />
+  <aura:attribute name="link2Path" type="String" />
+  <aura:attribute name="open2Tab" type="Boolean" default="false" />
+  <aura:attribute name="link3Label" type="String" />
+  <aura:attribute name="link3Path" type="String" />
+  <aura:attribute name="open3Tab" type="Boolean" default="false" />
+  <aura:attribute name="link4Label" type="String" />
+  <aura:attribute name="link4Path" type="String" />
+  <aura:attribute name="open4Tab" type="Boolean" default="false" />
+  <aura:attribute name="backgroundColor" type="String" default="#fff" />
+  <aura:attribute name="mobileSubheading" type="Boolean" default="true" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'additional-resources',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div
+      class="additional-resources__container"
+      style="{! empty(v.backgroundColor) ? '' : 'background:' + v.backgroundColor + ';'}"
+    >
+      <div 
+        class="{! join(' ',
+          'additional-resources__container',
+          v.backgroundColor != '#fff' ? 'additional-resources__container--padding' : 'component-container--padding'
+        )}"
+      >
+      <img
+          class="additional-resources__icon"
+          src="{!v.image.src}"
+          alt="{!v.image.alt}"
+        />
+      <aura:if isTrue="{!v.showHeading}">
+        <div class="additional-resources__heading">
+          <h2 class="additional-resources__title">
+            <lightning:formattedRichText
+              class="h2"
+              value="{!v.record.contentNodes.Headline.value}"
+            />
+          </h2>
+        </div>
+      </aura:if>
+        <aura:if isTrue="{! subheadingField != 'None'}">
+          <span
+            class="{! join(' ',
+              'additional-resources__subheading',
+              v.mobileSubheading ? '' : 'additional-resources__subheading--sm',
+              v.subheadingFontSize == 'Small' ? 'additional-resources__subheading--font-sm' : '',
+              v.subheadingFontSize == 'Medium' ? 'additional-resources__subheading--font-md' : ''
+            )}"
+          >
+            <lightning:formattedRichText
+              class="subheading-text"
+              value="{!v.subheading}"
+            />
+          </span>
+        </aura:if>
+        <ul class="additional-resources__links">
+          <li>
+            <aura:if isTrue="{!v.open1Tab}">
+              <a
+                href="{!v.link1Path}"
+                style="{! 'color:' + v.linkColor + ';'}"
+                target="_blank"
+                >{!v.link1Label}</a
+              >
+              <aura:set attribute="else">
+                <a href="{!v.link1Path}" style="{! 'color:' + v.linkColor + ';'}"
+                  >{!v.link1Label}</a
+                >
+              </aura:set>
+            </aura:if>
+          </li>
+          <aura:if isTrue="{! !empty(v.link2Label)}">
+            <li>
+              <aura:if isTrue="{!v.open2Tab}">
+                <a
+                  href="{!v.link2Path}"
+                  style="{! 'color:' + v.linkColor + ';'}"
+                  target="_blank"
+                  >{!v.link2Label}</a
+                >
+                <aura:set attribute="else">
+                  <a href="{!v.link2Path}" style="{! 'color:' + v.linkColor + ';'}"
+                    >{!v.link2Label}</a
+                  >
+                </aura:set>
+              </aura:if>
+            </li>
+          </aura:if>
+          <aura:if isTrue="{! !empty(v.link3Label)}">
+            <li>
+              <aura:if isTrue="{!v.open3Tab}">
+                <a
+                  href="{!v.link3Path}"
+                  style="{! 'color:' + v.linkColor + ';'}"
+                  target="_blank"
+                  >{!v.link3Label}</a
+                >
+                <aura:set attribute="else">
+                  <a href="{!v.link3Path}" style="{! 'color:' + v.linkColor + ';'}"
+                    >{!v.link3Label}</a
+                  >
+                </aura:set>
+              </aura:if>
+            </li>
+          </aura:if>
+          <aura:if isTrue="{! !empty(v.link4Label)}">
+            <li>
+              <aura:if isTrue="{!v.open4Tab}">
+                <a
+                  href="{!v.link4Path}"
+                  style="{! 'color:' + v.linkColor + ';'}"
+                  target="_blank"
+                  >{!v.link4Label}</a
+                >
+                <aura:set attribute="else">
+                  <a
+                    href="{!v.link4Path}"
+                    style="{! 'color:' + v.linkColor + ';'}"
+                    >{!v.link4Label}</a
+                  >
+                </aura:set>
+              </aura:if>
+            </li>
+          </aura:if>
+        </ul>
+      </div>
+    </div>
+  </div>
+</aura:component>

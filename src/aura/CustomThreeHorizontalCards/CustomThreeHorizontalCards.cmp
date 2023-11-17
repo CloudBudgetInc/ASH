@@ -1,0 +1,91 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="backgroundImage" type="String" />
+  <aura:attribute
+    name="backgroundImageField"
+    type="String"
+    required="true"
+    default="Image 1"
+  />
+  <aura:attribute name="subheading" type="String" />
+  <aura:attribute name="subheadingField" type="String" default="Subheading" />
+  <aura:attribute name="firstCard" type="String" />
+  <aura:attribute
+    name="firstCardField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="secondCard" type="String" />
+  <aura:attribute
+    name="secondCardField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="thirdCard" type="String" />
+  <aura:attribute
+    name="thirdCardField"
+    type="String"
+    required="true"
+    default="Rich Text Field 4"
+  />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+    
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      'horizontal-cards',
+      v.showTopPadding ? 'margin-top' : '',
+      v.showBottomPadding ? 'margin-bottom' : ''
+    )}"
+  >
+    <div
+      class="horizontal-cards__container"
+      style="{!'background-image:url(' + v.backgroundImage +')'}"
+    >
+        <div class="horizontal-cards__content">
+        <h2 class="horizontal-cards__title">
+          <lightning:formattedRichText
+            class="h2"
+            value="{!v.record.contentNodes.Headline.value}"
+        /></h2>
+        <aura:if isTrue="{!v.subheadingField != 'None' &amp;&amp; v.subheading}">
+          <p class="horizontal-cards__subtitle">
+            <lightning:formattedRichText
+              class="p"
+              value="{!v.subheading}"
+          /></p>
+        </aura:if>
+        <div class="horizontal-cards__sections">
+          <div class="horizontal-cards__section">
+            <lightning:formattedRichText
+              class="horizontal-cards__section-text p"
+              value="{!v.firstCard}"
+            />
+          </div>
+          <div class="horizontal-cards__section">
+            <lightning:formattedRichText
+              class="horizontal-cards__section-text p"
+              value="{!v.secondCard}"
+            />
+          </div>
+          <aura:if isTrue="{! !empty(v.thirdCard)}">
+              <div class="horizontal-cards__section">
+                <lightning:formattedRichText
+                  class="horizontal-cards__section-text p"
+                  value="{!v.thirdCard}"
+                />
+              </div>
+          </aura:if>
+        </div>
+        </div>
+    </div>
+  </div>
+</aura:component>

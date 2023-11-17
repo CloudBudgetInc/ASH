@@ -1,0 +1,101 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="backgroundColor" type="String" />
+  <aura:attribute name="leftHeadline" type="String" />
+  <aura:attribute name="leftHeadlineField" type="String" required="true" default="Rich Text Field 1" />
+  <aura:attribute name="leftDescription" type="String" />
+  <aura:attribute name="leftDescriptionField" type="String" required="true" default="Rich Text Field 2" />
+  <aura:attribute name="rightHeadline" type="String" />
+  <aura:attribute name="rightHeadlineField" type="String" required="true" default="Rich Text Field 3" />
+  <aura:attribute name="rightDescription" type="String" />
+  <aura:attribute name="rightDescriptionField" type="String" required="true" default="Rich Text Field 4" />
+  <aura:attribute name="leftCTALabel" type="String" />
+  <aura:attribute name="leftCTALink" type="String" />
+  <aura:attribute name="openLeftTab" type="Boolean" default="false" />
+  <aura:attribute name="rightCTALabel" type="String" />
+  <aura:attribute name="rightCTALink" type="String" />
+  <aura:attribute name="openRightTab" type="Boolean" default="false" />
+  <aura:attribute name="showHeadline" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      'custom-two-col-text',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div
+      class="{! join(' ',
+        'custom-two-col-text__container',
+        v.backgroundColor != 'none' ? 'custom-two-col-text__container--background-color' : ''
+      )}"
+      style="{! !empty(v.backgroundColor) ? 'background:' + v.backgroundColor + '!important;' : ''}"
+    >
+      <div class="component-container--padding-horizontal">
+        <aura:if isTrue="{!v.showHeadline}">
+          <h1>{!v.record.contentNodes.Headline.value}</h1>
+        </aura:if>
+        <div class="custom-two-col-text__row">
+          <div class="custom-two-col-text__col">
+            <lightning:formattedRichText class="custom-two-col-text__headline" value="{!v.leftHeadline}" />
+            <div class="custom-two-col-text__desc">
+              <lightning:formattedRichText class="p" value="{!v.leftDescription}" />
+            </div>
+            <aura:if isTrue="{! !empty(v.leftCTALabel)}">
+              <aura:if isTrue="{!v.openLeftTab}">
+                <a
+                  class="custom-two-col-text__cta cta-button cta-button--primary"
+                  href="{!v.leftCTALink}"
+                  target="_blank"
+                >
+                  {!v.leftCTALabel}
+                </a>
+                <aura:set attribute="else">
+                  <a
+                    class="custom-two-col-text__cta cta-button cta-button--primary"
+                    href="{!v.leftCTALink}"
+                  >
+                    {!v.leftCTALabel}
+                  </a>
+                </aura:set>
+              </aura:if>
+            </aura:if>
+          </div>
+          <div class="custom-two-col-text__col">
+            <lightning:formattedRichText class="custom-two-col-text__headline" value="{!v.rightHeadline}" />
+            <div class="custom-two-col-text__desc">
+              <lightning:formattedRichText class="p" value="{!v.rightDescription}" />
+            </div>
+            <aura:if isTrue="{! !empty(v.rightCTALabel)}">
+              <aura:if isTrue="{!v.openRightTab}">
+                <a
+                  class="custom-two-col-text__cta cta-button cta-button--primary"
+                  href="{!v.rightCTALink}"
+                  target="_blank"
+                >
+                  {!v.rightCTALabel}
+                </a>
+                <aura:set attribute="else">
+                  <a
+                    class="custom-two-col-text__cta cta-button cta-button--primary"
+                    href="{!v.rightCTALink}"
+                  >
+                    {!v.rightCTALabel}
+                  </a>
+                </aura:set>
+              </aura:if>
+            </aura:if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aura:component>

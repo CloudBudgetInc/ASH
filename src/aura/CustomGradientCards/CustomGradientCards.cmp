@@ -1,0 +1,168 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="leftImage" type="Object" />
+  <aura:attribute
+    name="leftImageField"
+    type="String"
+    required="true"
+    default="Image 1"
+  />
+  <aura:attribute name="leftHeadline" type="String" />
+  <aura:attribute
+    name="leftHeadlineField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="leftDescription" type="String" />
+  <aura:attribute
+    name="leftDescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="rightImage" type="Object" />
+  <aura:attribute
+    name="rightImageField"
+    type="String"
+    required="true"
+    default="Image 2"
+  />
+  <aura:attribute name="rightHeadline" type="String" />
+  <aura:attribute
+    name="rightHeadlineField"
+    type="String"
+    required="true"
+    default="Rich Text Field 3"
+  />
+  <aura:attribute name="rightDescription" type="String" />
+  <aura:attribute
+    name="rightDescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 4"
+  />
+  <aura:attribute name="leftButtonLabel" type="String" default="Learn More" />
+  <aura:attribute name="leftButtonLink" type="String" />
+  <aura:attribute name="openLeftTab" type="Boolean" default="false" />
+  <aura:attribute name="rightButtonLabel" type="String" default="Learn More" />
+  <aura:attribute name="rightButtonLink" type="String" />
+  <aura:attribute name="buttonStyle" type="String" default="primary" />
+  <aura:attribute name="buttonSize" type="String" default="small" />
+  <aura:attribute name="openRightTab" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'gradient-cards component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="gradient-cards__container">
+      <div class="gradient-cards__left">
+        <div class="gradient-cards__card">
+          <div class="gradient-cards__text">
+            <aura:if isTrue="{!v.leftImageField != 'None'}">
+              <img
+                class="gradient-cards__card-icon"
+                src="{!v.leftImage.src}"
+                alt="{!v.leftImage.alt}"
+              />
+            </aura:if>
+            <lightning:formattedRichText
+              class="gradient-cards__card-title"
+              value="{!v.leftHeadline}"
+            />
+            <lightning:formattedRichText
+              class="gradient-cards__card-body"
+              value="{!v.leftDescription}"
+            />
+          </div>
+          <aura:if isTrue="{!v.leftButtonLabel}">
+            <aura:if isTrue="{!v.openLeftTab}">
+              <a
+                class="{! join(' ',
+                  'gradient-cards__cta cta-button',
+                  'cta-button--' + v.buttonStyle,
+                  'cta-button--' + v.buttonSize
+                )}"
+                href="{!v.leftButtonLink}"
+                target="_blank"
+              >
+                {!v.leftButtonLabel}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'gradient-cards__cta cta-button',
+                    'cta-button--' + v.buttonStyle,
+                    'cta-button--' + v.buttonSize
+                  )}"
+                  href="{!v.leftButtonLink}"
+                >
+                  {!v.leftButtonLabel}
+                </a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+        </div>
+      </div>
+      <div class="gradient-cards__right">
+        <div class="gradient-cards__card">
+          <div class="gradient-cards__text">
+            <aura:if isTrue="{!v.rightImageField != 'None'}">
+              <img
+                class="gradient-cards__card-icon"
+                src="{!v.rightImage.src}"
+                alt="{!v.rightImage.alt}"
+              />
+            </aura:if>
+            <lightning:formattedRichText
+              class="gradient-cards__card-title"
+              value="{!v.rightHeadline}"
+            />
+            <lightning:formattedRichText
+              class="gradient-cards__card-body"
+              value="{!v.rightDescription}"
+            />
+          </div>
+          <aura:if isTrue="{!v.rightButtonLabel}">
+            <aura:if isTrue="{!v.openRightTab}">
+              <a
+                class="{! join(' ',
+                  'gradient-cards__cta cta-button',
+                  'cta-button--' + v.buttonStyle,
+                  'cta-button--' + v.buttonSize
+                )}"
+                href="{!v.rightButtonLink}"
+                target="_blank"
+              >
+                {!v.rightButtonLabel}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'gradient-cards__cta cta-button',
+                    'cta-button--' + v.buttonStyle,
+                    'cta-button--' + v.buttonSize
+                  )}"
+                  href="{!v.rightButtonLink}"
+                >
+                  {!v.rightButtonLabel}
+                </a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+        </div>
+      </div>  
+    </div>
+  </div>
+</aura:component>

@@ -1,0 +1,11 @@
+.THIS.confirm-profile {
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.THIS .confirm-profile__msg {
+  font-size: 14px;
+  padding-bottom: 10px;
+}

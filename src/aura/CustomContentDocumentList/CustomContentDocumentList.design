@@ -1,0 +1,12 @@
+<design:component label="Custom Content Document List">
+  <!-- <design:attribute
+    name="fileType"
+    label="Upload File Types Allowed"
+    description="Comma-separated list of file extensions that can be uploaded in the format .ext, such as .pdf, .jpg, or .png."
+  ></design:attribute>
+  <design:attribute
+    name="multiple"
+    label="Allow Multiple File Upload"
+    description="Allow multiple files to be uploaded at a time."
+  ></design:attribute> -->
+</design:component>

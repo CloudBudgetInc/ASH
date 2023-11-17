@@ -1,0 +1,37 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomConfirmProfileController"
+>
+<aura:attribute name="contact" type="Contact" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="confirm-profile">
+  <aura:if isTrue="{! empty(v.contact.Profile_Last_Confirmed__c)}">
+    <p class="confirm-profile__msg">You haven't confirmed your profile information recently.</p>
+    <aura:set attribute="else">
+      <p class="confirm-profile__msg">You last confirmed your information on 
+        <lightning:formattedDateTime
+          value="{! v.contact.Profile_Last_Confirmed__c}"
+          month="long"
+          day="2-digit"
+          year="numeric"
+        />
+        at
+        <lightning:formattedDateTime
+          value="{! v.contact.Profile_Last_Confirmed__c}"
+          hour="2-digit"
+          minute="2-digit"
+        />
+      </p>
+    </aura:set>
+  </aura:if>
+  <lightning:button
+    class="confirm-profile__btn"
+    variant="brand"
+    label="Confirm Profile"
+    title="Confirm Profile"
+    onclick="{! c.handleConfirmProfile }"
+  />
+</div>
+</aura:component>

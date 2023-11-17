@@ -1,0 +1,82 @@
+<design:component label="Two Column Text">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="leftHeadlineField"
+    label="Left Headline Field"
+    datasource="none, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the heading to display in the left card."
+  ></design:attribute>
+  <design:attribute
+    name="leftDescriptionField"
+    label="Left Description Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the description to display in the left card."
+  ></design:attribute>
+  <design:attribute
+    name="rightHeadlineField"
+    label="Right Headline Field"
+    datasource="none, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the heading to display in the right card."
+  ></design:attribute>
+  <design:attribute
+    name="rightDescriptionField"
+    label="Right Descriptions Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the description to display in the right card."
+  ></design:attribute>
+  <design:attribute
+    name="leftCTALabel"
+    label="Left CTA Label"
+    description="Label for the CTA on the left. Leave blank to not show a cta."
+  ></design:attribute>
+  <design:attribute
+    name="leftCTALink"
+    label="Left CTA Link"
+    description="Link url for the CTA on the left."
+  ></design:attribute>
+  <design:attribute
+    name="openLeftTab"
+    label="Open left link in new tab"
+    description="Check to open the CTA on the left in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="rightCTALabel"
+    label="Right CTA Label"
+    description="Label for the CTA on the right. Leave blank to not show a cta."
+  ></design:attribute>
+  <design:attribute
+    name="rightCTALink"
+    label="Right CTA Link"
+    description="Link url for the CTA on the right."
+  ></design:attribute>
+  <design:attribute
+    name="openRightTab"
+    label="Open right link in new tab"
+    description="Check to open the CTA on the right in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="none, #e2eaee, #f4f2e7, #f8f8f8"
+    description="Add a background color to show."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadline"
+    label="Show Headline"
+    description="Check to show the headline over the two columns."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,50 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute
+    name="headline"
+    type="String"
+    required="true"
+    default="Looking for Something Else?"
+  />
+  <aura:attribute name="topic1Image" type="String" required="true" />
+  <aura:attribute name="topic1Label" type="String" required="true" />
+  <aura:attribute name="topic1Link" type="String" required="true" />
+  <aura:attribute name="topic2Image" type="String" required="true" />
+  <aura:attribute name="topic2Label" type="String" required="true" />
+  <aura:attribute name="topic2Link" type="String" required="true" />
+  <aura:attribute name="topic3Image" type="String" />
+  <aura:attribute name="topic3Label" type="String" />
+  <aura:attribute name="topic3Link" type="String" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <div
+    class="{! join(' ',
+      'featured-topics',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <h2 class="featured-topics__title">{!v.headline}</h2>
+    <div
+      class="{!!empty(v.topic3Image) ? 'featured-topics__list--three' : 'featured-topics__list'}"
+    >
+      <a class="featured-topic" href="{!v.topic1Link}">
+        <p class="featured-topic__label">{!v.topic1Label}</p>
+        <img src="{!'/sfsites/c/file-asset/' + v.topic1Image}" alt="topic 1" />
+      </a>
+      <a class="featured-topic" href="{!v.topic2Link}">
+        <p class="featured-topic__label">{!v.topic2Label}</p>
+        <img src="{!'/sfsites/c/file-asset/' + v.topic2Image}" alt="topic 2" />
+      </a>
+      <aura:if isTrue="{!!empty(v.topic3Image)}">
+        <a class="featured-topic" href="{!v.topic3Link}">
+          <p class="featured-topic__label">{!v.topic3Label}</p>
+          <img
+            src="{!'/sfsites/c/file-asset/' + v.topic3Image}"
+            alt="topic 3"
+          />
+        </a>
+      </aura:if>
+    </div>
+  </div>
+</aura:component>

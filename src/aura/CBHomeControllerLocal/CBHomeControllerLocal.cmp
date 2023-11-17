@@ -1,0 +1,74 @@
+<aura:component  description="CloudBudget2 ASH Controller"
+				 implements="lightning:actionOverride,lightning:isUrlAddressable,force:hasSObjectName,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+				 access="global"
+				 controller="CBASHController">
+	<ltng:require scripts="{!join(',',$Resource.cb4__JS_CONST, $Resource.cb4__JS_UTILS)}"
+				  afterScriptsLoaded="{!c.runInit}"/>
+	<aura:attribute name="selectOptions" type="Object" access="private"/>
+	<aura:attribute name="lockYear"  type="String" access="private"/>
+	<aura:attribute name="lockMonth" type="String" access="private"/>
+	<aura:attribute name="lockIndicator" type="String" access="private" default="none"/>
+	<aura:attribute name="BPeriod" type="String" access="private" default="upToDate"/>
+
+	<lightning:card variant="Narrow" iconName="standard:account">
+		<!--<aura:set attribute="actions">
+			<lightning:buttonMenu alternativeText="Show menu" iconSize="x-small"
+								  menuAlignment="right" onselect="{!c.handleMainMenu}">
+				<lightning:menuItem value="redirectToApexJobs" label="Apex Jobs"/>
+			</lightning:buttonMenu>
+		</aura:set>-->
+
+		<aura:set attribute="title">
+			CloudBudget Controller
+		</aura:set>
+
+		<aura:set attribute="body">
+			<lightning:tabset selectedTabId="blocker">
+			<lightning:tab label="Budget Locker" id="blocker">
+					<lightning:layout>
+						<lightning:layoutItem padding="around-none" class="slds-p-top_large slds-p-left_medium">
+							<lightning:buttonIcon iconName="utility:refresh" alternativeText="Refresh current periods lock status" onclick="{!c.refreshCurrentUpdateStatuses}" variant="brand"/>
+						</lightning:layoutItem>
+					</lightning:layout>
+
+					<lightning:layout verticalAlign="end">
+						<lightning:layoutItem padding="around-none">
+							<lightning:select label="Budget Year" value="{!v.lockYear}" class="slds-p-left_medium" onchange="{!c.refreshLockedPeriods}">
+								<aura:iteration items="{!v.selectOptions.years}" var="y">
+									<option label="{!y.title}" value="{!y.value}"
+											selected="{!y.title == v.lockYear}"></option>
+								</aura:iteration>
+							</lightning:select>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="around-none" >
+							<lightning:select label="Month" value="{!v.lockMonth}" class="slds-p-left_medium">
+								<option label="Unlock All" value="none"/>
+								<aura:iteration items="{!v.selectOptions.lockPeriods}" var="p">
+									<option label="{!p.title}" value="{!p.value}"
+											selected="{!p.title == v.lockMonth}"></option>
+								</aura:iteration>
+							</lightning:select>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="around-none" class="slds-p-left_medium">
+							<lightning:button label="{!if(v.lockMonth == 'none', 'Unlock all Periods for BY' + v.lockYear, 'Lock BY' + v.lockYear + ' from ' + v.lockYear + ' Q1 till ' + v.lockMonth)}" onclick="{!c.lockBudgetsTill}" type="button" variant="brand"/>
+						</lightning:layoutItem>
+					</lightning:layout>
+
+					<lightning:layout verticalAlign="end">
+						<lightning:layoutItem class="slds-p-left_medium slds-form-element__label">Lock status : </lightning:layoutItem>
+						<lightning:layoutItem padding="around-none" class="processContainer">
+							<lightning:progressIndicator currentStep="{!v.lockIndicator}" type="base" hasError="false" variant="base">
+								<aura:renderIf isTrue="{!v.lockIndicator == 'none'}"><lightning:progressStep label="Unlocked" value="none"/></aura:renderIf>
+								<aura:iteration items="{!v.selectOptions.lockPeriods}" var="p">
+									<lightning:progressStep label="{!p.title}" value="{!p.value}"/>
+								</aura:iteration>
+							</lightning:progressIndicator>
+						</lightning:layoutItem>
+					</lightning:layout>
+
+				</lightning:tab>
+			</lightning:tabset>
+		</aura:set>
+	</lightning:card>
+
+</aura:component>

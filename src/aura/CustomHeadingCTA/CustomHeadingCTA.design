@@ -1,0 +1,32 @@
+<design:component label="Custom Heading with Button">
+  <design:attribute
+    name="headline"
+    label="Headline"
+    description="Enter a headline to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter a label for a button to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,92 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="accordion1Label" type="String" default="Accordion 1" />
+  <aura:attribute name="accordion2Label" type="String" default="Accordion 2" />
+  <aura:attribute name="accordion3Label" type="String" />
+  <aura:attribute name="accordion4Label" type="String" />
+  <aura:attribute name="accordionMap" type="Map" />
+  
+  <aura:attribute name="panel1Desc" type="String" />
+  <aura:attribute
+    name="panel1DescField"
+    type="String"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="panel2Desc" type="String" />
+  <aura:attribute
+    name="panel2DescField"
+    type="String"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="panel3Desc" type="String" />
+  <aura:attribute
+    name="panel3DescField"
+    type="String"
+    default="Rich Text Field 3"
+  />
+  <aura:attribute name="panel4Desc" type="String" />
+  <aura:attribute
+    name="panel4DescField"
+    type="String"
+    default="Rich Text Field 4"
+  />
+  
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  <aura:attribute name="showLargeTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showLargeBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'custom-faq component-container--padding-horizontal',
+      v.showTopPadding ? 'custom-faq--padding-top' : '',
+      v.showBottomPadding ? 'custom-faq--padding-bottom' : '',
+      v.showLargeTopPadding ? 'custom-faq--large-padding-top' : '',
+      v.showLargeBottomPadding ? 'custom-faq--large-padding-bottom' : ''
+    )}"
+  >
+
+    <aura:iteration items="{!v.accordionMap}" var="accordionObj" indexVar="index">
+      <div
+        class="{! join(' ',
+          'custom-faq__accordionSectionHeader',
+          v.borderColor == 'white' ? 'custom-faq__accordionSectionHeader--white' : 'custom-faq__accordionSectionHeader--blue'
+        )}"
+        id="{!'custom-faq-accordion-container-' + index + '-' + accordionObj.label}"
+        onclick="{!c.handleAccordion}"
+      >
+        <span
+          class="custom-faq__label"
+          id="{!'custom-faq-accordion-label-' + index + '-' + accordionObj.label}"
+          onclick="{!c.handleAccordion}"
+        >
+          {!accordionObj.label}
+        </span>
+        <span
+          class="custom-faq__label custom-faq__icon-plus"
+          id="{!'custom-faq-accordion-plus-' + index + '-' + accordionObj.label}"
+          onclick="{!c.handleAccordion}"
+          >+</span
+        >
+        <span
+          class="custom-faq__label custom-faq__icon-minus"
+          id="{!'custom-faq-accordion-minus-' + index + '-' + accordionObj.label}"
+          onclick="{!c.handleAccordion}"
+          >X</span
+        >
+      </div>
+      <div
+        class="custom-faq__accordionSection"
+        id="{!'custom-faq-accordion-' + index + '-section-' + accordionObj.label}"
+      >
+        <lightning:formattedRichText value="{!accordionObj.content}" />
+      </div>
+    </aura:iteration>
+  </div>
+</aura:component>

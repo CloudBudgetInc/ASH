@@ -1,0 +1,33 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute name="flowName" type="String" required="true" />
+  <aura:attribute name="title" type="String"/>
+  <aura:attribute name="showFlow" type="Boolean" default="false" />
+  <aura:attribute name="buttonLabel" type="String"/>
+  <aura:attribute name="buttonStyle" type="String" default="primary"/>
+  <aura:attribute name="textColor" type="String" default="#333"/>
+
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+  <div class="custom-flow">
+    <aura:if isTrue="{!v.title}">
+      <h2>{!v.title}</h2>
+    </aura:if>
+    <aura:if isTrue="{!v.buttonLabel &amp;&amp; !v.showFlow}">
+      <lightning:button
+        class="{! 'custom-flow__button cta-button cta-button--' + v.buttonStyle}"
+        variant="brand"
+        label="{!v.buttonLabel}"
+        title="{!v.buttonLabel}"
+        onclick="{! c.handleClick }"
+      />
+    </aura:if>
+    <div
+      class="custom-flow__flow"
+      id="{!v.textColor == '#333' ? 'custom-flow__flow--light' : 'custom-flow__flow'}"
+      aura:id="flowContainer"
+      style="{!'color: '+ v.textColor + ';'}"
+    >
+      <lightning:flow aura:id="flowData" />
+    </div>
+  </div>
+</aura:component>

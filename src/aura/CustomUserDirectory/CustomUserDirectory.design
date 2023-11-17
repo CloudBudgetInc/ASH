@@ -1,0 +1,57 @@
+<design:component label="Custom Member Directory">
+  <design:attribute
+    name="headline"
+    label="Headline"
+    description="Enter a headline to display above the list of members."
+  ></design:attribute>
+  <design:attribute
+    name="intro"
+    label="Intro"
+    description="Enter an introduction paragraph to display above the list of members."
+  ></design:attribute>
+  <design:attribute
+    name="nameLabel"
+    label="Name Label"
+    description="Enter a label for the Name column."
+  ></design:attribute>
+  <design:attribute
+    name="roleLabel"
+    label="Role Label"
+    description="Enter a label for the Role column."
+  ></design:attribute>
+  <design:attribute
+    name="consortiumLabel"
+    label="Consortium Label"
+    description="Enter a label for the Consortium column."
+  ></design:attribute>
+  <design:attribute
+    name="stateLabel"
+    label="State Label"
+    description="Enter a label for the State column."
+  ></design:attribute>
+  <design:attribute
+    name="pageSize"
+    label="Initial Number of Items"
+    description="Enter the number of items to display initially."
+  ></design:attribute>
+  <design:attribute
+    name="baseUrl"
+    label="Base Url"
+    description="Enter the base url of the site."
+  />
+  <design:attribute
+    name="detailUrl"
+    label="Member Detail Url"
+    description="Enter the url of the member detail page."
+  />
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

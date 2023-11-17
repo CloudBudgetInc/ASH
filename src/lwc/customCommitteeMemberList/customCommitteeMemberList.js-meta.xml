@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <masterLabel>Committee Member List</masterLabel>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Account</object>
+            </objects>
+            <property
+                name="emailBtnLabel"
+                label="Send Email Button Label"
+                type="String"
+                description="Enter a label for the email send button."
+                default="Send Email"
+                required="true"
+            />
+            <property
+                name="commentBtnLabel"
+                label="Add Comments Button Label"
+                type="String"
+                description="Enter a label for the bulk add comment button."
+                default="Add Comments"
+                required="true"
+            />
+            <property
+                name="emailTemplateId"
+                label="Email Template Id"
+                type="String"
+                description="Enter the template id of the email to send to committee members."
+                default="00X4C000000N65jUAC"
+                required="true"
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

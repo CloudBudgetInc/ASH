@@ -1,0 +1,199 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CurrentUserController"
+>
+<aura:attribute name="contact" type="Contact" />
+<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+
+<aura:attribute name="renewalLabel" type="String" default="RENEW NOW" />
+<aura:attribute name="renewalLink" type="String" default="https://apps.hematology.org/membershiprenew" />
+<aura:attribute name="joinLabel" type="String" default="JOIN NOW" />
+<aura:attribute name="joinLink" type="String" default="https://www.hematology.org/membership" />
+
+<aura:attribute name="memberStatusLabel" type="String" default="Membership Status" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="current-profile">
+  <div class="current-profile__container">
+    <h2 class="current-profile__name">
+      {!v.contact.Display_Name__c}
+    </h2>
+    <p class="current-profile__item">{!v.contact.Email}</p>
+    <aura:if isTrue="{!v.contact.Personify_ID__c}">
+      <p class="current-profile__item">
+        <strong>
+          <aura:if isTrue="{!v.contact.ASH_Member__c}">
+            Member Number:
+            <aura:set attribute="else">
+              Customer Number:
+            </aura:set>
+          </aura:if>
+        </strong>
+        
+        &nbsp;{!v.contact.Personify_ID__c}
+      </p>
+    </aura:if>
+    <!-- Member -->
+    <aura:if isTrue="{!v.contact.ASH_Member__c}">
+      <aura:if isTrue="{!v.contact.Membership_Status__c}">
+        <p class="current-profile__item"><strong>Type:</strong>&nbsp;{!v.contact.Membership_Status__c}</p>
+      </aura:if>
+      <!-- Current Membership Start -->
+      <aura:if isTrue="{!v.contact.Current_Membership_Start__c != null}">
+        <!-- Member Renewal -->
+        <aura:if isTrue="{!v.contact.Renewal__c}">
+          <p class="current-profile__item"><strong>{!v.memberStatusLabel}:</strong>&nbsp;
+            <a class="current-profile__item current-profile__renewal" href="{!v.renewalLink}" target="_blank">
+              {!v.renewalLabel}
+            </a>
+          </p>
+          <!-- Member w/o renewal -->
+          <aura:set attribute="else">
+            <aura:if isTrue="{!and(v.contact.Current_Membership_Start__c , v.contact.Current_Membership_End__c)}">
+              <p class="current-profile__item"><strong>{!v.memberStatusLabel}:</strong>&nbsp;Active Member&nbsp;
+                <lightning:formattedDateTime
+                  value="{!v.contact.Current_Membership_Start__c}"
+                  year="numeric"
+                  month="numeric"
+                  day="numeric"
+                  timeZone="UTC"
+                />
+                -
+                <lightning:formattedDateTime
+                  value="{!v.contact.Current_Membership_End__c}"
+                  year="numeric"
+                  month="numeric"
+                  day="numeric"
+                  timeZone="UTC"
+                />
+              </p>
+              <aura:set attribute="else">
+                <aura:if isTrue="{!v.contact.Current_Membership_Start__c}">
+                  <p class="current-profile__item"><strong>Active Member Since:</strong>&nbsp;
+                    <lightning:formattedDateTime
+                      value="{!v.contact.Current_Membership_Start__c}"
+                      year="numeric"
+                      month="numeric"
+                      day="numeric"
+                      timeZone="UTC"
+                    />
+                  </p>
+                </aura:if>
+              </aura:set>
+            </aura:if>
+          </aura:set>
+        </aura:if>
+        <!-- Start Date else -->
+        <aura:set attribute="else">
+          <p class="current-profile__item"><strong>{!v.memberStatusLabel}:</strong>&nbsp;
+            <a class="current-profile__item current-profile__renewal" href="{!v.joinLink}" target="_blank">
+              {!v.joinLabel}
+            </a>
+          </p>
+        </aura:set>
+      </aura:if>
+      <!-- Non-Member -->
+      <aura:set attribute="else">
+        <p class="current-profile__item"><strong>{!v.memberStatusLabel}:</strong>&nbsp;
+          <!-- With Renewal -->
+          <aura:if isTrue="{!v.contact.Renewal__c}">
+            <a class="current-profile__item current-profile__renewal" href="{!v.renewalLink}" target="_blank">
+              {!v.renewalLabel}
+            </a>
+            <!-- Without Renewal -->
+            <aura:set attribute="else">
+              <a class="current-profile__item current-profile__renewal" href="{!v.joinLink}" target="_blank">
+                {!v.joinLabel}
+              </a>
+            </aura:set>
+          </aura:if>
+        </p>
+      </aura:set>
+    </aura:if>
+    <p class="current-profile__item">{!v.contact.About_Me__c}</p>
+  </div>
+  
+  <lightning:button
+    variant="neutral"
+    label="Edit Profile"
+    title="Edit Profile"
+    onclick="{! c.openModal }"
+  />
+
+  <!-- START of EDIT Popup FORM -->
+  <div>
+    <aura:if isTrue="{!v.isModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-edit"
+        aria-modal="true"
+        aria-describedby="modal-content-id-edit"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-edit"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Edit {! v.contact.FirstName + ' '} {!v.contact.LastName}
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-edit"
+          >
+            <lightning:recordEditForm
+              recordId="{!v.contact.Id}"
+              objectApiName="Contact"
+              onload="{!c.setLoadingFalse}"
+              onerror="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.handleSuccess}"
+            >
+              <lightning:messages />
+              <lightning:inputField class="current-profile__field" required="true" fieldName="FirstName" />
+              <lightning:inputField class="current-profile__field" fieldName="LastName" />
+              <lightning:inputField class="current-profile__field" fieldName="About_Me__c" />
+              <aura:if isTrue="{!v.loading}">
+                <div class="current-profile__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <div class="current-profile__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of EDIT Popup FORM -->
+</div>
+</aura:component>

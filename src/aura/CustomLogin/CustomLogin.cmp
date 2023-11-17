@@ -1,0 +1,84 @@
+<aura:component controller="CustomLoginController">
+  <aura:attribute name="username" type="String" default="" />
+  <aura:attribute name="password" type="String" default="" />
+  <aura:attribute name="errorMessage" type="String" default="" />
+  <aura:attribute name="showError" type="Boolean" default="false" />
+  <aura:attribute name="startUrl" type="String" />
+  <aura:registerEvent name="cancel" type="c:PressEvent" />
+
+  <div class="login">
+    <button
+      class="login__button-cancel"
+      onclick="{!c.cancelLogin}"
+      aura:id="login-cancel-button"
+    >
+      <img
+        class="login__button-close-icon"
+        src="{!$ContentAsset.Hamburger_Close_Icon}"
+        alt="close-icon"
+      />
+    </button>
+    <form class="login__form">
+      <div class="login__form-top">
+        <div class="login__form-inputs">
+          <img
+            class="login__icon"
+            src="{!$ContentAsset.Profile_Icon}"
+            alt="avatar-icon"
+          />
+          <div class="login__form-element slds-form-element">
+            <div class="login__form-element__control login__form-element__control--margin slds-form-element__control">
+              <ui:inputText
+                value="{!v.username}"
+                aura:id="username__input"
+                class="login__form-input slds-input"
+                placeholder="Username"
+                keyup="{!c.handleKeyUp}"
+              />
+            </div>
+          </div>
+          <div class="login__form-element slds-form-element">
+            <div class="login__form-element__control slds-form-element__control">
+              <ui:inputSecret
+                value="{!v.password}"
+                aura:id="password__input"
+                class="login__form-input slds-input"
+                placeholder="Password"
+                keyup="{!c.handleKeyUp}"
+              />
+            </div>
+          </div>
+        </div>
+        <a
+          href="/s/login/ForgotPassword"
+          class="login__link md"
+          aura:id="login__forgot"
+        >
+          Forgot Password?
+        </a>
+      </div>
+      <aura:if isTrue="{!v.showError &amp;&amp; !empty(v.username)}">
+        <span class="login__error sm">{!v.errorMessage}</span>
+      </aura:if>
+      <div class="login__actions">
+        <a
+          href="/s/login/ForgotPassword"
+          class="login__link sm"
+          aura:id="login__forgot"
+        >
+          Forgot Password?
+        </a>
+        <ui:button
+          aura:id="login__button"
+          buttonTitle="Sign In"
+          class="login__button"
+          label="Sign In"
+          press="{!c.handleLogin}"
+        />
+      </div>
+    </form>
+    <aura:if isTrue="{!v.showError &amp;&amp; !empty(v.username)}">
+      <span class="login__error md">{!v.errorMessage}</span>
+    </aura:if>
+  </div>
+</aura:component>

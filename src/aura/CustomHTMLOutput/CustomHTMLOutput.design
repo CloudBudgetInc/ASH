@@ -1,0 +1,3 @@
+<design:component label="Custom HTML Output">
+  <design:attribute name="input" label="HTML Input" />
+</design:component>

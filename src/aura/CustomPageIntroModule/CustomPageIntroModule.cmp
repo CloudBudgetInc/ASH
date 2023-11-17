@@ -1,0 +1,35 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="image" type="Object" />
+  <aura:attribute name="description" type="String" />
+  <aura:attribute name="descriptionField" type="String" required="true" default="Rich Text Field 1" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      'page-intro',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <span class="page-intro__left">
+      <lightning:formattedRichText
+        value="{!v.description}"
+      />
+    </span>
+    <span class="page-intro__right">
+      <img
+        class="page-intro__image"
+        src="{!v.image.src}"
+        alt="{!v.image.alt}"
+      />
+      <div class="page-intro__background"></div>
+    </span>
+  </div>
+</aura:component>

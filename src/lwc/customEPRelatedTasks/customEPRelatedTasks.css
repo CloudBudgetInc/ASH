@@ -1,0 +1,17 @@
+.ep-task-list__heading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ep-task-list__heading__refresh {
+    display: flex;
+    flex-direction: row;
+}
+
+.ep-task-list__heading__refresh__message {
+    padding: 0 1rem;
+}
+
+.refreshIcon:hover {
+    cursor: pointer;
+}

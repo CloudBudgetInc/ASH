@@ -1,0 +1,10 @@
+div.spinner{
+    display: block;
+    margin-top:  20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+p{
+    margin-top: 10px;
+    margin-bottom:10px;
+}

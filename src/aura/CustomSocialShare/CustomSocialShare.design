@@ -1,0 +1,10 @@
+<design:component label="Custom Social Share">
+    <design:attribute name="pageUrl" label="Page Url" description="Enter path of the page url to be shared. (i.e. /about)" />
+    <design:attribute name="shareText" label="Twitter Share Text" description="Enter text to include in Twitter share." />
+    <design:attribute name="showTwitter" label="Show Twitter" description="Display Twitter share link." />
+    <design:attribute name="showFacebook" label="Show Facebook" description="Display Facebook share link." />
+    <design:attribute name="showLinkedIn" label="Show LinkedIn" description="Display LinkedIn share link." />
+    <design:attribute name="showEmail" label="Show Email" description="Display Email share" />
+    <design:attribute name="emailSubject" label="Email Share Subject" description="Enter an email subject." />
+    <design:attribute name="emailBody" label="Email Share Text" description="Enter text to include in Email share before the link." />
+</design:component>

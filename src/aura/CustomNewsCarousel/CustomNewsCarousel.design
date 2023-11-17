@@ -1,0 +1,12 @@
+<design:component label="Custom News Carousel">
+	<design:attribute
+    name="maxItems"
+    label="Maximum Items to Show"
+    description="Enter a number for the maximum items to show."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

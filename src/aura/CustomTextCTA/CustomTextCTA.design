@@ -1,0 +1,61 @@
+<design:component label="Custom Text with CTA">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="headlineField"
+    label="Headline Field"
+    datasource="Headline, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for a headline to display."
+  ></design:attribute>
+  <design:attribute
+    name="contentField"
+    label="Body Content Field"
+    datasource="Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the content to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter a label for a button to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="buttonStyle"
+    label="Button Style"
+    datasource="primary, secondary, tertiary, tertiary-light, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Select a button type to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonSize"
+    label="Button Size"
+    datasource="small, medium, large"
+    description="Select a button size."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomBorder"
+    label="Apply Bottom Border"
+    description="Check to apply bottom border."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

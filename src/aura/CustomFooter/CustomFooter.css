@@ -1,0 +1,124 @@
+.THIS.footer {
+    margin: 0 auto;
+    max-width: 1440px;
+}
+
+.THIS .footer__top {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 10px 30px;
+}
+
+.THIS .footer__logo {
+    width: auto;
+}
+
+.THIS .footer__info {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.THIS .footer__info-section {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+.THIS .footer__info-heading {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.THIS .footer__info-text {
+    color: #ccc;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+
+.THIS .footer__socialLinks {
+    align-items: center;
+    display: flex;
+}
+
+.THIS .footer__socialLinks > a {
+    margin-left: 10px;
+}
+
+.THIS .footer__socialLinks > a > img {
+    height: 24px;
+}
+
+.THIS .footer__bottom {
+    align-items: center;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0px 10px 20px;
+}
+
+.THIS .footer__divider {
+    border-bottom: 3px solid #ccc;
+    flex-grow: 1;
+    margin: 5px 20px;
+}
+
+.THIS .footer__copyright {
+    font-size: 14px;
+    text-align: center;
+}
+
+.THIS .footer__links {
+    display: flex;
+    justify-content: space-around;
+}
+
+.THIS .footer__link {
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+}
+
+.THIS .footer__link::after {
+    content: '';
+    position: absolute;
+    border-right: 1px solid;
+    height: 10px;
+    right: 0;
+    top: 2px;
+    transform: translate(-50%, 50%);
+}
+
+.THIS .footer__link:last-child::after {
+    border-right: none;
+    padding-right:0;
+}
+
+@media (min-width: 375px) {
+    .THIS .footer__top {
+        flex-direction: row;
+    }
+
+    .THIS .footer__bottom {
+        flex-direction: row;
+    }
+
+    .THIS .footer__info {
+        flex: 1;
+        flex-direction: row;
+    	justify-content: space-around;
+        padding: 0;
+    }
+    
+    .THIS .footer__info-section {
+        padding-bottom: 0;
+    }
+
+    .THIS .footer__copyright {
+        text-align: left;
+    }
+}

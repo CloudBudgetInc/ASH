@@ -1,0 +1,62 @@
+<design:component label="Custom Featured Topics">
+   <design:attribute
+    name="headline"
+    label="Headline"
+    description="Enter a headline for the section."
+  ></design:attribute>
+  <design:attribute
+    name="topic1Label"
+    label="Topic 1 Label"
+    description="Enter a label for the first topic."
+  ></design:attribute>
+  <design:attribute
+    name="topic1Image"
+    label="Topic 1 Image"
+    description="Enter the name of the image to display for the first topic."
+  ></design:attribute>
+  <design:attribute
+    name="topic1Link"
+    label="Topic 1 Link"
+    description="Enter a link for the first topic link."
+  ></design:attribute>
+  <design:attribute
+    name="topic2Label"
+    label="Topic 2 Label"
+    description="Enter a label for the second topic."
+  ></design:attribute>
+  <design:attribute
+    name="topic2Image"
+    label="Topic 2 Image"
+    description="Enter the name of the image to display for the second topic."
+  ></design:attribute>
+  <design:attribute
+    name="topic2Link"
+    label="Topic 2 Link"
+    description="Enter a link for the second topic link."
+  ></design:attribute>
+  <design:attribute
+    name="topic3Label"
+    label="Topic 3 Label"
+    description="Enter a label for the third topic."
+  ></design:attribute>
+  <design:attribute
+    name="topic3Image"
+    label="Topic 3 Image"
+    description="Enter the name of the image to display for the third topic."
+  ></design:attribute>
+  <design:attribute
+    name="topic3Link"
+    label="Topic 3 Link"
+    description="Enter a link for the third topic link."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,34 @@
+<design:component label="Custom Flow">
+  <design:attribute
+    name="flowName"
+    label="Flow API Name"
+    description="API name of the flow to display."
+  ></design:attribute>
+  <design:attribute
+    name="title"
+    label="Headline"
+    description="A headline to show above flow."
+  ></design:attribute>
+  <design:attribute
+    name="showFlow"
+    label="Show Flow Initially"
+    description="Check to show the flow initially. Otherwise the button will trigger the flow to show."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Label for a button to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonStyle"
+    label="Button Style"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Select a button type to display."
+  ></design:attribute>
+  <design:attribute
+    name="textColor"
+    label="Text Color"
+    datasource="#333, #333"
+    description="Select a text color."
+  ></design:attribute>
+</design:component>

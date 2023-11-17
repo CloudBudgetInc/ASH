@@ -1,0 +1,12 @@
+<aura:component description="CBExcelReportGeneartor" implements="lightning:actionOverride,lightning:isUrlAddressable,force:hasRecordId,force:hasSObjectName,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+				access="global" controller="CBExcelReport">
+	<ltng:require scripts="{!$Resource.cb4__JS_UTILS}" afterScriptsLoaded="{!c.doInit}" />
+	<aura:attribute name="excelDataValue" type="Object"/>
+	<div class="slds-card slds-p-around_small">
+		<div class="slds-grid">
+			<div class="slds-grid slds-grid_vertical-align-center">
+				<div ><c:cbReportingExcel excelData="{!v.excelDataValue}"/></div><div class="slds-p-left_small">Download Excel Report</div>
+			</div>
+		</div>
+	</div>
+</aura:component>

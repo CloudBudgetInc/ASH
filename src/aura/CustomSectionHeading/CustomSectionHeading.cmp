@@ -1,0 +1,115 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="image" type="Object" />
+  <aura:attribute name="iconPlacement" type="String" default="above" />
+  <aura:attribute name="imageField" type="String" default="None" />
+  <aura:attribute name="subheading" type="String" />
+  <aura:attribute
+    name="subheadingField"
+    type="String"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="subheadingFontSize" type="String" default="Large" />
+  <aura:attribute name="buttonLabel" type="String" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="buttonStyle" type="String" default="primary" />
+  <aura:attribute name="buttonSize" type="String" default="small" />
+  <aura:attribute name="backgroundColor" type="String" default="#fff" />
+  <aura:attribute name="showHeadline" type="Boolean" default="true" />
+  <aura:attribute name="mobileSubheading" type="Boolean" default="true" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'custom-section',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : '',
+      v.backgroundColor == '#fff' ? 'white' : ''
+    )}"
+  >
+    <div
+      class="section-heading"
+      style="{! empty(v.backgroundColor) ? '' : 'background:' + v.backgroundColor + ';'}"
+    >
+      <div
+        class="{! join(' ',
+          'section-heading__container component-container--padding-horizontal'
+        )}"
+      >
+        <aura:if isTrue="{!v.iconPlacement == 'above'}">
+          <img
+            class="section-heading__icon--above"
+            src="{!v.image.src}"
+            alt="{!v.image.alt}"
+          />
+        </aura:if>
+        <aura:if isTrue="{!v.showHeadline}">
+          <div class="section-heading__heading">
+            <h2 class="section-heading__title">
+              <aura:if isTrue="{!v.iconPlacement == 'left'}">
+                <img
+                  class="section-heading__icon--left"
+                  src="{!v.image.src}"
+                  alt="{!v.image.alt}"
+                />
+              </aura:if>
+              <lightning:formattedRichText
+                class="h2"
+                value="{!v.record.contentNodes.Headline.value}"
+              />
+            </h2>
+          </div>
+        </aura:if>
+        <aura:if isTrue="{! v.subheadingField != 'None'}">
+          <span
+            class="{! join(' ',
+              'section-heading__subheader',
+              v.mobileSubheading ? '' : 'section-heading__subheader--sm',
+              v.subheadingFontSize == 'Small' ? 'section-heading__subheader--font-sm' : '',
+              v.subheadingFontSize == 'Medium' ? 'section-heading__subheader--font-md' : ''
+            )}"
+          >
+            <lightning:formattedRichText
+              class="subheader"
+              value="{!v.subheading}"
+            />
+          </span>
+        </aura:if>
+        <aura:if isTrue="{! !empty(v.buttonLabel)}">
+          <aura:if isTrue="{!v.openTab}">
+            <a
+              class="{! join(' ',
+                'section-heading__cta cta-button',
+                'cta-button--' + v.buttonStyle,
+                'cta-button--' + v.buttonSize
+              )}"
+              href="{!v.buttonLink}"
+              target="_blank"
+            >
+              {!v.buttonLabel}
+            </a>
+            <aura:set attribute="else">
+              <a
+                class="{! join(' ',
+                  'section-heading__cta cta-button',
+                  'cta-button--' + v.buttonStyle,
+                  'cta-button--' + v.buttonSize
+                )}"
+                href="{!v.buttonLink}">
+                  {!v.buttonLabel}
+              </a>
+            </aura:set>
+          </aura:if>
+        </aura:if>
+      </div>
+    </div>
+  </div>
+</aura:component>

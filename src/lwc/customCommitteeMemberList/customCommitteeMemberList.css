@@ -1,0 +1,35 @@
+.committee-member-list__header {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.committee-member-list__title {
+  align-items: center;
+}
+
+.committee-member-list__menu:hover {
+  border-bottom: 1px solid #000;
+}
+
+.committee-member-list__empty {
+  background-color: #fff;
+  height: 400px;
+}
+
+.committee-member-list__loading {
+  height: 50px;
+  position: relative;
+}
+
+.committee-member-list__filters {
+  align-items: end;
+}
+
+.committee-member-list__filters__sortby > *,
+.committee-member-list__filters__thenby > * {
+  display: inline-block;
+}
+
+.icon-close:hover {
+  cursor: pointer;
+}

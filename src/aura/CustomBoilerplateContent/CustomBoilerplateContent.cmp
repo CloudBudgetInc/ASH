@@ -1,0 +1,44 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="ManagedContentController">
+  <aura:attribute name="recordId" type="String" required="true" />
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="showOnPressRelease" type="Boolean" default="true" />
+  <aura:attribute name="showOnNews" type="Boolean" default="false" />
+  <aura:attribute name="showOnEvent" type="Boolean" default="false" />
+  <aura:attribute name="showHeadline" type="Boolean" default="false" />
+  <aura:attribute name="body" type="String" />
+  <aura:attribute
+    name="bodyField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="categoryType" type="String" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="true" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <aura:if isTrue="{!v.showOnPressRelease &amp;&amp; v.categoryType == 'Press_Release'
+    || v.showOnNews &amp;&amp; v.categoryType == 'News'
+    || v.showOnEvent &amp;&amp; (v.categoryType == 'Event'
+    || v.categoryType == 'Webinar')}">
+    <div
+      class="{! v.showTopPadding ? v.showBottomPadding ?
+      'boilerplate boilerplate--padding-top boilerplate--padding-bottom'
+      : 'boilerplate boilerplate--padding-top'
+      : v.showBottomPadding ? 'boilerplate boilerplate--padding-bottom' : 'boilerplate'}"
+    >
+      <aura:if isTrue="{!v.showHeadline}">
+        <p class="boilerplate__title">
+          <lightning:formattedRichText
+            value="{!v.record.contentNodes.Headline.value}"
+          />
+        </p>
+      </aura:if>
+      <div class="boilerplate__content p">
+        <lightning:formattedRichText value="{!v.body}" />
+      </div>
+    </div>
+  </aura:if>
+</aura:component>

@@ -1,0 +1,22 @@
+.THIS {
+  align-items: center;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+.THIS .profile-welcome__img {
+  border-radius: 50%;
+  width: 150px;
+}
+
+.THIS .profile-welcome__intro {
+  font-size: 36px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.THIS .profile-welcome__message {
+  font-size: 24px;
+  text-align: center;
+}

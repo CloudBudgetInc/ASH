@@ -1,0 +1,1118 @@
+<aura:component extends="forceCommunity:navigationMenuBase">
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="loggedIn" type="Boolean" />
+  <aura:attribute name="showAccord" type="Boolean" />
+  <aura:attribute name="accordLabel" type="String" />
+  <aura:attribute name="navigationLinkSetId" type="String" />
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="location" type="String" />
+
+  <aura:handler event="forceCommunity:routeChange" action="{!c.handleRouteChange}" />
+
+  <div class="mobile-menu">
+    <aura:if isTrue="{!v.showAccord}">
+      <div
+        class="mobile-menu__accordionSectionHeader"
+        id="accordion-container-0"
+        onclick="{!c.handleAccordion}"
+      >
+        <span
+          class="mobile-menu__label"
+          id="accordion-label-0"
+          onclick="{!c.handleAccordion}"
+          data-label="{!v.accordLabel}"
+        >
+          {!v.accordLabel}
+        </span>
+        <span
+          class="mobile-menu__label mobile-menu__icon-plus"
+          id="accordion-plus-0"
+          onclick="{!c.handleAccordion}"
+          >+</span
+        >
+        <span
+          class="mobile-menu__label mobile-menu__icon-minus"
+          id="accordion-minus-0"
+          onclick="{!c.handleAccordion}"
+          >-</span
+        >
+      </div>
+      <div
+        class="mobile-menu__accordionSection"
+        id="accordion-0-section"
+        onclick="{!c.onClick}"
+      >
+        <ul class="mobile-menu__links">
+          <li class="mobile-menu__link">
+            <div
+              class="mobile-menu__accordionSectionHeader"
+              id="{!'accordion-container-' + 1}"
+              onclick="{!c.handleAccordion}"
+            >
+              <span
+                class="mobile-menu__label"
+                id="{!'accordion-label-' + 1}"
+                onclick="{!c.handleAccordion}"
+                data-label="COVID-19 Registry"
+              >
+                COVID-19 Registry
+              </span>
+              <span
+                class="mobile-menu__label mobile-menu__icon-plus"
+                id="{!'accordion-plus-' + 1}"
+                onclick="{!c.handleAccordion}"
+                >+</span
+              >
+              <span
+                class="mobile-menu__label mobile-menu__icon-minus"
+                id="{!'accordion-minus-' + 1}"
+                onclick="{!c.handleAccordion}"
+                >-</span
+              >
+            </div>
+            <ul
+              class="mobile-menu__accordionSection"
+              id="{!'accordion-' + 1 + '-section'}"
+              onclick="{!c.onClick}"
+            >
+              <li data-label="COVID-19 Home">
+                <a
+                  class="{!v.location == 'covid-19-registry' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'covid-19-registry'}"
+                >
+                  COVID-19 Home
+                </a>
+              </li>
+              <li data-label="Data Summaries">
+                <a
+                  class="{!v.location == 'covid-19-registry-data-summaries' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                   href="{!v.baseUrl + 'covid-19-registry/data-summaries'}"
+                >
+                  Data Summaries
+                </a>
+              </li>
+              <li data-label="Acknowledgements">
+                <a
+                  class="{!v.location == 'covid-19-registry-acknowledgements' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                   href="{!v.baseUrl + 'covid-19-registry/acknowledgements'}"
+                >
+                  Acknowledgements
+                </a>
+              </li>
+              <li data-label="FAQs">
+                <a
+                  class="{!v.location == 'covid-19-registry-faqs' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                   href="{!v.baseUrl + 'covid-19-registry/faqs'}"
+                >
+                  FAQs
+                </a>
+              </li>
+              <li class="mobile-menu__link">
+                <a
+                  class="mobile-menu__label nav-link"
+                  data-label="ASH COVID-19 Resources"
+                  href="https://www.hematology.org/covid-19"
+                  target="_blank"
+                >
+                  ASH COVID-19 Resources
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mobile-menu__link">
+            <div
+              class="mobile-menu__accordionSectionHeader"
+              id="{!'accordion-container-' + 2}"
+              onclick="{!c.handleAccordion}"
+            >
+              <span
+                class="mobile-menu__label"
+                id="{!'accordion-label-' + 2}"
+                onclick="{!c.handleAccordion}"
+                data-label="Sickle Cell Disease Community"
+              >
+              Sickle Cell Disease Community
+              </span>
+              <span
+                class="mobile-menu__label mobile-menu__icon-plus"
+                id="{!'accordion-plus-' + 2}"
+                onclick="{!c.handleAccordion}"
+                >+</span
+              >
+              <span
+                class="mobile-menu__label mobile-menu__icon-minus"
+                id="{!'accordion-minus-' + 2}"
+                onclick="{!c.handleAccordion}"
+                >-</span
+              >
+            </div>
+            <ul
+              class="mobile-menu__accordionSection"
+              id="{!'accordion-' + 2 + '-section'}"
+              onclick="{!c.onClick}"
+            >
+              <li data-label="Sickle Cell Disease Community">
+                <a
+                  class="{!v.location == 'participants-and-advocates' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'participants-and-advocates'}"
+                >
+                Sickle Cell Disease Community
+                </a>
+              </li>
+              <li data-label="Clinical Trials 101">
+                <a
+                  class="{!v.location == 'clinical-trials-101' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'clinical-trials-101'}"
+                >
+                  Clinical Trials 101
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mobile-menu__link">
+            <div
+              class="mobile-menu__accordionSectionHeader"
+              id="{!'accordion-container-' + 3}"
+              onclick="{!c.handleAccordion}"
+            >
+              <span
+                class="mobile-menu__label"
+                id="{!'accordion-label-' + 3}"
+                onclick="{!c.handleAccordion}"
+                data-label="Clinical Trials Network"
+              >
+                Clinical Trials Network
+              </span>
+              <span
+                class="mobile-menu__label mobile-menu__icon-plus"
+                id="{!'accordion-plus-' + 3}"
+                onclick="{!c.handleAccordion}"
+                >+</span
+              >
+              <span
+                class="mobile-menu__label mobile-menu__icon-minus"
+                id="{!'accordion-minus-' + 3}"
+                onclick="{!c.handleAccordion}"
+                >-</span
+              >
+            </div>
+            <ul
+              class="mobile-menu__accordionSection"
+              id="{!'accordion-' + 3 + '-section'}"
+              onclick="{!c.onClick}"
+            >
+              <li data-label="CTN Home">
+                <a
+                  class="{!v.location == 'clinical-trials-network' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'clinical-trials-network'}"
+                >
+                  CTN Home
+                </a>
+              </li>
+              <li data-label="FAQs">
+                <a
+                  class="{!v.location == 'clinical-trials-network-faqs' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'clinical-trials-network/faqs'}"
+                >
+                  FAQs
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mobile-menu__link">
+            <div
+              class="mobile-menu__accordionSectionHeader"
+              id="{!'accordion-container-' + 4}"
+              onclick="{!c.handleAccordion}"
+            >
+              <span
+                class="mobile-menu__label"
+                id="{!'accordion-label-' + 4}"
+                onclick="{!c.handleAccordion}"
+                data-label="Data Hub"
+              >
+                Data Hub
+              </span>
+              <span
+                class="mobile-menu__label mobile-menu__icon-plus"
+                id="{!'accordion-plus-' + 4}"
+                onclick="{!c.handleAccordion}"
+                >+</span
+              >
+              <span
+                class="mobile-menu__label mobile-menu__icon-minus"
+                id="{!'accordion-minus-' + 4}"
+                onclick="{!c.handleAccordion}"
+                >-</span
+              >
+            </div>
+            <ul
+              class="mobile-menu__accordionSection"
+              id="{!'accordion-' + 4 + '-section'}"
+              onclick="{!c.onClick}"
+            >
+              <li data-label="Data Hub Home">
+                <a
+                  class="{!v.location == 'about-the-data-hub' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub'}"
+                >
+                  Data Hub Home
+                </a>
+              </li>
+              <li data-label="Data Hub Programs">
+                <a
+                  class="{!v.location == 'programs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/programs'}"
+                >
+                  Data Hub Programs
+                </a>
+              </li>
+              <li data-label="Sickle Cell Disease Program">
+                <a
+                  class="{!v.location == 'sickle-cell-disease-program' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-program'}"
+                >
+                  Sickle Cell Disease Program
+                </a>
+              </li>
+              <li data-label="Multiple Myeloma Program">
+                <a
+                  class="{!v.location == 'multiple-myeloma-program' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/multiple-myeloma-program'}"
+                >
+                  Multiple Myeloma Program
+                </a>
+              </li>                                    
+              <li data-label="Data Hub Real World Evidence Initiative">
+                <a
+                  class="{!v.location == 'real-world-evidence-initiative' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/real-world-evidence-initiative'}"
+                >
+                  Real World Evidence Initiative
+                </a>
+              </li>
+              <li data-label="Sickle Cell Disease Learning Community">
+                <a
+                  class="{!v.location == 'sickle-cell-disease-learning-community' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-learning-community'}"
+                >
+                  Sickle Cell Disease Learning Community
+                </a>
+              </li>                                    
+              <li data-label="Data Quality">
+                <a
+                  class="{!v.location == 'data-quality' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/data-quality'}"
+                >
+                  Data Quality
+                </a>
+              </li>
+              <li data-label="Research and Analytics">
+                <a
+                  class="{!v.location == 'research-and-analytics' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/research-and-analytics'}"
+                >
+                  Reasearch and Analytics
+                </a>
+              </li>
+              <li data-label="Data Submission">
+                <a
+                  class="{!v.location == 'data-submission' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/data-submission'}"
+                >
+                  Data Submission
+                </a>
+              </li>                                                        
+              <li data-label="Data Hub FAQs">
+                <a
+                  class="{!v.location == 'data-hub-faqs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'about-the-data-hub/faqs'}"
+                >
+                  Data Hub FAQs
+                </a>
+              </li>              
+            </ul>
+          </li>
+          <li class="mobile-menu__link">
+            <div
+              class="mobile-menu__accordionSectionHeader"
+              id="{!'accordion-container-' + 5}"
+              onclick="{!c.handleAccordion}"
+            >
+              <span
+                class="mobile-menu__label"
+                id="{!'accordion-label-' + 5}"
+                onclick="{!c.handleAccordion}"
+                data-label="News &amp; Events"
+              >
+                News &amp; Events
+              </span>
+              <span
+                class="mobile-menu__label mobile-menu__icon-plus"
+                id="{!'accordion-plus-' + 5}"
+                onclick="{!c.handleAccordion}"
+                >+</span
+              >
+              <span
+                class="mobile-menu__label mobile-menu__icon-minus"
+                id="{!'accordion-minus-' + 5}"
+                onclick="{!c.handleAccordion}"
+                >-</span
+              >
+            </div>
+            <ul
+              class="mobile-menu__accordionSection"
+              id="{!'accordion-' + 5 + '-section'}"
+              onclick="{!c.onClick}"
+            >
+              <li data-label="News Home">
+                <a
+                  class="{!v.location == 'news-and-events' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'news-and-events'}"
+                >
+                  News Home
+                </a>
+              </li>
+              <li data-label="Newsletters">
+                <a
+                  class="{!v.location == 'newsletters' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                  href="{!v.baseUrl + 'newsletters'}"
+                >
+                  Newsletters
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mobile-menu__link">
+            <a
+              class="{!v.location == 'about' ? 'mobile-menu__label mobile-menu__label-active nav-link' : 'mobile-menu__label nav-link'}"
+              data-label="About"
+              href="{!v.baseUrl + 'about'}"
+            >
+              About ASH RC
+            </a>
+          </li>
+          <li class="mobile-menu__link">
+            <a
+              class="{!v.location == 'contact-us' ? 'mobile-menu__label mobile-menu__label-active nav-link' : 'mobile-menu__label nav-link'}"
+              data-label="About"
+              href="{!v.baseUrl + 'contact-us'}"
+            >
+              Contact Us
+            </a>
+          </li>
+        </ul>
+      </div>
+      <aura:set attribute="else">
+        <aura:if isTrue="{!v.loggedIn}">
+          <ul class="mobile-menu__auth-links">
+            <li class="mobile-menu__link">
+              <a
+                class="{!v.location == 'portal' ? 'mobile-menu__label mobile-menu__label--active nav-link' : 'mobile-menu__label nav-link'}"
+                data-label="About"
+                href="{!v.baseUrl + 'portal'}"
+              >
+                My Dashboard
+              </a>
+            </li>
+            <li class="mobile-menu__link">
+              <div
+                class="mobile-menu__accordionSectionHeader"
+                id="{!'accordion-container-' + 6}"
+                onclick="{!c.handleAccordion}"
+              >
+                <span
+                  class="mobile-menu__label"
+                  id="{!'accordion-label-' + 6}"
+                  onclick="{!c.handleAccordion}"
+                  data-label="Clinical Trials Network"
+                >
+                  Clinical Trials Network
+                </span>
+                <span
+                  class="mobile-menu__label mobile-menu__icon-plus"
+                  id="{!'accordion-plus-' + 6}"
+                  onclick="{!c.handleAccordion}"
+                  >+</span
+                >
+                <span
+                  class="mobile-menu__label mobile-menu__icon-minus"
+                  id="{!'accordion-minus-' + 6}"
+                  onclick="{!c.handleAccordion}"
+                  >-</span
+                >
+              </div>
+              <ul
+                class="mobile-menu__accordionSection"
+                id="{!'accordion-' + 6 + '-section'}"
+                onclick="{!c.onClick}"
+              >
+                <li data-label="Clinical Trials Network">
+                  <a
+                    class="{!v.location == 'portal-clinical-trials-network' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'portal/clinical-trials-network'}"
+                  >
+                    CTN Dashboard
+                  </a>
+                </li>
+                <li data-label="Clinical Trials Network">
+                  <a
+                    class="{!v.location == 'portal-scd-ctn-site-locations' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'portal/scd-ctn-site-locations'}"
+                  >
+                    CTN Site Locations
+                  </a>
+                </li>
+                <li data-label="Data Hub">
+                  <a
+                    class="{!v.location == 'portal-site-directory' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'portal/site-directory'}"
+                    target="_blank"
+                  >
+                    CTN Site Directory
+                  </a>
+                </li>
+                <li data-label="Clinical Trials Network">
+                  <a
+                    class="{!v.location == 'clinical-trials-network-faqs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                     href="{!v.baseUrl + 'clinical-trials-network/faqs'}"
+                    target="_blank"
+                  >
+                    CTN FAQs
+                  </a>
+                </li>
+                <!-- <li data-label="Clinical Trials Network">
+                  <a
+                    class="{!v.location == 'portal-ctn-news-and-events' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'portal/ctn-news-and-events'}"
+                  >
+                    CTN News &amp; Events
+                  </a>
+                </li> -->
+              </ul>
+            </li>
+            <li class="mobile-menu__link">
+              <div
+                class="mobile-menu__accordionSectionHeader"
+                id="{!'accordion-container-' + 7}"
+                onclick="{!c.handleAccordion}"
+              >
+                <span
+                  class="mobile-menu__label"
+                  id="{!'accordion-label-' + 7}"
+                  onclick="{!c.handleAccordion}"
+                  data-label="Data Hub"
+                >
+                  Data Hub
+                </span>
+                <span
+                  class="mobile-menu__label mobile-menu__icon-plus"
+                  id="{!'accordion-plus-' + 7}"
+                  onclick="{!c.handleAccordion}"
+                  >+</span
+                >
+                <span
+                  class="mobile-menu__label mobile-menu__icon-minus"
+                  id="{!'accordion-minus-' + 7}"
+                  onclick="{!c.handleAccordion}"
+                  >-</span
+                >
+              </div>
+              <ul
+                class="mobile-menu__accordionSection"
+                id="{!'accordion-' + 7 + '-section'}"
+                onclick="{!c.onClick}"
+              >
+                <li data-label="Data Hub">
+                  <a
+                    class="{!v.location == 'portal-data-hub' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'portal/data-hub'}"
+                  >
+                    Data Hub Dashboard
+                  </a>
+                </li>
+                <li data-label="Data Hub">
+                  <a
+                    class="{!v.location == 'portal-site-directory' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'portal/site-directory#data-hub'}"
+                    target="_blank"
+                  >
+                    Data Hub Site Directory
+                  </a>
+                </li>
+                <li data-label="Data Hub">
+                  <a
+                    class="{!v.location == 'data-hub-faqs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                    href="{!v.baseUrl + 'about-the-data-hub/faqs'}"
+                    target="_blank"
+                  >
+                    Data Hub FAQs
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="mobile-menu__link">
+              <a
+                class="{!v.location == 'portal-site-directory' ? 'mobile-menu__label mobile-menu__label--active nav-link' : 'mobile-menu__label nav-link'}"
+                data-label="Site Directory"
+                href="{!v.baseUrl + 'portal/site-directory'}"
+              >
+                Site Directory
+              </a>
+            </li>
+            <li class="mobile-menu__link">
+              <a
+                class="{!v.location == 'portal-committees' ? 'mobile-menu__label mobile-menu__label-active nav-link' : 'mobile-menu__label nav-link'}"
+                data-label="Committees"
+                href="{!v.baseUrl + 'portal/committees'}"
+              >
+                Committees
+              </a>
+            </li>
+            <li class="mobile-menu__link">
+              <a
+                class="{!v.location == 'portal-resource-library' ? 'mobile-menu__label mobile-menu__label--active nav-link' : 'mobile-menu__label nav-link'}"
+                data-label="Resource Library"
+                href="{!v.baseUrl + 'portal/resource-library'}"
+              >
+                Resource Library
+              </a>
+            </li>
+          </ul>
+          <aura:set attribute="else">
+            <ul class="mobile-menu__links">
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + 1}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + 1}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="COVID-19 Registry"
+                  >
+                    COVID-19 Registry
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + 1}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + 1}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + 1 + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <li data-label="COVID-19 Home">
+                    <a
+                      class="{!v.location == 'covid-19-registry' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'covid-19-registry'}"
+                    >
+                      COVID-19 Home
+                    </a>
+                  </li>
+                  <li data-label="Data Summaries">
+                    <a
+                      class="{!v.location == 'covid-19-registry-data-summaries' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                       href="{!v.baseUrl + 'covid-19-registry/data-summaries'}"
+                    >
+                      Data Summaries
+                    </a>
+                  </li>
+                  <li data-label="Acknowledgements">
+                    <a
+                      class="{!v.location == 'covid-19-registry-acknowledgements' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                       href="{!v.baseUrl + 'covid-19-registry/acknowledgements'}"
+                    >
+                      Acknowledgements
+                    </a>
+                  </li>
+                  <li data-label="FAQs">
+                    <a
+                      class="{!v.location == 'covid-19-registry-faqs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                       href="{!v.baseUrl + 'covid-19-registry/faqs'}"
+                    >
+                      FAQs
+                    </a>
+                  </li>
+                  <li class="mobile-menu__link">
+                    <a
+                      class="mobile-menu__label nav-link"
+                      data-label="ASH COVID-19 Resources"
+                      href="https://www.hematology.org/covid-19"
+                      target="_blank"
+                    >
+                      ASH COVID-19 Resources
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + 2}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + 2}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="Sickle Cell Disease Community"
+                  >
+                  Sickle Cell Disease Community
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + 2}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + 2}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + 2 + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <li data-label="Sickle Cell Disease Community">
+                    <a
+                      class="{!v.location == 'sickle-cell-disease-community' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'sickle-cell-disease-community'}"
+                    >
+                    Sickle Cell Disease Community
+                    </a>
+                  </li>
+                  <li data-label="Clinical Trials 101">
+                    <a
+                      class="{!v.location == 'clinical-trials-101' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'clinical-trials-101'}"
+                    >
+                      Clinical Trials 101
+                    </a>
+                  </li>
+                  <li data-label="Community Advisory Boards">
+                    <a
+                      class="{!v.location == 'community-advisory-board' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'sickle-cell-disease-community/community-advisory-board'}"
+                    >
+                      Community Advisory Boards
+                    </a>
+                  </li>                  
+                </ul>
+              </li>
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + 3}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + 3}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="Clinical Trials Network"
+                  >
+                    Clinical Trials Network
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + 3}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + 3}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + 3 + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <li data-label="CTN Home">
+                    <a
+                      class="{!v.location == 'clinical-trials-network' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'clinical-trials-network'}"
+                    >
+                      CTN Home
+                    </a>
+                  </li>
+                  <li data-label="FAQs">
+                    <a
+                      class="{!v.location == 'clinical-trials-network-faqs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                       href="{!v.baseUrl + 'clinical-trials-network/faqs'}"
+                    >
+                      FAQs
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + 4}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + 4}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="Data Hub"
+                  >
+                    Data Hub
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + 4}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + 4}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + 4 + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <li data-label="Data Hub Home">
+                    <a
+                      class="{!v.location == 'about-the-data-hub' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub'}"
+                    >
+                      Data Hub Home
+                    </a>
+                  </li>
+                  <li data-label="Data Hub Programs">
+                    <a
+                      class="{!v.location == 'programs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/programs'}"
+                    >
+                      Data Hub Programs
+                    </a>
+                  </li>
+                  <li data-label="Sickle Cell Disease Program">
+                    <a
+                      class="{!v.location == 'sickle-cell-disease-program' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-program'}"
+                    >
+                      Sickle Cell Disease Program
+                    </a>
+                  </li>
+                  <li data-label="Multiple Myeloma Program">
+                    <a
+                      class="{!v.location == 'multiple-myeloma-program' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/multiple-myeloma-program'}"
+                    >
+                      Multiple Myeloma Program
+                    </a>
+                  </li>                                    
+                  <li data-label="Data Hub Real World Evidence Initiative">
+                    <a
+                      class="{!v.location == 'real-world-evidence-initiative' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/real-world-evidence-initiative'}"
+                    >
+                      Real World Evidence Initiative
+                    </a>
+                  </li>
+                  <li data-label="Sickle Cell Disease Learning Community">
+                    <a
+                      class="{!v.location == 'sickle-cell-disease-learning-community' ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/sickle-cell-disease-learning-community'}"
+                    >
+                      Sickle Cell Disease Learning Community
+                    </a>
+                  </li>                                    
+                  <li data-label="Data Quality">
+                    <a
+                      class="{!v.location == 'data-quality' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/data-quality'}"
+                    >
+                      Data Quality
+                    </a>
+                  </li>
+                  <li data-label="Research and Analytics">
+                    <a
+                      class="{!v.location == 'research-and-analytics' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/research-and-analytics'}"
+                    >
+                      Reasearch and Analytics
+                    </a>
+                  </li>
+                  <li data-label="Data Submission">
+                    <a
+                      class="{!v.location == 'data-submission' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/data-submission'}"
+                    >
+                      Data Submission
+                    </a>
+                  </li>                                                        
+                  <li data-label="Data Hub FAQs">
+                    <a
+                      class="{!v.location == 'data-hub-faqs' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'about-the-data-hub/faqs'}"
+                    >
+                      Data Hub FAQs
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + 5}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + 5}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="News &amp; Events"
+                  >
+                    News &amp; Events
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + 5}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + 5}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + 5 + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <li data-label="News Home">
+                    <a
+                      class="{!v.location == 'news-and-events' ? 'mobile-menu__label mobile-menu__label--active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                      href="{!v.baseUrl + 'news-and-events'}"
+                    >
+                      News Home
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="mobile-menu__link">
+                <a
+                  class="{!v.location == 'about' ? 'mobile-menu__label mobile-menu__label--active nav-link' : 'mobile-menu__label nav-link'}"
+                  data-label="About"
+                  href="{!v.baseUrl + 'about'}"
+                >
+                  About ASH RC
+                </a>
+              </li>
+              <li class="mobile-menu__link">
+                <a
+                  class="{!v.location == 'contact-us' ? 'mobile-menu__label mobile-menu__label--active nav-link' : 'mobile-menu__label nav-link'}"
+                  data-label="About"
+                  href="{!v.baseUrl + 'contact-us'}"
+                >
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </aura:set>
+        </aura:if>
+      </aura:set>
+    </aura:if>
+    <!-- <aura:if isTrue="{!v.showAccord}">
+      <div
+        class="mobile-menu__accordionSectionHeader"
+        id="accordion-container-0"
+        onclick="{!c.handleAccordion}"
+      >
+        <span
+          class="mobile-menu__label"
+          id="accordion-label-0"
+          onclick="{!c.handleAccordion}"
+          data-label="{!v.accordLabel}"
+        >
+          {!v.accordLabel}
+        </span>
+        <span
+          class="mobile-menu__label mobile-menu__icon-plus"
+          id="accordion-plus-0"
+          onclick="{!c.handleAccordion}"
+          >+</span
+        >
+        <span
+          class="mobile-menu__label mobile-menu__icon-minus"
+          id="accordion-minus-0"
+          onclick="{!c.handleAccordion}"
+          >-</span
+        >
+      </div>
+      <div
+        class="mobile-menu__accordionSection"
+        id="accordion-0-section"
+        onclick="{!c.onClick}"
+      >
+        <ul class="{!v.loggedIn ? 'mobile-menu__auth-links' : 'mobile-menu__links'}" onclick="{!c.onClick}">
+          <aura:iteration items="{!v.menuItems}" var="item" indexVar="index">
+            <aura:if isTrue="{!item.subMenu}">
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + index}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + index}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="{!item.label}"
+                  >
+                    {!item.label}
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + index}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + index}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + index + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <aura:iteration items="{!item.subMenu}" var="subItem">
+                    <li data-label="{!subItem.label}">
+                      <a
+                        class="{!subItem.active ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                        href="{!subItem.target}"
+                        target="{!subItem.tab}"
+                        data-menu-item-id="{!subItem.id}"
+                      >
+                        {!subItem.label}
+                      </a>
+                    </li>
+                  </aura:iteration>
+                </ul>
+              </li>
+              <aura:set attribute="else">
+                <aura:if isTrue="{!item.label != 'Home'}">
+                  <li class="mobile-menu__link">
+                    <a
+                      class="{!item.active ? 'mobile-menu__label mobile-menu__label-active nav-link' : 'mobile-menu__label nav-link'}"
+                      data-label="{!item.label}"
+                      href="{!item.target}"
+                      target="{!item.tab}"
+                      data-menu-item-id="{!item.id}"
+                    >
+                      {!item.label}
+                    </a>
+                  </li>
+                </aura:if>
+              </aura:set>
+            </aura:if>
+          </aura:iteration>
+        </ul>
+      </div>
+      <aura:set attribute="else">
+        <ul class="{!v.loggedIn ? 'mobile-menu__auth-links' : 'mobile-menu__links'}" onclick="{!c.onClick}">
+          <aura:iteration items="{!v.menuItems}" var="item" indexVar="index">
+            <aura:if isTrue="{!item.subMenu}">
+              <li class="mobile-menu__link">
+                <div
+                  class="mobile-menu__accordionSectionHeader"
+                  id="{!'accordion-container-' + index}"
+                  onclick="{!c.handleAccordion}"
+                >
+                  <span
+                    class="mobile-menu__label"
+                    id="{!'accordion-label-' + index}"
+                    onclick="{!c.handleAccordion}"
+                    data-label="{!item.label}"
+                  >
+                    {!item.label}
+                  </span>
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-plus"
+                    id="{!'accordion-plus-' + index}"
+                    onclick="{!c.handleAccordion}"
+                    >+</span
+                  >
+                  <span
+                    class="mobile-menu__label mobile-menu__icon-minus"
+                    id="{!'accordion-minus-' + index}"
+                    onclick="{!c.handleAccordion}"
+                    >-</span
+                  >
+                </div>
+                <ul
+                  class="mobile-menu__accordionSection"
+                  id="{!'accordion-' + index + '-section'}"
+                  onclick="{!c.onClick}"
+                >
+                  <aura:iteration items="{!item.subMenu}" var="subItem">
+                    <li data-label="{!subItem.label}">
+                      <a
+                        class="{!subItem.active ? 'mobile-menu__label mobile-menu__label-active mobile-menu__sublink nav-link' : 'mobile-menu__label mobile-menu__sublink nav-link'}"
+                        href="{!subItem.target}"
+                        target="{!subItem.tab}"
+                        data-menu-item-id="{!subItem.id}"
+                      >
+                        {!subItem.label}
+                      </a>
+                    </li>
+                  </aura:iteration>
+                </ul>
+              </li>
+              <aura:set attribute="else">
+                <aura:if isTrue="{!item.label != 'Home'}">
+                  <li class="mobile-menu__link">
+                    <a
+                      class="{!item.active ? 'mobile-menu__label mobile-menu__label-active nav-link' : 'mobile-menu__label nav-link'}"
+                      data-label="{!item.label}"
+                      href="{!item.target}"
+                      target="{!item.tab}"
+                      data-menu-item-id="{!item.id}"
+                    >
+                      {!item.label}
+                    </a>
+                  </li>
+                </aura:if>
+              </aura:set>
+            </aura:if>
+          </aura:iteration>
+        </ul>
+      </aura:set>
+    </aura:if> -->
+  </div>
+</aura:component>

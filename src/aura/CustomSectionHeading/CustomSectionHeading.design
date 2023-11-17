@@ -1,0 +1,84 @@
+<design:component label="Custom Section">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadline"
+    label="Show Headline"
+    description="Check to display the headline."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingField"
+    label="Subheading Field"
+    datasource="None, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for a subheading to display."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingFontSize"
+    label="Subheading Font Size"
+    datasource="Large, Medium, Small"
+    description="Select a font size for the subheading."
+  ></design:attribute>
+  <design:attribute
+    name="mobileSubheading"
+    label="Show Subheading on Mobile"
+    description="Check to display the subheading on mobile."
+  ></design:attribute>
+  <design:attribute
+    name="imageField"
+    label="Icon Field"
+    datasource="None, Image"
+    description="Select the CMS field name of the icon to display above the text."
+  ></design:attribute>
+  <design:attribute
+    name="iconPlacement"
+    label="Icon Placement"
+    datasource="above, left"
+    description="Placement of icon around headings."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter a label for a button to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="buttonStyle"
+    label="Button Style"
+    datasource="primary, secondary, tertiary, tertiary-light, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Select a button type to display."
+  ></design:attribute>
+  <design:attribute
+    name="buttonSize"
+    label="Button Size"
+    datasource="small, medium, large"
+    description="Select a button size."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="#fff, #f4f2e7, #e2eaee, #f8f8f8"
+    description="Choose a color to change the background."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

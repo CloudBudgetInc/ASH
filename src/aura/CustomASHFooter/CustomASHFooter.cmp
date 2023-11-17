@@ -1,0 +1,85 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <aura:attribute name="copyrightYear" default="2020" type="Integer" />
+
+  <footer class="footer">
+    <div class="row">
+      <div class="col-3 footer__logo-section">
+        <img
+          src="{! $ContentAsset.ASH_Logo_SVG}"
+          class="footer_logo"
+          width="150"
+          height="150"
+          alt="American Society of Hematology Logo"
+        />
+      </div>
+      <div class="col-md-3 col-9 footer__section">
+        <div class="footer__address">
+          <p class="footer__address-title">American Society of Hematology</p>
+          <div class="footer__address-seperator"></div>
+          <p class="footer__address-info">
+            2021 L Street NW, Suite 900,<br />Washington, DC 20036
+          </p>
+        </div>
+      </div>
+      <div class="col-md-3 col-9 footer__section">
+        <div class="footer__address">
+          <p class="footer__address-title">Contact</p>
+          <div class="footer__address-seperator"></div>
+          <p class="footer__address-info">
+            Phone 202-776-0544<br />Toll Free 866-828-1231<br />Fax 202-776-0545
+          </p>
+        </div>
+      </div>
+      <div class="col-md-3 col-9 footer__section">
+        <div class="footer__social">
+          <p class="footer__social-title">Social</p>
+          <p class="footer__social-buttons">
+            <a
+              href="https://www.facebook.com/AmericanSocietyofHematology"
+              class="footer__social-button"
+              target="_blank"
+            >
+              <img src="{!$ContentAsset.icon_facebook_2x}" alt="facebook" />
+            </a>
+            <a
+              href="http://www.linkedin.com/company/american-society-of-hematology"
+              class="footer__social-button"
+              target="_blank"
+            >
+              <img src="{!$ContentAsset.icon_linkedin_2x}" alt="linkedIn" />
+            </a>
+            <a
+              href="https://twitter.com/ASH_hematology"
+              class="footer__social-button"
+              target="_blank"
+            >
+              <img src="{!$ContentAsset.icon_twitter_2x}" alt="twitter" />
+            </a>
+            <a
+              href="https://www.youtube.com/user/ASHWebmaster"
+              class="footer__social-button"
+              target="_blank"
+            >
+              <img src="{!$ContentAsset.icon_youtube_2x}" alt="youtube" />
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bar d-flex">
+      <p class="footer-bar__copyright">Copyright © {!v.copyrightYear} by American Society of Hematology</p>
+      <div class="flex-grow-1 align-self-center footer-bar__separator-section">
+        <span class="footer-bar__separator"></span>
+      </div>
+      <p>
+        <a href="https://hematology.org/about/corporate-support"
+          >Support Opportunities</a
+        >|<a href="https://hematology.org/about/privacy-policy"
+          >Privacy Policy</a
+        >|<a href="https://hematology.org/about/terms-of-service"
+          >Terms of Service</a
+        >|<a href="https://www.hematology.org/contact-us">Contact Us</a>
+      </p>
+    </div>
+  </footer>
+</aura:component>

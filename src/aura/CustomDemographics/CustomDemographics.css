@@ -1,0 +1,247 @@
+.THIS.demographics {
+  align-items: flex-start;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 20px 0;
+}
+
+.THIS .demographics__header {
+  align-items: flex-start;
+  display: flex;
+  flex-flow: column nowrap;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+.THIS .demographics__title {
+  padding-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .THIS .demographics__title {
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .THIS .demographics__header {
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+}
+
+.THIS .demographics__intro {
+  font-size: 16px;
+  padding-top: 20px;
+}
+
+.THIS .demographics__link {
+  color: #b7000f;
+  font-size: 16px;
+  padding: 10px 0;
+}
+
+.THIS .demographics__link:hover,
+.THIS .demographics__link:focus {
+  color: #b7000f;
+  text-decoration: underline;
+}
+
+.THIS .demographics__opt-in {
+  margin-top: 20px;
+}
+
+.THIS .demographics__opt-in label:hover {
+  cursor: pointer;
+}
+
+
+
+.THIS .demographics__opt-in .slds-form-element__label {
+  color: #000;
+  font-size: 14px;
+}
+
+.THIS .demographics__title {
+  color: #000;
+  font-size: 18px;
+}
+
+.THIS .demographics__section-title {
+  align-items: center;
+  color: #000;
+  display: flex;
+  font-size: 18px;
+  padding: 40px 0 10px;
+}
+
+.THIS .demographics__details {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+  font-size: 16px;
+  width: 100%;
+}
+
+/* .THIS .demographics__help {
+  font-size: 16px;
+  padding: 40px 0 0;
+} */
+
+.THIS .demographics__desc {
+  padding: 10px 0 20px;
+}
+
+.THIS .demographics__msg {
+  padding: 0 0 10px 0;
+}
+
+.THIS .demographics__pills {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.THIS .demographics__pill {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  text-align: center;
+  /* width: 60px; */
+}
+
+.THIS .demographics__placeholder {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: normal;
+}
+
+.THIS .demographics__title--form {
+  padding: 30px 0 10px;
+}
+
+.THIS .demographics__title--form:first-of-type {
+  padding: 0 0 10px;
+}
+
+.THIS .demographics__tooltip .slds-form-element__icon {
+  padding-left: 2px;
+  padding-top: 1px;
+}
+
+.THIS .demographics__field {
+  align-items: flex-start;
+  display: flex;
+  flex-flow: column nowrap;
+  padding-top: 10px;
+  width: 100%;
+}
+
+.THIS .demographics__separator {
+  height: 20px;
+  width: 100%;
+}
+
+.THIS .demographics__input .slds-form-element__icon {
+  display: none;
+}
+
+.THIS .demographics__field-label {
+  color: #84000b;
+  font-size: 14px;
+}
+
+.THIS .demographics__field-item {
+  color: rgba(0, 0, 0, 0.8);
+  padding-top: 5px;
+}
+
+.THIS .demographics__field-item a {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.THIS .demographics__field-none {
+  font-style: italic;
+}
+
+.THIS .slds-modal__header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.THIS .demographics__spinner {
+  height: 50px;
+  margin: 0 auto;
+  position: relative;
+  width: 50px;
+}
+
+.THIS .demographics__form-note,
+.THIS .demographics__approx-text {
+  padding: 10px 0 20px;
+}
+
+.THIS .demographics__form-note span {
+  color: #84000b;
+}
+
+.THIS .hide,
+.THIS .hidden {
+  display: none;
+}
+
+.THIS .demographics__confirm-msg {
+  font-size: 16px;
+}
+
+.THIS .demographics__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.THIS .demographics__view-more .slds-button__icon {
+  height: 20px;
+}
+
+.THIS .demographics__ethnicities li {
+  padding-bottom: 10px;
+}
+
+.THIS .demographics__ethnicities li:last-of-type {
+  padding-bottom: 0;
+}
+
+.THIS .slds-backdrop.ethnicities {
+  z-index: 9001;
+}
+
+.THIS .demographics__modal--ethnicities .slds-modal {
+  z-index: 9002;
+}
+
+@media (min-width: 600px) {
+  .THIS .demographics__details {
+    flex-flow: row wrap;
+  }
+
+  .THIS .demographics__field {
+    width: 50%;
+  }
+
+  .THIS .demographics__field--ethnicity {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .THIS .demographics__field {
+    width: 33%;
+  }
+
+  .THIS .demographics__field--ethnicity {
+    width: 100%;
+  }
+}

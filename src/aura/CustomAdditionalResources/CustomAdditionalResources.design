@@ -1,0 +1,117 @@
+<design:component label="Custom Additional Resources">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="showHeading"
+    label="Show Heading"
+    description="Check to display the heading."
+  ></design:attribute>
+  <design:attribute
+    name="imageField"
+    label="Icon Field"
+    datasource="None, Image"
+    description="Select the CMS field name of the icon to display above the text."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingField"
+    label="Subheading Field"
+    datasource="None, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for a subheading to display."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingFontSize"
+    label="Subheading Font Size"
+    datasource="Large, Medium, Small"
+    description="Select a font size for the subheading."
+  ></design:attribute>
+  <design:attribute
+    name="mobileSubheading"
+    label="Show Subheading on Mobile"
+    description="Check to display the subheading on mobile."
+  ></design:attribute>
+  <design:attribute
+    name="linkColor"
+    label="Link Color"
+    datasource="#d41f30, #333, #a30014"
+    description="Choose a color for the resource links."
+  ></design:attribute>
+  <design:attribute
+    name="link1Label"
+    label="Link 1 Label"
+    description="Enter a label for the first link to display."
+  ></design:attribute>
+  <design:attribute
+    name="link1Path"
+    label="Link 1 Path"
+    description="Enter a path for the first link."
+  ></design:attribute>
+  <design:attribute
+    name="open1Tab"
+    label="Open the first link in new tab"
+    description="Check to open the first link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="link2Label"
+    label="Link 2 Label"
+    description="Enter a label for the second link to display."
+  ></design:attribute>
+  <design:attribute
+    name="link2Path"
+    label="Link 2 Path"
+    description="Enter a path for the second link."
+  ></design:attribute>
+  <design:attribute
+    name="open2Tab"
+    label="Open the second link in new tab"
+    description="Check to open the second link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="link3Label"
+    label="Link 3 Label"
+    description="Enter a label for the third link to display."
+  ></design:attribute>
+  <design:attribute
+    name="link3Path"
+    label="Link 3 Path"
+    description="Enter a path for the third link."
+  ></design:attribute>
+  <design:attribute
+    name="open3Tab"
+    label="Open the third link in new tab"
+    description="Check to open the third link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="link4Label"
+    label="Link 4 Label"
+    description="Enter a label for a fourth link to display."
+  ></design:attribute>
+  <design:attribute
+    name="link4Path"
+    label="Link 4 Path"
+    description="Enter a path for a fourth link."
+  ></design:attribute>
+  <design:attribute
+    name="open4Tab"
+    label="Open the fourth link in new tab"
+    description="Check to open the fourth link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="#fff, #f4f2e7, #e2eaee, #f8f8f8"
+    description="Choose a color to change the background."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,3 @@
+<design:component label="Custom ASH Footer">
+    <design:attribute name="copyrightYear" label="Copyright Year" description="Enter copyright year to display" />
+</design:component>

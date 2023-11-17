@@ -1,0 +1,159 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="image" type="Object" />
+  <aura:attribute
+    name="imageField"
+    type="String"
+    required="true"
+    default="Image 1"
+  />
+  <aura:attribute name="topDescription" type="String" />
+  <aura:attribute
+    name="topDescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="rightDescription" type="String" />
+  <aura:attribute
+    name="rightDescriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="textOnImage" type="String" />
+  <aura:attribute
+    name="textOnImageField"
+    type="String"
+    default="Subheading"
+  />
+  <aura:attribute name="textUnderImage" type="String" />
+  <aura:attribute
+    name="textUnderImageField"
+    type="String"
+    required="true"
+    default="Rich Text Field 3"
+  />
+  <aura:attribute name="linkColor" type="String" default="#7095aa" />
+  <aura:attribute name="showTopButton" type="Boolean" default="false" />
+  <aura:attribute name="openTopTab" type="Boolean" default="false" />
+  <aura:attribute name="topButtonLabel" type="String" default="Learn More" />
+  <aura:attribute name="topButtonLink" type="String" />
+  <aura:attribute name="showRightButton" type="Boolean" default="false" />
+  <aura:attribute name="rightButtonLabel" type="String" default="Learn More" />
+  <aura:attribute name="rightButtonLink" type="String" />
+  <aura:attribute name="openRightTab" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="true" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+    'image-caption-text',
+    v.showTopPadding ? 'padding-top' : '',
+    v.showBottomPadding ? 'padding-bottom' : ''
+  )}"
+  >
+    <div class="image-caption-text__top">
+      <div class="image-caption-text__heading">
+        <h2 class="image-caption-text__title">
+          <lightning:formattedRichText
+            class="h2"
+            value="{!v.record.contentNodes.Headline.value}"
+          />
+        </h2>
+      </div>
+      <p
+         class="{!v.linkColor == '#a30014'? 'image-caption-text__description image-caption-text__description--red'
+                 : 'image-caption-text__description'}">
+        <lightning:formattedRichText
+          class="{!v.linkColor == '#a30014'? 'image-caption-text__description p image-caption-text__description--red'
+                 : 'image-caption-text__description p'}"
+          value="{!v.topDescription}"
+        />
+      </p>
+      <aura:if isTrue="{!v.showTopButton}">
+        <aura:if isTrue="{!v.openTopTab}">
+            <a
+              class="image-caption-text__cta cta-button cta-button--primary image-caption-text__cta--top"
+              href="{!v.topButtonLink}"
+              target="_blank"
+            >
+              {!v.topButtonLabel}
+            </a>
+            <aura:set attribute="else">
+                <a
+                  class="image-caption-text__cta cta-button cta-button--primary image-caption-text__cta--top"
+                  href="{!v.topButtonLink}"
+                >
+                  {!v.topButtonLabel}
+                </a>
+            </aura:set>
+        </aura:if>
+      </aura:if>
+    </div>
+    <div class="image-caption-text__content">
+      <div class="image-caption-text__content-container">
+        <div class="image-caption-text__content-left">
+          <div
+            class="{!!empty(v.textOnImage) ?
+                   'image-caption-text__image-container image-caption-text__image-container-overlay'
+                   : 'image-caption-text__image-container'}"
+          >
+            <img
+              class="image-caption-text__image"
+              src="{!v.image.src}"
+              alt="{!v.image.alt}"
+            />
+            <div class="p">
+              <lightning:formattedRichText
+                class="image-caption-text__image-text p"
+                value="{!v.textOnImage}"
+              />
+            </div>
+          </div>
+          <div class="image-caption-text__image-caption p--small">
+            <lightning:formattedRichText
+              class="{!v.linkColor == '#a30014'? 'image-caption-text__image-caption p--small image-caption-text__image-caption--red'
+                 : 'image-caption-text__image-caption p--small'}"
+              value="{!v.textUnderImage}"
+            />
+          </div>
+        </div>
+        <div class="image-caption-text__content-right">
+          <p class="{!v.linkColor == '#a30014'? 'image-caption-text__content-right-description p image-caption-text__content-right-description--red'
+                 : 'image-caption-text__content-right-description p'}">
+            <lightning:formattedRichText
+              class="{!v.linkColor == '#a30014'? 'image-caption-text__content-right-description p image-caption-text__content-right-description--red'
+                 : 'image-caption-text__content-right-description p'}"
+              value="{!v.rightDescription}"
+          /></p>
+          <aura:if isTrue="{!v.showRightButton}">
+            <aura:if isTrue="{!v.openRightTab}">
+                <a
+                  class="image-caption-text__cta cta-button cta-button--primary image-caption-text__cta--right"
+                  href="{!v.rightButtonLink}"
+                  target="_blank"
+                >
+                  {!v.rightButtonLabel}
+                </a>
+                <aura:set attribute="else">
+                    <a
+                      class="image-caption-text__cta cta-button cta-button--primary image-caption-text__cta--right"
+                      href="{!v.rightButtonLink}"
+                    >
+                      {!v.rightButtonLabel}
+                    </a>
+                </aura:set>
+            </aura:if>
+          </aura:if>
+        </div>
+      </div>
+    </div>
+  </div>
+</aura:component>

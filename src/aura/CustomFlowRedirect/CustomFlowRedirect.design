@@ -1,0 +1,7 @@
+<design:component label="Flow Redirect">
+  <design:attribute
+    name="url"
+    label="Redirect Url"
+    description="Enter a relative url to redirect to when flow finishes."
+  />
+</design:component>

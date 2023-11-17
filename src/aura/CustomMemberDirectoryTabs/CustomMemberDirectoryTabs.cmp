@@ -1,0 +1,96 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+  <!-- Design Attributes -->
+  <aura:attribute
+    name="title"
+    type="String"
+    default="Site Directory"
+  />
+  <aura:attribute
+    name="tab1Label"
+    type="String"
+    default="Clinical Trials Network"
+  />
+  <aura:attribute
+    name="tab2Label"
+    type="String"
+    default="Data Hub"
+  />
+  <aura:attribute name="ctuLabel" type="String" default="Clinical Trials Unit" />
+  <aura:attribute name="learningCommLabel" type="String" default="Learning Community" />
+  <aura:attribute
+    name="ctnIntro"
+    type="String"
+    default="The Clinical Trials Network Site Directory is a comprehensive, searchable online directory of member sites and their research staff.  Use our Participating Site Directory to find and connect with fellow members of the Clinical Trial Network."
+  />
+  <aura:attribute
+    name="dataHubIntro"
+    type="String"
+    default="The Data Hub Site Directory is a comprehensive, searchable online directory of member sites and their research staff.  Use our Participating Site Directory to find and connect with fellow members of the Data Hub."
+  />
+  <aura:attribute name="baseUrl" type="String" default="/s/" />
+  <aura:attribute name="detailUrl" type="String" default="profile-details" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <!-- Controller Attributes -->
+  <aura:attribute name="selectedTabId" type="String" default="ctn" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      'member-directory-tabs component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="member-directory-tabs__container">
+      <div class="member-directory-tabs__header">
+        <h2 class="member-directory-tabs__header-title">
+          <lightning:formattedRichText
+            class="member-directory-tabs__header-title"
+            value="{!v.title}"
+          />
+        </h2>
+      </div>
+      <lightning:tabset class="member-directory-tabs__tabset" selectedTabId="{!v.selectedTabId}">
+        <lightning:tab label="{!v.tab1Label}" id="ctn">
+          <div class="member-directory-tabs__tab-panel">
+            <c:CustomCTNDirectory
+              intro="{!v.ctnIntro}"
+              ctuLabel="{!v.ctuLabel}"
+              nameLabel="Name"
+              roleLabel="Role"
+              programLabel="Consortium"
+              stateLabel="State"
+              siteLabel="Site Name"
+              sortBy="Name"
+              sortDir="ASC"
+              pageSize="25"
+              baseUrl="{!v.baseUrl}"
+              detailUrl="{!v.detailUrl}"
+            />
+          </div>
+        </lightning:tab>
+        <lightning:tab label="{!v.tab2Label}" id="data-hub">
+          <div class="member-directory-tabs__tab-panel">
+            <c:CustomDataHubDirectory 
+              intro="{!v.dataHubIntro}"
+              learningCommLabel="{!v.learningCommLabel}"
+              nameLabel="Name"
+              roleLabel="Role"
+              programLabel="Program"
+              stateLabel="State"
+              siteLabel="Site Name"
+              sortBy="Name"
+              sortDir="ASC"
+              pageSize="25"
+              baseUrl="{!v.baseUrl}"
+              detailUrl="{!v.detailUrl}"
+            />
+          </div>
+        </lightning:tab>
+      </lightning:tabset>
+    </div>
+  </div>
+</aura:component>

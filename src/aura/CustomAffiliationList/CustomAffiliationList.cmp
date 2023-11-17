@@ -1,0 +1,620 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomAffiliationController"
+>
+<aura:attribute name="affiliations" type="Affiliate__c[]" />
+<aura:attribute name="userId" type="String" />
+<aura:attribute name="contactId" type="String" />
+<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+<aura:attribute name="isAddModalOpen" type="Boolean" default="false" />
+<aura:attribute name="isOrgModalOpen" type="Boolean" default="false" />
+<aura:attribute name="isAddConfirmationModalOpen" type="Boolean" default="false" />
+<aura:attribute name="isDeleteModalOpen" type="Boolean" default="false" />
+<aura:attribute name="editId" type="String" />
+<aura:attribute name="deleteId" type="String" />
+<aura:attribute name="accountId" type="String" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+<aura:attribute name="disableEndDate" type="Boolean" default="true" />
+<aura:attribute name="newOrgName" type="String" />
+<aura:attribute name="newOrg" type="PenRec__c" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="custom-affiliations">
+  <aura:if isTrue="{!empty(v.affiliations)}">
+    <div class="custom-affiliations__empty">
+      <p>
+        There are no affiliations to display.
+      </p>
+      <!-- Add Button -->
+      <lightning:button
+        class="custom-affiliations__btn--empty"
+        variant="neutral"
+        label="Add Affiliation"
+        title="Add Affiliation"
+        onclick="{! c.openAddModal }"
+      />
+    </div>
+    <aura:set attribute="else">
+      <div class="custom-affiliations__container">
+        <div class="custom-affiliations__header">
+          <h2 class="custom-affiliations__title">
+            Affiliations
+          </h2>
+          <lightning:button
+            class="custom-affiliations__btn--add"
+            variant="neutral"
+            label="Add Affiliation"
+            title="Add Affiliation"
+            onclick="{! c.openAddModal }"
+          />
+        </div>
+        <ul class="custom-affiliations-list">
+          <aura:iteration items="{!v.affiliations}" var="affiliation">
+            <li class="custom-affiliations-item">
+              <div class="custom-affiliations-item__container">
+                <p class="custom-affiliations-item__role">{!affiliation.Role__c}</p>
+                <p class="custom-affiliations-item__name">
+                  <aura:if isTrue="{! !empty(affiliation.Related_Organization__r.Name)}">
+                    <span>{!affiliation.Related_Organization__r.Name}
+                      <!-- <lightning:helptext
+                        class="custom-affiliations-item__tooltip"
+                        content="If you notice a change in your organization name, we have updated it to match our primary record for this organization."
+                      /> -->
+                    </span>
+                    <aura:set attribute="else">
+                      <aura:if isTrue="{! !empty(affiliation.Pending_Record__r.Organization_Name__c)}">
+                        <span>{!affiliation.Pending_Record__r.Organization_Name__c}
+                          <lightning:helptext
+                            class="custom-affiliations-item__tooltip"
+                            content="Organization is Pending"
+                            iconName="utility:priority"
+                          />
+                        </span>
+                      </aura:if>
+                    </aura:set>
+                  </aura:if>
+                  <aura:if isTrue="{!affiliation.Type1__c}">
+                    <span class="custom-affiliations-item__type1">({!affiliation.Type1__c})</span>
+                  </aura:if>
+                </p>
+              <div class="custom-affiliations-item__dates">
+                  <p class="custom-affiliations-item--gray">
+                    <lightning:formattedDateTime
+                      value="{!affiliation.Start_Date__c}"
+                      year="numeric"
+                      month="short"
+                      day="2-digit"
+                      timeZone="UTC"
+                    />
+                    <aura:if isTrue="{!affiliation.Active__c}">
+                      - Present <span class="custom-affiliations-item--active">Active</span>
+                      <aura:set attribute="else">
+                        <aura:if isTrue="{!affiliation.End_Date__c}">
+                          - <lightning:formattedDateTime
+                            value="{!affiliation.End_Date__c}"
+                            year="numeric"
+                            month="short"
+                            day="2-digit"
+                            timeZone="UTC"
+                          />
+                        </aura:if>
+                      </aura:set>
+                    </aura:if>
+                    <aura:if isTrue="{!affiliation.Primary__c}">
+                      <span class="custom-affiliations-item--primary">Primary</span>
+                    </aura:if>
+                  </p>
+                </div>
+                <p class="custom-affiliations-item--gray">
+                  {!affiliation.Related_Organization__r.BillingCity}
+                  <aura:if isTrue="{!affiliation.Related_Organization__r.BillingState}">
+                    , {!affiliation.Related_Organization__r.BillingState}
+                  </aura:if>
+                </p>
+              </div>
+              <span class="custom-affiliations__btns">
+                <!-- Edit Button -->
+                <lightning:button
+                  class="custom-affiliations__btn"
+                  variant="neutral"
+                  label="Edit"
+                  name="{!affiliation.Id}"
+                  title="Edit"
+                  onclick="{! c.openModal }"
+                />
+                <!-- Delete Button -->
+                <aura:if isTrue="{! affiliation.OwnerId == v.userId}">
+                  <lightning:buttonIcon
+                    name="{!affiliation.Id}"
+                    iconName="utility:delete"
+                    variant="brand"
+                    alternativeText="Delete"
+                    title="Delete"
+                    onclick="{! c.openDeleteModal }"
+                  />
+                </aura:if>
+              </span>
+              
+              <!-- START of EDIT Popup FORM -->
+              <div class="custom-affiliations__modal">
+                <aura:if isTrue="{!v.isModalOpen &amp;&amp; v.editId == affiliation.Id}">
+                  <!-- Modal/Popup Box starts here-->
+                  <section
+                    role="dialog"
+                    tabindex="-1"
+                    aria-labelledby="modal-heading-edit"
+                    aria-modal="true"
+                    aria-describedby="modal-content-id-edit"
+                    class="slds-modal slds-fade-in-open"
+                  >
+                    <div class="slds-modal__container">
+                      <!-- Modal/Popup Box Header Starts here-->
+                      <header class="slds-modal__header">
+                        <h2
+                          id="modal-heading-edit"
+                          class="slds-text-heading_medium slds-hyphenate"
+                        >
+                          Edit Affiliation
+                        </h2>
+                        <lightning:buttonIcon
+                          iconName="utility:close"
+                          size="large"
+                          variant="bare"
+                          onclick="{! c.closeModal }"
+                          alternativeText="Close"
+                          title="Close"
+                        />
+                      </header>
+                      <div
+                        class="slds-modal__content slds-p-around_medium"
+                        id="modal-content-id-edit"
+                      >
+                        <lightning:recordEditForm
+                          recordId="{!affiliation.Id}"
+                          objectApiName="Affiliate__c"
+                          onload="{!c.setLoadingFalse}"
+                          onerror="{!c.setLoadingFalse}"
+                          onsubmit="{!c.submitDetails}"
+                          onsuccess="{!c.closeModal}"
+                        >
+                          <lightning:messages />
+                          <div class="slds-grid slds-wrap">
+                            <aura:if isTrue="{! !empty(affiliation.Pending_Record__r.Organization_Name__c)}">
+                              <p class="slds-col slds-size_1-of-1 slds-form-element slds-form-element_stacked">
+                                <label class="slds-form-element__label slds-no-flex">Related Organization</label>
+                                <br />
+                                <strong class="custom-affiliations__edit-pending-org">
+                                  {!affiliation.Pending_Record__r.Organization_Name__c}
+                                </strong>{!' '}
+                                <br />
+                                This new organization will be reviewed internally. Initially you will see it as pending, but this will update automatically after the review is complete.
+                              </p>
+                              <aura:set attribute="else">
+                                <lightning:inputField
+                                  class="slds-col slds-size_1-of-1"
+                                  fieldName="Related_Organization__c"
+                                  value="{!v.accountId}"
+                                />
+                              </aura:set>
+                            </aura:if>
+                            <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Role__c" />
+                            <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Type1__c" />
+                            <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Start_Date__c" />
+                            <lightning:inputField
+                              class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                              aura:id="endDate"
+                              disabled="{!v.disableEndDate}"
+                              fieldName="End_Date__c"
+                            />
+                            <lightning:inputField
+                              class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                              aura:id="active"
+                              onchange="{!c.disableFields}"
+                              fieldName="Active__c"
+                              variant="inline"
+                            />
+                            <lightning:inputField
+                              class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                              fieldName="Primary__c"
+                              variant="inline"
+                            />
+                          </div>
+                          <aura:if isTrue="{!v.loading}">
+                            <div class="custom-affiliations__spinner">
+                              <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                            </div>
+                          </aura:if>
+                          <div class="custom-affiliations__actions slds-m-top_medium">
+                            <lightning:button
+                              variant="neutral"
+                              label="Cancel"
+                              title="Cancel"
+                              onclick="{! c.closeModal }"
+                            />
+                            <lightning:button
+                              variant="brand"
+                              type="submit"
+                              name="save"
+                              label="Save"
+                            />
+                          </div>
+                        </lightning:recordEditForm>
+                      </div>
+                    </div>
+                  </section>
+                  <div class="slds-backdrop slds-backdrop_open"></div>
+                </aura:if>
+              </div>
+              <!-- END of EDIT Popup FORM -->
+
+              <!-- START of DELETE Popup FORM -->
+              <div class="custom-affiliations__modal">
+                <aura:if isTrue="{!v.isDeleteModalOpen &amp;&amp; v.deleteId == affiliation.Id}">
+                  <!-- Modal/Popup Box starts here-->
+                  <section
+                    role="dialog"
+                    tabindex="-1"
+                    aria-labelledby="modal-heading-delete"
+                    aria-modal="true"
+                    aria-describedby="modal-content-id-delete"
+                    class="slds-modal slds-fade-in-open"
+                  >
+                    <div class="slds-modal__container">
+                      <!-- Modal/Popup Box Header Starts here-->
+                      <header class="slds-modal__header">
+                        <h2
+                          id="modal-heading-delete"
+                          class="slds-text-heading_medium slds-hyphenate"
+                        >
+                          Delete Affiliation
+                        </h2>
+                        <lightning:buttonIcon
+                          iconName="utility:close"
+                          size="large"
+                          variant="bare"
+                          onclick="{! c.closeDeleteModal }"
+                          alternativeText="Close"
+                          title="Close"
+                        />
+                      </header>
+                      <div
+                        class="slds-modal__content slds-p-around_medium"
+                        id="modal-content-id-delete"
+                      >
+                        <p class="custom-affiliations__modal-content">
+                          <aura:if isTrue="{! !affiliation.Active__c}">
+                            Are you sure you want to delete this affiliation?
+                            <aura:set attribute="else">
+                              Are you sure you want to delete this affiliation? You can also deactivate by adding an end date to the existing affiliation.
+                            </aura:set>
+                          </aura:if>
+                        </p>
+                        <aura:if isTrue="{!v.loading}">
+                          <div class="custom-affiliations__spinner">
+                            <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                          </div>
+                        </aura:if>
+                        <aura:if isTrue="{! affiliation.Active__c}">
+                          <div class="custom-affiliations__actions--deactivate slds-m-top_medium">
+                            <lightning:button
+                              variant="brand-outline"
+                              label="Deactivate"
+                              title="Deactivate"
+                              name="{!affiliation.Id}"
+                              onclick="{! c.deactivate }"
+                            />
+                            <span>
+                              <lightning:button
+                                variant="neutral"
+                                label="Cancel"
+                                title="Cancel"
+                                onclick="{! c.closeDeleteModal }"
+                              />
+                              <lightning:button
+                                variant="brand"
+                                name="delete"
+                                label="Delete"
+                                title="Delete"
+                                onclick="{! c.handleDelete }"
+                              />
+                            </span>
+                          </div>
+                          <aura:set attribute="else">
+                            <div class="custom-affiliations__actions--delete slds-m-top_medium">
+                              <lightning:button
+                                variant="neutral"
+                                label="Cancel"
+                                title="Cancel"
+                                onclick="{! c.closeDeleteModal }"
+                              />
+                              <lightning:button
+                                variant="brand"
+                                name="delete"
+                                label="Delete"
+                                title="Delete"
+                                onclick="{! c.handleDelete }"
+                              />
+                            </div>
+                          </aura:set>
+                        </aura:if>
+                      </div>
+                    </div>
+                  </section>
+                  <div class="slds-backdrop slds-backdrop_open"></div>
+                </aura:if>
+              </div>
+              <!-- END of DELETE Popup FORM -->
+            </li>
+          </aura:iteration>
+        </ul>
+      </div>
+    </aura:set>
+  </aura:if>
+  <!-- START of ADD Popup FORM -->
+  <div class="custom-affiliations__modal">
+    <aura:if isTrue="{!v.isAddModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-add"
+        aria-modal="true"
+        aria-describedby="modal-content-id-add"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-add"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Add Affiliation
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeAddModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-add"
+          >
+            <lightning:recordEditForm
+              aura:id="recordEditForm"
+              objectApiName="Affiliate__c"
+              onload="{!c.setLoadingFalse}"
+              onerror="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.handleAddSuccess}"
+            >
+              <lightning:messages />
+              <div class="slds-grid slds-wrap">
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-hide"
+                  fieldName="Contact__c"
+                  disabled="true"
+                  value="{!v.contactId}"
+                />
+                <aura:if isTrue="{! !empty(v.newOrg.Id)}">
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-hide"
+                    fieldName="Pending_Record__c"
+                    disabled="true"
+                    value="{!v.newOrg.Id}"
+                  />
+                </aura:if>
+                <aura:if isTrue="{! !empty(v.newOrg.Organization_Name__c)}">
+                  <p class="slds-col slds-size_1-of-1">
+                    Thank you for the information. An email confirmation will be sent when the organization, <strong>{!v.newOrg.Organization_Name__c}</strong>, is added to the list.
+                  </p>
+                  <aura:set attribute="else">
+                    <div class="slds-grid slds-wrap slds-col">
+                      <lightning:inputField
+                        class="slds-col slds-size_1-of-1"
+                        fieldName="Related_Organization__c"
+                      />
+                      <div class="slds-col slds-size_1-of-1">
+                        <lightning:button
+                          class="custom-affiliations__edit-organization-btn"
+                          variant="brand"
+                          type="button"
+                          name="Organization Not Listed"
+                          label="Organization Not Listed"
+                          onclick="{! c.openOrgModal }"
+                        />
+                      </div>
+                    </div>
+                  </aura:set>
+                </aura:if>
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Role__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Type1__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Start_Date__c" />
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                  fieldName="End_Date__c"
+                  disabled="{!v.disableEndDate}"
+                />
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                  aura:id="active"
+                  onchange="{!c.disableFields}"
+                  fieldName="Active__c"
+                />
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                  fieldName="Primary__c"
+                />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="custom-affiliations__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <div class="custom-affiliations__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeAddModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of ADD Popup FORM -->
+
+  <!-- START of ADD CONFIRMATION Popup FORM -->
+  <div class="custom-affiliations__modal">
+    <aura:if isTrue="{!v.isAddConfirmationModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-add-confirmation"
+        aria-modal="true"
+        aria-describedby="modal-content-id-add-confirmation"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-add-confirmation"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Affiliation Submitted
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeAddConfirmationModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-add-confirmation"
+          >
+            <p class="custom-affiliations__modal-content">
+              Thank you for creating your affiliation.
+              <aura:if isTrue="{! !empty(v.newOrg.Id)}">
+                If we find that an existing organization matches one in our system, this record will be updated.
+              </aura:if>
+            </p>
+            <div class="custom-affiliations__actions slds-m-top_medium">
+              <lightning:button
+                variant="brand"
+                name="Ok"
+                label="Ok"
+                title="Ok"
+                onclick="{! c.closeAddConfirmationModal }"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of ADD CONFIRMATION Popup FORM -->
+
+  <!-- START of ADD ORG Popup FORM -->
+  <div class="custom-affiliations__modal">
+    <aura:if isTrue="{!v.isOrgModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-add-confirmation"
+        aria-modal="true"
+        aria-describedby="modal-content-id-add-confirmation"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-add-confirmation"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Create Pending Organization
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeOrgModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-add-confirmation"
+          >
+            <lightning:recordEditForm
+              aura:id="recordEditForm"
+              objectApiName="PenRec__c"
+              onload="{!c.setLoadingFalse}"
+              onerror="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.handleOrgSuccess}"
+            >
+              <lightning:messages />
+              <div class="slds-grid slds-wrap">
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Organization_Name__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Other_Names__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Street__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Street1__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="City__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="State__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Zip__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" fieldName="Country__c" />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="custom-affiliations__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <div class="custom-affiliations__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeOrgModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of ADD ORG Popup FORM -->
+</div>
+</aura:component>

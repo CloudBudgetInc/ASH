@@ -1,0 +1,28 @@
+<design:component label="Custom YouTube Player">
+  <design:attribute
+    name="videoUrl"
+    label="Video Embed Url"
+    description="Enter the embed link of the video to display."
+  />
+  <design:attribute
+    name="width"
+    label="Video Width"
+    description="Enter video width as pixels or percentage."
+  />
+  <design:attribute
+    name="height"
+    label="Video Height"
+    description="Enter video height as pixels or percentage."
+  />
+  <design:attribute
+    name="autoPlay"
+    label="Autoplay Video"
+    description="Choose to autoplay the video on page load. If checked, video will be muted on page load as well."
+  />
+  <design:attribute
+    name="hideControls"
+    label="Hide Video Controls"
+    description="If checked, bottom controls will not be visible and keyboard functionality will not work.
+                 The user will still be able to click the video to play/pause."
+  />
+</design:component>

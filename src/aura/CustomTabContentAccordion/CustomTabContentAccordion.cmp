@@ -1,0 +1,165 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <!-- Design Attributes -->
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="accordionContentSlug" type="String" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute
+    name="tab1Label"
+    type="String"
+    default="Committees"
+  />
+  <aura:attribute
+    name="tab2Label"
+    type="String"
+    default="Meeting Materials"
+  />
+  <aura:attribute
+    name="tab3Label"
+    type="String"
+    default="Project Timeline"
+  />
+  <aura:attribute
+    name="tab4Label"
+    type="String"
+    default="Useful Readings"
+  />
+  
+  <aura:attribute
+    name="accordion1Label"
+    type="String"
+  />
+  <aura:attribute
+    name="accordion2Label"
+    type="String"
+  />
+  <aura:attribute
+    name="accordion3Label"
+    type="String"
+  />
+  <aura:attribute
+    name="accordion4Label"
+    type="String"
+  />
+
+  <aura:attribute name="panel1Desc" type="String" />
+  <aura:attribute
+    name="panel1DescField"
+    type="String"
+    required="true"
+    default="None"
+  />
+  <aura:attribute name="panel2Desc" type="String" />
+  <aura:attribute
+    name="panel2DescField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="panel3Desc" type="String" />
+  <aura:attribute
+    name="panel3DescField"
+    type="String"
+    required="true"
+    default="Rich Text Field 3"
+  />
+  <aura:attribute name="panel4Desc" type="String" />
+  <aura:attribute
+    name="panel4DescField"
+    type="String"
+    default="Rich Text Field 4"
+  />
+  <aura:attribute name="showHeaderTitle" type="Boolean" default="false" />
+  <aura:attribute name="showSubheadingAsTitle" type="Boolean" default="false" />
+  <aura:attribute name="showAccordion" type="Boolean" default="true" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      'custom-tabs component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="custom-tabs__container">
+      <aura:if isTrue="{!v.showHeaderTitle}">
+        <div class="custom-tabs__header">
+          <h2 class="custom-tabs__header-title">
+            <lightning:formattedRichText
+              class="custom-tabs__header-title"
+              value="{!v.record.contentNodes.Headline.value}"
+            />  
+          </h2>
+        </div>
+      </aura:if>
+      <aura:if isTrue="{!v.showSubheadingAsTitle}">
+        <div class="custom-tabs__header">
+          <h2 class="custom-tabs__header-title">
+            <lightning:formattedRichText
+              class="custom-tabs__header-title"
+              value="{!v.record.contentNodes.Subheading.value}"
+            />  
+          </h2>
+        </div>
+      </aura:if>
+      <lightning:tabset class="custom-tabs__tabset">
+        <lightning:tab label="{!v.tab1Label}">
+          <div class="custom-tabs__tab-panel">
+            <div class="custom-tabs__tab-panel-content">
+              <lightning:formattedRichText
+                class="custom-tabs__tab-panel-content-rt"
+                value="{!v.panel1Desc}"
+              />
+              <aura:if isTrue="{!v.showAccordion}">
+                <c:CustomContentAccordion
+                  contentSlug="{!v.accordionContentSlug}"
+                  accordion1Label="{!v.accordion1Label}"
+                  accordion2Label="{!v.accordion2Label}"
+                  accordion3Label="{!v.accordion3Label}"
+                  accordion4Label="{!v.accordion4Label}"
+                />
+              </aura:if>
+            </div>
+          </div>
+        </lightning:tab>
+        <lightning:tab label="{!v.tab2Label}">
+          <div class="custom-tabs__tab-panel">
+            <div class="custom-tabs__tab-panel-content">
+              <lightning:formattedRichText
+                class="custom-tabs__tab-panel-content-rt"
+                value="{!v.panel2Desc}"
+              />
+            </div>
+          </div>
+        </lightning:tab>
+        <lightning:tab label="{!v.tab3Label}">
+          <div class="custom-tabs__tab-panel">
+            <div class="custom-tabs__tab-panel-content">
+              <lightning:formattedRichText
+                class="custom-tabs__tab-panel-content-rt"
+                value="{!v.panel3Desc}"
+              />
+            </div>
+          </div>
+        </lightning:tab>
+        <aura:if isTrue="{! !empty(v.tab4Label)}">
+          <lightning:tab label="{!v.tab4Label}">
+            <div class="custom-tabs__tab-panel">
+              <div class="custom-tabs__tab-panel-content">
+                <lightning:formattedRichText
+                  class="custom-tabs__tab-panel-content-rt"
+                  value="{!v.panel4Desc}"
+                />
+              </div>
+            </div>
+          </lightning:tab>
+        </aura:if>
+      </lightning:tabset>
+    </div>
+  </div>
+</aura:component>

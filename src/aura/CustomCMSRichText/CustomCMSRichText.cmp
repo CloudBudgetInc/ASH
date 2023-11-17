@@ -1,0 +1,127 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="backgroundImage" type="String" />
+  <aura:attribute name="backgroundImageField" type="String" default="None" />
+  <aura:attribute name="backgroundColor" type="String" default="none" />
+  <aura:attribute name="textColor" type="String" default="#333" />
+  <aura:attribute name="textSize" type="String" default="normal" />
+  <aura:attribute name="linkColor" type="String" default="#7095aa" />
+  <aura:attribute name="buttonLabel" type="String" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="buttonStyle" type="String" default="primary" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="buttonAlignment" type="String" default="left" />
+  <aura:attribute name="bottomText" type="String" />
+  <aura:attribute name="bottomTextField" type="String" default="None" />
+  <aura:attribute name="bottomTextAlignment" type="String" default="left" />
+  <aura:attribute name="showBottomTextPadding" type="Boolean" default="false" />
+  <aura:attribute name="showHeadline" type="Boolean" default="true" />
+  <aura:attribute name="centerHeadline" type="Boolean" default="false" />
+  <aura:attribute name="showHeadlineBorder" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  <aura:attribute name="centerContent" type="Boolean" default="false" />
+  <aura:attribute name="content" type="String" />
+  <aura:attribute
+    name="contentField"
+    type="String"
+    default="Rich Text Field 1"
+    required="true"
+  />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'rich-text',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div
+      class="{! join(' ',
+        'rich-text-container',
+        !empty(v.backgroundImage) ? 'rich-text-container--background' : '',
+        v.backgroundColor != 'none' ? 'rich-text-container--background-color' : ''
+      )}"
+      style="{! join(' ',
+        empty(v.backgroundImage) &amp;&amp; !empty(v.backgroundColor) ? 'background:' + v.backgroundColor + '!important;' : '',
+        !empty(v.backgroundImage) ? 'background-image:url(' + v.backgroundImage +')' : ''
+      )}"
+    >
+      <div
+        class="{! !empty(v.backgroundImage) ? 'rich-text-container__background--overlay component-container--padding-horizontal' :
+      'rich-text-container__no-background component-container--padding-horizontal'}"
+      >
+        <aura:if isTrue="{!v.showHeadline}">
+          <div
+            class="{!v.centerHeadline ? 'rich-text-container__header rich-text-container__header--center' : 'rich-text-container__header'}"
+          >
+            <h2
+              class="{! join(' ',
+                'rich-text-container__header-title',
+                v.centerHeadline ? 'rich-text-container__header-title--centered' : '',
+                v.showHeadlineBorder ? 'rich-text-container__header-title--border' : ''
+              )}"
+              style="{!'color:' + v.textColor + ';'}"
+            >
+              <lightning:formattedRichText
+                class="{!v.centerHeadline ?
+                  'rich-text-container__header-title h2 rich-text-container__header-title--centered' 
+                  : 'rich-text-container__header-title h2'}"
+                value="{!v.record.contentNodes.Headline.value}"
+                style="{!'color:' + v.textColor + ';'}"
+              />
+            </h2>
+          </div>
+        </aura:if>
+        <div class="rich-text-container__content-container">
+          <lightning:formattedRichText
+            class="{! join(' ',
+              'rich-text-container__content', 
+              v.linkColor == '#a30014' ? 'rich-text-container__content--red' : '',
+              v.textSize == 'normal' ? '' : 'rich-text-container__content--large'
+            )}"
+            value="{!v.content}"
+            style="{!'color:' + v.textColor + ';'}"
+          />
+        </div>
+        <aura:if isTrue="{! !empty(v.buttonLabel)}">
+          <div
+            class="{!'rich-text-container__cta cta-button cta-button--' +  v.buttonStyle}"
+            style="{!v.buttonAlignment == 'left' ? 'align-self: flex-start'
+                      : v.buttonAlignment == 'right' ? 'align-self: flex-end;' : 'align-self: center;'}"
+          >
+            <aura:if isTrue="{!v.openTab}">
+                <a href="{!v.buttonLink}" target="_blank">{!v.buttonLabel}</a>
+                <aura:set attribute="else">
+                  <a href="{!v.buttonLink}">{!v.buttonLabel}</a>
+                </aura:set>
+            </aura:if>
+          </div>
+        </aura:if>
+        <aura:if isTrue="{! bottomTextField != 'None'}">
+          <div
+            class="rich-text-container__bottom"
+            style="{!v.bottomTextAlignment == 'left' ? 'align-self: flex-start'
+                      : v.bottomTextAlignment == 'right' ? 'align-self: flex-end;' : 'align-self: center;' }"
+          >
+            <lightning:formattedRichText
+              class="{! join(' ',
+                'rich-text-container__content-bottom', 
+                v.textColor == '#fff' ? 'rich-text-container__content-bottom--light' : '',
+                v.textSize == 'normal' ? 'p' : 'rich-text-container__content-bottom--large'
+              )}"
+              style="{!v.showBottomTextPadding ? 'padding-top: 30px' : ''}"
+              value="{!v.bottomText}"
+            />
+          </div>
+        </aura:if>
+      </div>
+    </div>
+  </div>
+</aura:component>

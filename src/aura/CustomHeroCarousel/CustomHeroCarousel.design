@@ -1,0 +1,7 @@
+<design:component label="Custom Hero Carousel">
+	<design:attribute
+    name="maxItems"
+    label="Maximum Items to Show"
+    description="Enter a number for the maximum items to show."
+  ></design:attribute>
+</design:component>

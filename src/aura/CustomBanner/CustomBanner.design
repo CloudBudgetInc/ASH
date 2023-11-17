@@ -1,0 +1,35 @@
+<design:component label="Custom Alert Banner">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="messageField"
+    label="Message Field"
+    datasource="Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the message to display."
+  ></design:attribute>
+  <design:attribute
+    name="color"
+    label="Color"
+    datasource="#fff, #000"
+    description="Choose a color to change the background."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundColor"
+    label="Background Color"
+    datasource="#7095aa, #f4f2e7, #e2eaee"
+    description="Choose a color to change the background."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadline"
+    label="Show Headline"
+    description="Check to display headline from CMS above message."
+  ></design:attribute>
+  <design:attribute
+    name="showLogo"
+    label="Show Logo"
+    description="Check to show the ASH RC logo."
+  ></design:attribute>
+</design:component>

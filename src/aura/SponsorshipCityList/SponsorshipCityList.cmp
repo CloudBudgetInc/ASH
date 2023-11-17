@@ -1,0 +1,20 @@
+<!--
+*__________________________________________________________________________________________________
+* @Name         SponsorshipCityList
+* @Author       Max Paquin mpaquin@fionta.com
+* @CreatedDate  11/20/2017
+* @Controller   SponsorshipCityListController
+*__________________________________________________________________________________________________
+* @Description
+*               LC used to retrieve Campaign records that will be used to display a list of "cities"
+*__________________________________________________________________________________________________
+-->
+
+<aura:component controller="SponsorshipCityListController">
+
+<!-- ATTRIBUTES -->
+    <aura:attribute name="cityList" type="Campaign[]" />
+<!-- EVENT HANDLERS -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+</aura:component>

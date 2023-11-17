@@ -1,0 +1,76 @@
+<aura:component controller="ArticleController">
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="topic" type="String" />
+  <aura:attribute name="articles" type="Knowledge__kav[]" />
+  <aura:attribute name="filteredArticles" type="Knowledge__kav[]" />
+  <aura:attribute name="currentPage" type="Integer" default="1" />
+  <aura:attribute name="title" type="String" />
+  <aura:attribute name="limit" type="String" default="3" />
+  <aura:attribute name="loading" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="article-panel">
+    <aura:if isTrue="{!v.loading}">
+      <div class="article-panel__loading">
+        <p class="article-panel__loading-text">
+          Loading articles
+          <div class="article-panel__loading-spinner">
+            <lightning:spinner
+              alternativeText="Loading"
+              size="small"
+              variant="brand"
+            />
+          </div>
+        </p>
+      </div>
+      <aura:set attribute="else">
+        <ul class="article-panel__list">
+          <aura:iteration items="{!v.filteredArticles}" var="article" indexVar="index">
+            <li class="article-panel__item">
+              <div class="article-panel__item-flag">{!article.Category}</div>
+              <a class="article-panel__item-title" href="{! v.baseUrl + '/' + article.UrlName}">{!article.Title}</a>
+              <aura:if isTrue="{!article.Publication_Date__c}">
+                <p class="article-panel__item-date">
+                  Published:
+                  <lightning:formattedDateTime
+                    month="long"
+                    day="2-digit"
+                    year="numeric"
+                    timeZone="UTC"
+                    value="{!article.Publication_Date__c}"
+                  />
+                </p>
+                <aura:set attribute="else">
+                  <aura:if isTrue="{!article.Event_Date__c}">
+                    <p class="article-panel__item-date">
+                      Start Date:
+                      <lightning:formattedDateTime
+                        month="long"
+                        day="2-digit"
+                        year="numeric"
+                        timeZone="UTC"
+                        value="{!article.Event_Date__c}"
+                      />
+                      <!-- <lightning:formattedDateTime
+                        value="{!article.Event_Date__c}"
+                        month="long"
+                        day="2-digit"
+                        year="numeric"
+                        hour="numeric"
+                        minute="2-digit"
+                        timeZoneName="short"
+                        hour12="true"
+                      /> -->
+                    </p>
+                  </aura:if>
+                </aura:set>
+              </aura:if>
+              <p class="article-panel__item-snippet">{!article.Snippet__c}</p>
+            </li>
+          </aura:iteration>
+        </ul>
+      </aura:set>
+    </aura:if>
+  </div>
+</aura:component>

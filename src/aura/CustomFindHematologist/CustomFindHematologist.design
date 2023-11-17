@@ -1,0 +1,26 @@
+<design:component label="Custom Find a Hematologist">
+  <design:attribute
+    name="title"
+    label="Title"
+  />
+  <design:attribute
+    name="editBtnLabel"
+    label="Edit Button Label"
+    description="Enter a label for the edit button."
+  />
+  <design:attribute
+    name="checkboxLabel"
+    label="Opt In/Out Checkbox Label"
+    description="Enter a label for the FAH opt in/out checkbox."
+  />
+  <design:attribute
+    name="serviceMsg"
+    label="Service Offerings Message"
+    description="Enter a message for service offerings."
+  />
+  <design:attribute
+    name="editFormTitle"
+    label="Edit Form Title"
+    description="Enter a title for the edit form."
+  />
+</design:component>

@@ -1,0 +1,15 @@
+<aura:component>
+    <aura:handler event="c:CommitteeListLoaded" action="{!c.onCommitteeListLoad}"/>
+    <lightning:navigation aura:id="navigation"/>
+    <aura:attribute name="rows" type="Map[]"/>
+    <aura:attribute name="cols" type="Map[]"/>
+    <div style="height: 300px">
+        <lightning:datatable
+                data="{!v.rows}"
+                columns="{!v.cols}"
+                keyField="Id"
+                columnWidthsMode="auto"
+                hideCheckboxColumn="true"
+                showRowNumberColumn="false"/>
+    </div>        
+</aura:component>

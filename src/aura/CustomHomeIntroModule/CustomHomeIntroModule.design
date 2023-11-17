@@ -1,0 +1,53 @@
+<design:component label="Text, Image, and CTA Intro">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="descriptionField"
+    label="Description Field"
+    datasource="Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the description to display."
+  ></design:attribute>
+  <design:attribute
+    name="leftButtonLabel"
+    label="Left Button Label"
+    description="Enter a label for the left button."
+  ></design:attribute>
+  <design:attribute
+    name="leftButtonLink"
+    label="Left Button Link"
+    description="Enter a link for the left button."
+  ></design:attribute>
+  <design:attribute
+    name="openLeftTab"
+    label="Open left button link in new tab"
+    description="Check to open the left button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="rightButtonLabel"
+    label="Right Button Label"
+    description="Enter a label for the right button."
+  ></design:attribute>
+  <design:attribute
+    name="rightButtonLink"
+    label="Right Button Link"
+    description="Enter a link for the right button."
+  ></design:attribute>
+  <design:attribute
+    name="openRightTab"
+    label="Open right button link in new tab"
+    description="Check to open the right button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

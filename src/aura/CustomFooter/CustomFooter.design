@@ -1,0 +1,12 @@
+<design:component label="Custom Footer">
+    <design:attribute name="facebookLink" label="Facebook Link" description="Enter link to Facebook page" />
+    <design:attribute name="showFacebook" label="Show Facebook" description="Display Facebook link" />
+    <design:attribute name="twitterLink" label="Twitter Link" description="Enter link to Twitter page" />
+	<design:attribute name="showTwitter" label="Show Twitter" description="Display Twitter link" />
+    <design:attribute name="youTubeLink" label="YouTube Link" description="Enter link to YouTube page" />
+    <design:attribute name="showYouTube" label="Show YouTube" description="Display YouTube link" />
+    <design:attribute name="linkedInLink" label="LinkedIn Link" description="Enter link to LinkedIn page" />
+    <design:attribute name="showLinkedIn" label="Show LinkedIn" description="Display LinkedIn link" />
+    <design:attribute name="addressTitle" label="Address Title" description="Enter title to display above the address" />
+    <design:attribute name="copyrightYear" label="Copyright Year" description="Enter copyright year to display" />
+</design:component>

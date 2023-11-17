@@ -1,0 +1,730 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomSubcriptionCenterController"
+>
+  <aura:attribute name="contact" type="Contact" />
+  <aura:attribute name="submittedAll" type="Boolean" />
+  <aura:attribute name="submitted" type="Boolean" />
+  <aura:attribute name="emailUpdated" type="Boolean" />
+  <aura:attribute name="isMember" type="Boolean" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="subscription-center">
+    <div class="intro">
+      <div class="intro__banner">
+        <h2 class="intro__name">Hello, {!v.contact.FirstName}</h2>
+        <p class="intro__updated">
+          <span class="intro__updated-date"
+            ><strong>Last Updated:</strong>
+            <lightning:formattedDateTime
+              month="numeric"
+              day="numeric"
+              year="numeric"
+              timeZone="UTC"
+              value="{!v.contact.Email_Subscriptions_Last_Updated_Date__c}"
+            />
+          </span>
+          <span class="intro__updated-time"
+            ><strong>Time:</strong>
+            <lightning:formattedDateTime
+              hour="2-digit"
+              minute="2-digit"
+              timeZone="{!$Local.Timezone}"
+              value="{!v.contact.Email_Subscriptions_Last_Updated_Date__c}"
+            />
+          </span>
+        </p>
+      </div>
+      <div class="intro__bottom bottom-border">
+        <p class="intro__welcome">
+          <strong>
+            Welcome to your email management center where you can manage your
+            individual preferences for email:
+          </strong>
+        </p>
+        <lightning:recordEditForm
+          class="intro__email"
+          recordId="{!v.contact.Id}"
+          objectApiName="Contact"
+          onsuccess="{!c.handleEmailUpdate}"
+        >
+          <lightning:inputField class="intro__email-input" variant="label-hidden" fieldName="Email" onchange="{!c.handleEmailChange}" />
+          <lightning:button class="intro__email-btn" variant="neutral" type="submit" name="update" label="Update" />
+          <aura:if isTrue="{!v.emailUpdated}">
+            <p class="intro__email-msg green italic">
+              Thank You! Your email has been updated!
+            </p>
+          </aura:if>
+        </lightning:recordEditForm>
+        <p class="intro__description">
+          Below you can check/uncheck any of the boxes below to opt-in to
+          receive emails from ASH on the selected topic(s) or you can choose to
+          subscribe to all to start enjoying all ASH communications. You can
+          unsubscribe at any time, but please allow up to 24-hours for changes
+          to your subscription preferences to be processed.
+        </p>
+      </div>
+    </div>
+    <div class="main">
+      <section class="box-section">
+        <h2 class="box-section__title red">
+          Subscribe/Unsubscribe to <span class="underline">ALL</span> Email
+          Promotions and e-Newsletters
+        </h2>
+        <p>
+          If you would like to subscribe/unsubscribe from
+          <strong class="underline">all current and future</strong> ASH email
+          promotions and e-newsletters, noted in the below categories, please
+          press the corresponding checkbox and clicking the save button below:
+        </p>
+        <form class="form form--sub" onsubmit="{!c.handleAll}">
+          <div class="form__group">
+            <label class="form__label italic upper">
+              <aura:if isTrue="{!v.contact.HasOptedOutOfEmail}">
+                <input type="radio" id="subscribe" name="sub-radio" />
+                <aura:set attribute="else">
+                  <input
+                    type="radio"
+                    id="subscribe"
+                    name="sub-radio"
+                    checked="checked"
+                  />
+                </aura:set>
+              </aura:if>
+              <span class="form__radio"></span>
+              <strong>Subscribe All</strong>
+            </label>
+            <label class="form__label italic upper">
+              <aura:if isTrue="{!v.contact.HasOptedOutOfEmail}">
+                <input
+                  type="radio"
+                  id="unsubscribe"
+                  name="sub-radio"
+                  checked="checked"
+                />
+                <aura:set attribute="else">
+                  <input type="radio" id="unsubscribe" name="sub-radio" />
+                </aura:set>
+              </aura:if>
+              <span class="form__radio"></span>
+              Unsubscribe All
+            </label>
+          </div>
+          <p class="italic">
+            <span class="red">Please Note:</span> By selecting one of the above
+            options, all of the custom elections made below will be reset and
+            you will either be subscribed or unsubscribed from all mailings.
+            After unsubscribing from all email promotions, ASH members may
+            occassionally receive informational communications from ASH about
+            changes to their account or specific ASH programs and services that
+            directly relate to their membership status.
+          </p>
+          <div class="submit">
+            <button type="submit">Update Preferences</button>
+            <aura:if isTrue="{!v.submittedAll}">
+              <p class="green italic">
+                Thank You! Your email preferences have been updated!
+              </p>
+            </aura:if>
+          </div>
+        </form>
+        <p class="bottom-border margin"></p>
+        <form onsubmit="{!c.handleUpdate}">
+          <h2 class="box-section__title">I. Promotional Email Subscriptions</h2>
+          <div class="form--sub">
+            <p>
+              Customize your individual subscriptions to opt-in or opt-out to
+              receive relevant updates on upcoming ASH meetings, available
+              online education, award and training opportunities, and the latest
+              job listings.
+            </p>
+            <div class="subscriptions">
+              <p class="subscriptions__label">ASH Meetings</p>
+              <div class="subscriptions__toggles">
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.ASH_Annual_Meeting__c}">
+                      <input
+                        type="checkbox"
+                        name="ashAnnualMeeting"
+                        id="ashAnnualMeeting"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="ashAnnualMeeting"
+                          id="ashAnnualMeeting"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">ASH Annual Meetings</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if
+                      isTrue="{!v.contact.ASH_Meeting_on_Lymphoma_Biology__c}"
+                    >
+                      <input
+                        type="checkbox"
+                        name="ashMeetingOnLymphomiaBiology"
+                        id="ashMeetingOnLymphomiaBiology"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="ashMeetingOnLymphomiaBiology"
+                          id="ashMeetingOnLymphomiaBiology"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">ASH Meeting on Lymphomia Biology</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if
+                      isTrue="{!v.contact.ASH_Consultative_Hematology_Course__c}"
+                    >
+                      <input
+                        type="checkbox"
+                        name="ashConsultativeHematologyCourse"
+                        id="ashConsultativeHematologyCourse"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="ashConsultativeHematologyCourse"
+                          id="ashConsultativeHematologyCourse"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">ASH Consultative Hematology Course</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if
+                      isTrue="{!v.contact.Latest_in_Precision_Medicine_and_Immuno__c}"
+                    >
+                      <input
+                        type="checkbox"
+                        name="latestInPrecisionMedicineAndImmunotherapy"
+                        id="latestInPrecisionMedicineAndImmunotherapy"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="latestInPrecisionMedicineAndImmunotherapy"
+                          id="latestInPrecisionMedicineAndImmunotherapy"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">
+                      Latest in precision medicine and immunotherapy
+                    </div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if
+                      isTrue="{!v.contact.ASH_Meeting_on_Hematologic_Malignancies__c}"
+                    >
+                      <input
+                        type="checkbox"
+                        name="ashMeetingOnHematologicMalignancies"
+                        id="ashMeetingOnHematologicMalignancies"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="ashMeetingOnHematologicMalignancies"
+                          id="ashMeetingOnHematologicMalignancies"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">ASH Meeting on Hematologic Malignancies</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Highlights_of_ASH__c}">
+                      <input
+                        type="checkbox"
+                        name="highlightsOfAsh"
+                        id="highlightsOfAsh"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="highlightsOfAsh"
+                          id="highlightsOfAsh"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <input type="checkbox" name="highlightsOfAsh" />
+                    <div class="">Highlights of ASH</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="subscriptions">
+              <p class="subscriptions__label">ASH Guidelines</p>
+              <div class="subscriptions__toggles">
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Acute_Myeloid_Leukemia__c}">
+                      <input
+                        type="checkbox"
+                        name="acuteMyeloidLeukemia"
+                        id="acuteMyeloidLeukemia"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="acuteMyeloidLeukemia"
+                          id="acuteMyeloidLeukemia"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Acute Myeloid Leukemia</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Immune_Thrombocytopenia__c}">
+                      <input
+                        type="checkbox"
+                        name="immuneThrombocytopenia"
+                        id="immuneThrombocytopenia"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="immuneThrombocytopenia"
+                          id="immuneThrombocytopenia"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Immune Thrombocytopenia</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Sickle_Cell_Disease__c}">
+                      <input
+                        type="checkbox"
+                        name="sickleCellDisease"
+                        id="sickleCellDisease"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="sickleCellDisease"
+                          id="sickleCellDisease"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Sickle Cell Disease</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Venous_Thromboembolism__c}">
+                      <input
+                        type="checkbox"
+                        name="venousThromboembolism"
+                        id="venousThromboembolism"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="venousThromboembolism"
+                          id="venousThromboembolism"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Venous Thromboembolism</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Von_Willebrand_Disease__c}">
+                      <input
+                        type="checkbox"
+                        name="vonWillebrandDisease"
+                        id="vonWillebrandDisease"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="vonWillebrandDisease"
+                          id="vonWillebrandDisease"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Von Willebrand Disease</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="subscriptions">
+              <p class="subscriptions__label">ASH Awards</p>
+              <div class="subscriptions__toggles">
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Honorific_and_Mentor__c}">
+                      <input
+                        type="checkbox"
+                        name="honorificAndMentor"
+                        id="honorificAndMentor"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="honorificAndMentor"
+                          id="honorificAndMentor"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Honorific and Mentor</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Medical_Students__c}">
+                      <input
+                        type="checkbox"
+                        name="medicalStudents"
+                        id="medicalStudents"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="medicalStudents"
+                          id="medicalStudents"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Medical Students</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Career_and_Training__c}">
+                      <input
+                        type="checkbox"
+                        name="careerAndTraining"
+                        id="careerAndTraining"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="careerAndTraining"
+                          id="careerAndTraining"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Career and Training</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="subscriptions">
+              <p class="subscriptions__label">Online Education &amp; Jobs</p>
+              <div class="subscriptions__toggles">
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if
+                      isTrue="{!v.contact.Webinars_Webcasts_Podcasts__c}"
+                    >
+                      <input
+                        type="checkbox"
+                        name="webinarsWebcastsPodcasts"
+                        id="webinarsWebcastsPodcasts"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="webinarsWebcastsPodcasts"
+                          id="webinarsWebcastsPodcasts"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Webinars, Webcasts, Podcasts</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Job_Center_Opportunities__c}">
+                      <input
+                        type="checkbox"
+                        name="jobCenterOpportunities"
+                        id="jobCenterOpportunities"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="jobCenterOpportunities"
+                          id="jobCenterOpportunities"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Job Center Opportunities</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h2 class="box-section__title">II. e-Newsletter Subscriptions</h2>
+          <div class="form--sub">
+            <p>
+              Stay informed about the latest in hematology, from important
+              developments in the field to policy issues affecting the science
+              and practice of hematology. You can opt-in or opt-out by selecting
+              any of the options below.
+            </p>
+            <div class="subscriptions subscriptions--newsletter">
+              <p class="subscriptions__label">ASH e-Newsletters</p>
+              <div class="subscriptions__toggles">
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Advance_Notice__c}">
+                      <input
+                        type="checkbox"
+                        name="advanceNotice"
+                        id="advanceNotice"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="advanceNotice"
+                          id="advanceNotice"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Advance Notice</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.Blood_Advances_Highlights__c}">
+                      <input
+                        type="checkbox"
+                        name="bloodAdvancesHighlights"
+                        id="bloodAdvancesHighlights"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="bloodAdvancesHighlights"
+                          id="bloodAdvancesHighlights"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">Blood Advances Highlights</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.ASH_Clinical_Trials__c}">
+                      <input
+                        type="checkbox"
+                        name="ashClinicalTrials"
+                        id="ashClinicalTrials"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="ashClinicalTrials"
+                          id="ashClinicalTrials"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">ASH Clinical News</div>
+                  </label>
+                </div>
+                <aura:if isTrue="{!v.isMember}">
+                  <div class="toggle-switch">
+                    <label class="toggle">
+                      <aura:if isTrue="{!v.contact.The_Hematologist__c}">
+                        <input
+                          type="checkbox"
+                          name="theHematologist"
+                          id="theHematologist"
+                        />
+                        <aura:set attribute="else">
+                          <input
+                            type="checkbox"
+                            name="theHematologist"
+                            id="theHematologist"
+                            checked="checked"
+                          />
+                        </aura:set>
+                      </aura:if>
+                      <div class="">The Hematologist (Members Only)</div>
+                    </label>
+                  </div>
+                  <div class="toggle-switch">
+                    <label class="toggle">
+                      <aura:if isTrue="{!v.contact.ASH_Newslink__c}">
+                        <input
+                          type="checkbox"
+                          name="ashNewslink"
+                          id="ashNewslink"
+                        />
+                        <aura:set attribute="else">
+                          <input
+                            type="checkbox"
+                            name="ashNewslink"
+                            id="ashNewslink"
+                            checked="checked"
+                          />
+                        </aura:set>
+                      </aura:if>
+                      <div class="">ASH Newslink (Members Only)</div>
+                    </label>
+                  </div>
+                </aura:if>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.This_Week_in_Blood__c}">
+                      <input
+                        type="checkbox"
+                        name="thisWeekInBlood"
+                        id="thisWeekInBlood"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="thisWeekInBlood"
+                          id="thisWeekInBlood"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">This Week in Blood</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.FDA_Alerts__c}">
+                      <input
+                        type="checkbox"
+                        name="fdaAlerts"
+                        id="fdaAlerts"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="fdaAlerts"
+                          id="fdaAlerts"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">FDA Alerts</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.ASH_Practice_Update__c}">
+                      <input
+                        type="checkbox"
+                        name="ashPracticeUpdate"
+                        id="ashPracticeUpdate"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="ashPracticeUpdate"
+                          id="ashPracticeUpdate"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">ASH Practice Update</div>
+                  </label>
+                </div>
+                <div class="toggle-switch">
+                  <label class="toggle">
+                    <aura:if isTrue="{!v.contact.TraineE_News__c}">
+                      <input
+                        type="checkbox"
+                        name="traineENews"
+                        id="traineENews"
+                      />
+                      <aura:set attribute="else">
+                        <input
+                          type="checkbox"
+                          name="traineENews"
+                          id="traineENews"
+                          checked="checked"
+                        />
+                      </aura:set>
+                    </aura:if>
+                    <div class="">TraineE-News</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- <p class="form__disclaimer">
+            Additional Newsletter options for ASH members can be managed in <a href="https://my.hematology.org/s/subscription-center">My Account</a>.
+          </p> -->
+            <div class="submit">
+              <button type="submit">Update Preferences</button>
+              <aura:if isTrue="{!v.submitted}">
+                <p class="green italic">
+                  Thank You! Your email preferences have been updated!
+                </p>
+              </aura:if>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+    <section class="bottom-section center">
+      <h2 class="box-section__title">
+        Having Trouble or need help with your subscription settings?
+      </h2>
+      <p class="contact">
+        Give us a call at 1.866.828.1231. International Callers can dial
+        001.202.776.0544.
+        <br />
+        Hours of Operation: Monday - <span class="hours">Friday</span>9 AM to 5
+        PM Eastern Time
+      </p>
+
+      <h2 class="box-section__title red">Your Privacy is Protected!</h2>
+      <p>
+        It is the policy of ASH to not give, sell, or otherwise transfer
+        information regarding the targets of marketing campaigns (such as email
+        addresses) to any other party for the purpose of initiating, or enabling
+        others to initiate, electronically transmitted messages, except where
+        such targets have been advised in advance that they may receive
+        information from sponsors of ASH conferences or seminars, and have
+        agreed in advance to receive such correspondance.
+      </p>
+    </section>
+  </div>
+</aura:component>

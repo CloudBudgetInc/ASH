@@ -1,0 +1,59 @@
+<template>
+
+	<lightning-card title="CB Custom Excel Report v43">
+		<lightning-layout slot="actions">
+			<lightning-layout-item>
+				<lightning-combobox
+						name="selectedTemplate"
+						label="Template"
+						value={selectedTemplate}
+						placeholder="Select Excel Template"
+						options={templateSO}
+						onchange={handleChangeFilter}></lightning-combobox>
+
+			</lightning-layout-item>
+			<lightning-layout-item>
+				<lightning-combobox
+						name="selectedCompany"
+						label="Acc Company"
+						value={selectedCompany}
+						placeholder="Select Accounting Company"
+						options={companySO}
+						onchange={handleChangeFilter}></lightning-combobox>
+
+			</lightning-layout-item>
+			<lightning-layout-item>
+				<lightning-combobox
+						name="selectedBY"
+						label="Approved BY"
+						value={selectedBY}
+						placeholder="Select Approved Budget Year"
+						options={budgetYearSO}
+						onchange={handleChangeFilter}></lightning-combobox>
+
+			</lightning-layout-item>
+			<lightning-layout-item>
+				<div class="slds-p-top_large">
+					<lightning-button icon-name="doctype:excel" label="Download"
+									  title="Download Reporting Balances to Custom Excel File"
+									  onclick={downloadData}></lightning-button>
+				</div>
+			</lightning-layout-item>
+
+		</lightning-layout>
+
+
+		<p class="slds-p-horizontal_small">
+			<template for:each={logs} for:item="log">
+				<div key={log}>
+					{log}
+				</div>
+			</template>
+		</p>
+	</lightning-card>
+
+	<!-- SPINNER -->
+	<c-cb-spinner show={showSpinner}></c-cb-spinner>
+	<!-- SPINNER -->
+
+</template>

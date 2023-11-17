@@ -1,0 +1,37 @@
+<aura:component>
+  <aura:attribute name="baseUrl" type="String" />
+  <aura:attribute name="authLink1" type="String" />
+  <aura:attribute name="authLink2" type="String" />
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="location" type="String" />
+  <aura:attribute name="header" type="String" />
+
+  <div class="auth-nav">
+    <!-- <ul class="auth-nav__links">
+      <li
+        class="{!v.location == 'members' ? 'auth-nav__link auth-nav__link-active' : 'auth-nav__link'}"
+      >
+        <a href="{!v.baseUrl + 'members'}">{!v.authLink1}</a>
+      </li>
+      <li
+        class="{!v.location == 'members-directory' ? 'auth-nav__link auth-nav__link-active' : 'auth-nav__link'}"
+      >
+        <a href="{!v.baseUrl + 'members-directory'}">{!v.authLink2}</a>
+      </li>
+    </ul> -->
+    <span class="auth-nav__user">
+      <span class="auth-nav__member">
+        <img
+          class="auth-nav__user-icon"
+          src="{!$ContentAsset.Profile_Icon}"
+          alt="avatar-icon"
+          id="avatar-icon"
+        />
+        Welcome, {!v.member}!
+      </span>
+      <a href="/secur/logout.jsp" class="auth-nav__logout">
+        Sign Out
+      </a>
+    </span>
+  </div>
+</aura:component>

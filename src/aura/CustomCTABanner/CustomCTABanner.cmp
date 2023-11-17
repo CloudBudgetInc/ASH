@@ -1,0 +1,74 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" />
+  <aura:attribute name="backgroundImage" type="String" />
+  <aura:attribute name="description" type="String" />
+  <aura:attribute
+    name="descriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute
+    name="buttonLabel"
+    type="String"
+    required="true"
+    default="Learn More"
+  />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="buttonStyle" type="String" default="transparent-light" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  <aura:attribute name="showExtraPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'cta-banner',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div
+      class="{! join(' ',
+        'cta-banner__container',
+        v.showExtraPadding ? 'cta-banner__container--padding' : ''
+      )}"
+      style="{!'background-image:url(' + v.backgroundImage +')'}"
+    >
+      <div class="cta-banner__body">
+        <lightning:formattedRichText
+          class="cta-banner__body-text p"
+          value="{!v.description}"
+        />
+      </div>
+      <aura:if isTrue="{!v.openTab}">
+        <a
+          class="{! join(' ',
+            'cta-banner__button cta-button',
+            'cta-button--' + v.buttonStyle
+          )}"
+          href="{!v.buttonLink}"
+          target="_blank"
+        >
+          {!v.buttonLabel}
+        </a>
+        <aura:set attribute="else">
+          <a
+            class="{! join(' ',
+              'cta-banner__button cta-button',
+              'cta-button--' + v.buttonStyle
+            )}"
+            href="{!v.buttonLink}"
+          >
+            {!v.buttonLabel}
+          </a>
+        </aura:set>
+      </aura:if>
+    </div>
+  </div>
+</aura:component>

@@ -1,0 +1,156 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="ArticleController">
+  <aura:attribute name="topic" type="String" />
+  <aura:attribute name="articles" type="Knowledge__kav[]" />
+  <aura:attribute name="filteredArticles" type="Knowledge__kav[]" />
+  <aura:attribute name="currentPage" type="Integer" default="1" />
+  <aura:attribute name="layout" type="String" default="List" />
+  <aura:attribute name="showGridMobile" type="Boolean" default="false" />
+  <aura:attribute name="showBackground" type="Boolean" default="false" />
+  <aura:attribute name="title" type="String" />
+  <aura:attribute name="limit" type="String" default="5" />
+  <aura:attribute name="centerTitle" type="Boolean" default="false" />
+  <aura:attribute name="articleCategory" type="String" />
+  <aura:attribute name="articleCategorySize" type="String" default="Small" />
+  <aura:attribute name="italicizeCategory" type="Boolean" default="false" />
+  <aura:attribute name="showCategory" type="Boolean" default="false" />
+  <aura:attribute name="articleTitleSize" type="String" default="Medium" />
+  <aura:attribute name="articleSpeakerSize" type="String" default="Small" />
+  <aura:attribute name="showSpeakers" type="Boolean" default="true" />
+  <aura:attribute name="articleDateSize" type="String" default="Regular" />
+  <aura:attribute name="showDate" type="Boolean" default="true" />
+  <aura:attribute name="italicizeDate" type="Boolean" default="false" />
+  <aura:attribute name="articleAudience" type="String" />
+  <aura:attribute name="articleAudienceSize" type="String" default="Small" />
+  <aura:attribute name="italicizeAudience" type="Boolean" default="false" />
+  <aura:attribute name="showAudience" type="Boolean" default="false" />
+  <aura:attribute name="articleSnippetSize" type="String" default="Regular" />
+  <aura:attribute name="showSnippet" type="Boolean" default="true" />
+  <aura:attribute name="showSeparator" type="Boolean" default="true" />
+  <aura:attribute name="readMoreLabel" type="String" default="Read More" />
+  <aura:attribute name="articleReadSize" type="String" default="Regular" />
+  <aura:attribute name="showReadMore" type="Boolean" default="true" />
+  <aura:attribute name="showViewMore" type="Boolean" default="true" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  <aura:attribute name="showSidePadding" type="Boolean" default="true" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'article-list',
+      v.showTopPadding ? 'article-list--padding-top' : '',
+      v.showBottomPadding ? 'article-list--padding-bottom' : '',
+      v.showSidePadding ? 'article-list--padding-side' : '',
+      v.layout == 'List' ? 'list' : 'grid'
+    )}"
+    id="{! 'article-list-' + v.title}"
+  >
+    <aura:if isTrue="{!v.title}">
+      <h2 class="{!v.centerTitle ? 'article-list__title article-list__title--center' : 'article-list__title'}">
+        {!v.title}
+      </h2>
+    </aura:if>
+    <div
+      class="{! join(' ',
+        'article-list__items',
+        v.layout == 'List' ? 'list' : 'grid',
+        v.showGridMobile ? '' : 'hide'
+      )}"
+    >
+      <aura:iteration items="{!v.filteredArticles}" var="article" indexVar="index">
+        <div
+          class="{! join(' ',
+            'article-list__article',
+            v.showSeparator ? 'separator' : '',
+            v.showBackground ? 'background' : ''
+          )}"
+        >
+          <aura:if isTrue="{!v.showCategory &amp;&amp; article.Category}">
+            <p class="{!v.articleCategorySize == 'Small' ? 'article-list__article-category article-list__article-category--sm'
+              : 'article-list__article-category'}"
+              style="{!v.italicizeCategory ? 'font-style: italic' : 'font-style: normal'}"
+            >
+              {!article.Category}
+            </p>
+          </aura:if>
+          <div class="article-list__article-content">
+            <a
+              class="{! v.articleTitleSize == 'Medium' ? 'article-list__article-title article-list__article-title--md' :
+              v.articleTitleSize == 'Small' ? 'article-list__article-title article-list__article-title--sm' : 'article-list__article-title'}"
+              href="{! '/s/article/' + article.UrlName}"
+            >
+              {!article.Title}
+            </a>
+            <aura:if isTrue="{!v.showSpeakers &amp;&amp; article.Speakers__c}">
+              <p class="{!v.articleSpeakerSize == 'Small' ? 'article-list__article-speaker article-list__article-speaker--sm'
+                : 'article-list__article-speaker'}"
+              >
+                {!article.Speakers__c}
+              </p>
+            </aura:if>
+            <aura:if isTrue="{!v.showDate}">
+              <p class="{! v.italicizeDate ? 'article-list__article-date article-list__article-date--italics'
+                : 'article-list__article-date'}"
+                style="{!v.articleDateSize == 'Small' ? 'font-size: 14px !important; padding-top: 0;' : 'font-size: 16px'}">
+                <aura:if isTrue="{!article.Publication_Date__c}">
+                  <lightning:formattedDateTime
+                    month="long"
+                    day="2-digit"
+                    year="numeric"
+                    timeZone="UTC"
+                    value="{!article.Publication_Date__c}"
+                  />
+                  <aura:set attribute="else">
+                    <aura:if isTrue="{!article.Event_Date__c}">
+                      <lightning:formattedDateTime
+                        value="{!article.Event_Date__c}"
+                        month="long"
+                        day="2-digit"
+                        year="numeric"
+                        hour="numeric"
+                        minute="2-digit"
+                        timeZoneName="short"
+                        hour12="true"
+                      />
+                    </aura:if>
+                  </aura:set>
+                </aura:if>
+              </p>
+            </aura:if>
+            <aura:if isTrue="{!v.showAudience}">
+              <p class="{!v.articleAudienceSize == 'Small' ? 'article-list__article-audience article-list__article-audience--sm'
+                : 'article-list__article-audience'}"
+                style="{!v.italicizeAudience ? 'font-style: italic' : 'font-style: normal'}"
+              >
+                {!article.Audience}
+              </p>
+            </aura:if>
+            <aura:if isTrue="{!v.showSnippet &amp;&amp; !empty(article.Snippet__c)}">
+              <p class="{!v.articleSnippetSize == 'Small' ? 'article-list__article-snippet article-list__article-snippet--sm'
+                : 'article-list__article-snippet'}">
+                {!article.Snippet__c}
+              </p>
+            </aura:if>
+            <aura:if isTrue="{!v.showReadMore}">
+              <a class="{!v.articleReadSize == 'Small' ? 'article-list__article-read article-list__article-read--sm' : 'article-list__article-read'}"
+                href="{! '/s/article/' + article.UrlName}">
+                {!v.readMoreLabel}
+              </a>
+            </aura:if>
+          </div>
+        </div>
+      </aura:iteration>
+    </div>
+    <aura:if isTrue="{! v.showViewMore &amp;&amp; !empty(v.filteredArticles)}">
+      <lightning:button
+        aura:id="viewMore"
+        class="cta-button cta-button--primary article-list__view-more"
+        variant="brand"
+        label="View More"
+        title="View More"
+        onclick="{! c.handleViewMore }"
+      />
+    </aura:if>
+  </div>
+</aura:component>

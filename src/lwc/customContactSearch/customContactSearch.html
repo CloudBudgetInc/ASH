@@ -1,0 +1,125 @@
+<template>
+    <div class="contact-search">
+      <div class="slds-page-header contact-search__header">
+        <div class="slds-page-header__row">
+          <div class="slds-page-header__col-title">
+            <div class="slds-media contact-search__title">
+              <div class="slds-media__figure">
+                <lightning-icon
+                  icon-name="standard:contact_list"
+                  alternative-text="contact_list"
+                  title="contact_list"
+                >
+                </lightning-icon>
+              </div>
+              <div class="slds-media__body">
+                <div class="slds-page-header__name">
+                  <div class="slds-page-header__name-title">
+                    <h1>
+                      <span
+                        class="slds-page-header__title slds-truncate"
+                        title="Search contact Members"
+                        >People Search</span>
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-page-header__row">
+          <div class="slds-page-header__col-details contact-search__search">
+            <div>
+              <div onkeyup={handleKeyUp}>
+                <lightning-input
+                  name="enter-search"
+                  placeholder="Search for people..."
+                  aria-label="Search for people when user hits the 'enter' key"
+                  type="search"
+                ></lightning-input>
+              </div>
+            </div>
+            <div class="slds-m-top_medium">
+                <div onchange={handleChecked}>
+                  <lightning-input
+                    name="filter-checkbox"
+                    label="ASH Member"
+                    aria-label="Filter contacts by ASH Member status"
+                    type="checkbox"
+                  ></lightning-input>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-search__list slds-p-around_large">
+        <template if:true={loading}>
+          <div class="contact-search__loading">
+            <lightning-spinner
+              alternative-text="Loading"
+              size="small"
+              variant="brand"
+            ></lightning-spinner>
+          </div>
+        </template>
+        <template if:false={loading}>
+          <template if:true={showResults}>
+            <template if:true={results}>
+              <template for:each={results} for:item="result">
+                <div key={result.Id} class="contact-search__item">
+                  <template if:true={result}>
+                    <template if:true={result.Display_Name__c}>
+                      <a href={result.url} class="contact-search__name">{result.Display_Name__c}</a>
+                    </template>
+                    <template if:true={result.ASH_Member__c}>
+                      <p class="slds-m-top_small"><strong>ASH Member</strong></p>
+                    </template>
+                    <template if:true={result.MailingAddress}>
+                      <div class="slds-m-top_small">
+                        <strong>Mailing Address:</strong>
+                        <div class="contact-search__mailing">
+                          <div>{result.MailingAddress.street}</div>
+                          <div>
+                           <template if:true={result.MailingAddress.city}>
+                              {result.MailingAddress.city}
+                            </template>
+                            <template if:true={result.MailingAddress.state}>
+                              , {result.MailingAddress.state}
+                            </template>
+                            <template if:true={result.MailingAddress.postalCode}>
+                              , {result.MailingAddress.postalCode}
+                            </template>
+                          </div>
+                          <div>{result.MailingAddress.country}</div>
+                        </div>  
+                      </div>
+                    </template>
+                  </template>
+                </div>
+              </template>
+          </template>
+          <template if:false={results}>
+            No results found. Please double check your search input.
+          </template>
+          </template>
+          <template if:false={showResults}>
+            <template if:true={error}>
+              <p class="slds-text-align_center slds-text-color_error">{error}</p>
+            </template>
+            <template if:false={error}>
+              <template if:true={searchTerm}>
+                <p class="slds-text-align_center">
+                  No results found. Please double check your search input.
+                </p>
+              </template>
+              <template if:false={searchTerm}>
+                <p class="slds-text-align_center">
+                  Please enter a name to search.
+                </p>
+              </template>
+            </template>
+          </template>
+        </template>
+      </div>
+    </div>
+  </template>

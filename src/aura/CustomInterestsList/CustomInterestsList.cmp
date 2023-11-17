@@ -1,0 +1,139 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomInterestsController"
+>
+<aura:attribute name="contact" type="Contact" />
+<aura:attribute name="clinicalInterests" type="String[]" />
+<aura:attribute name="researchInterests" type="String[]" />
+<aura:attribute name="placeholder" type="String" default="N/A" />
+<aura:attribute name="isModalOpen" type="Boolean" default="false" />
+<aura:attribute name="loading" type="Boolean" default="false" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="custom-interests">
+  <div class="custom-interests__header">
+    <h2 class="custom-interests__title">Interests</h2>
+      <lightning:button
+        class="custom-interests__btn"
+        variant="neutral"
+        label="Edit Interests"
+        title="Edit Interests"
+        onclick="{! c.openModal }"
+      />
+  </div>
+  <section>
+    <h2 class="custom-interests__section-title">Clinical Interests</h2>
+    <aura:if isTrue="{! empty(v.clinicalInterests) }">
+      <div>
+        <p>
+          There are no Clinical Interests to display.
+        </p>
+      </div>
+      <aura:set attribute="else">
+        <ul class="custom-interests-item__pills">
+          <aura:iteration items="{!v.clinicalInterests}" var="clinicalInterest">
+            <li class="custom-interests-item__pill">
+              {! clinicalInterest }
+            </li>
+          </aura:iteration>
+        </ul>
+      </aura:set>
+    </aura:if>
+  </section>
+  <section>
+    <h2 class="custom-interests__section-title">Research Interests</h2>
+    <aura:if isTrue="{! empty(v.researchInterests) }">
+      <div>
+        <p>
+          There are no Research Interests to display.
+        </p>
+      </div>
+      <aura:set attribute="else">
+        <ul class="custom-interests-item__pills">
+          <aura:iteration items="{!v.researchInterests}" var="researchInterest">
+            <li class="custom-interests-item__pill">
+              {! researchInterest }
+            </li>
+          </aura:iteration>
+        </ul>
+      </aura:set>
+    </aura:if>
+  </section>
+
+  <!-- START of EDIT Popup FORM -->
+  <div>
+    <aura:if isTrue="{!v.isModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-edit"
+        aria-modal="true"
+        aria-describedby="modal-content-id-edit"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-edit"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              Edit Interests
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-edit"
+          >
+            <lightning:recordEditForm
+              recordId="{!v.contact.Id}"
+              objectApiName="Contact"
+              onerror="{!c.handleError}"
+              onload="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.closeModal}"
+            >
+              <lightning:messages />
+              <div class="slds-grid slds-wrap">
+                <lightning:inputField class="slds-col slds-size_1-of-1" fieldName="Clinical_Interests_Multi__c" />
+                <lightning:inputField class="slds-col slds-size_1-of-1" fieldName="Research_Interests__c" />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="custom-interests__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <div class="custom-interests__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of EDIT Popup FORM -->
+</div>
+</aura:component>

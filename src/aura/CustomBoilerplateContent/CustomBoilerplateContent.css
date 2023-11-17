@@ -1,0 +1,145 @@
+.THIS.boilerplate {
+  border-top: 2px solid #e7eaee;
+  padding: 0 20px;
+}
+
+.THIS.boilerplate--padding-top {
+  padding-top: 30px;
+}
+
+.THIS.boilerplate--padding-bottom {
+  padding-bottom: 30px;
+}
+
+.THIS h1,
+.THIS .h1 {
+  color: #333 !important;
+  font-family: 'DroidSerif-Bold', 'Droid Serif Bold', 'Droid Serif', sans-serif;
+  font-size: 22px !important;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.THIS h2,
+.THIS .h2 {
+  color: #333 !important;
+  font-family: 'DroidSerif-Bold', 'Droid Serif Bold', 'Droid Serif', sans-serif;
+  font-size: 20px !important;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.THIS h3,
+.THIS .h3 {
+  color: #333 !important;
+  font-family: 'DroidSerif-Bold', 'Droid Serif Bold', 'Droid Serif', sans-serif;
+  font-size: 18px !important;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.THIS h4,
+.THIS .h4 {
+  color: #333 !important;
+  font-family: 'DroidSerif', 'Droid Serif', sans-serif;
+  font-size: 24px !important;
+  line-height: 1;
+}
+
+.THIS h5,
+.THIS .h5 {
+  color: #333 !important;
+  font-family: 'DroidSerif-Bold', 'Droid Serif Bold', 'Droid Serif', sans-serif;
+  font-size: 20px !important;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.THIS h6,
+.THIS .h6 {
+  color: #333 !important;
+  font-family: 'DroidSerif', 'Droid Serif', sans-serif;
+  font-size: 16px !important;
+  line-height: 1;
+}
+
+.THIS p,
+.THIS span,
+.THIS ul,
+.THIS li {
+  color: #333 !important;
+  font-family: 'Helvetica-Light', 'Helvetica Light', 'Helvetica', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.THIS a:focus,
+.THIS a:hover {
+  color: #015478;
+}
+
+.THIS .boilerplate__title {
+  padding-bottom: 15px;
+}
+
+.THIS .boilerplate__title span {
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .THIS.boilerplate {
+    padding: 0 30px;
+  }
+
+  .THIS.boilerplate--padding-top {
+    padding-top: 50px;
+  }
+  
+  .THIS.boilerplate--padding-bottom {
+    padding-bottom: 50px;
+  }
+
+  .THIS h1,
+  .THIS .h1 {
+    font-size: 38px !important;
+  }
+
+  .THIS h2,
+  .THIS .h2 {
+    font-size: 32px !important;
+    text-align: center;
+  }
+
+  .THIS h3,
+  .THIS .h3 {
+    font-size: 28px !important;
+  }
+
+  .THIS h4,
+  .THIS .h4 {
+    font-size: 24px !important;
+  }
+
+  .THIS h5,
+  .THIS .h5 {
+    font-size: 20px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .THIS.boilerplate {
+    margin: 0 auto;
+    max-width: 1024px;
+    padding: 0 50px;
+  }
+
+  .THIS.boilerplate--padding-top {
+    padding-top: 50px;
+  }
+  
+  .THIS.boilerplate--padding-bottom {
+    padding-bottom: 50px;
+  }
+}

@@ -1,0 +1,47 @@
+<design:component label="Custom Global Initiatives Section">
+	<design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="backgroundImageField"
+    label="Background Image Field"
+    datasource="Image 1, Image 2, Image 3, Image 4, Image 5"
+    description="Select the CMS field name of the background image to display."
+  ></design:attribute>
+  <design:attribute
+    name="subheadingField"
+    label="Subheading Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the subheading to display under the headline."
+  ></design:attribute>
+  <design:attribute
+    name="firstCardField"
+    label="First Section Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the first section."
+  ></design:attribute>
+  <design:attribute
+    name="secondCardField"
+    label="Second Section Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the second section."
+  ></design:attribute>
+  <design:attribute
+    name="thirdCardField"
+    label="Third Section Field"
+    datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the text to display in the third section."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,353 @@
+<template>
+  <template if:true={showDetail}>
+    <div class="slds-card slds-m-bottom_xx-small" data-id="member-detail">
+      <div class="slds-card__header slds-grid">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+          <div class="slds-media__figure">
+            <span class="slds-icon_container slds-icon-standard-account" title="account">
+              <lightning-icon
+                  icon-name="standard:person_name"
+                  alternative-text="member"
+                  title="member"
+                  size="small">
+              </lightning-icon>  
+            </span>
+          </div>
+          <div class="slds-media__body">
+            <h2 class="slds-card__header-title">
+              <template if:true={detail.Contact__c}>
+                <strong>{detail.Contact__r.Display_Name__c}</strong>
+              </template>
+              <template if:false={detail.Contact__c}>
+                <strong>{detail.Contact_Name__c}</strong>
+              </template>
+            </h2>
+          </div>
+          <div class="slds-no-flex">
+            <lightning-icon
+              icon-name="utility:close"
+              alternative-text="close"
+              onclick={handleClose}
+              title="close"
+              size="small"
+              class="icon-close"
+             ></lightning-icon>
+          </div>
+        </header>
+      </div>
+      <div class="slds-card__body slds-card__body_inner slds-p-around_medium">
+        <div class="slds-p-bottom_small">
+          <template if:true={detail.Start__c}>
+            <lightning-formatted-date-time
+              value={detail.Start__c}
+              year="numeric"
+              month="short"
+              day="numeric"
+              time-zone="UTC"
+            ></lightning-formatted-date-time>
+            <template if:true={detail.End__c}>
+              &nbsp;-&nbsp;
+              <lightning-formatted-date-time
+                value={detail.End__c}
+                year="numeric"
+                month="short"
+                day="numeric"
+                time-zone="UTC"
+              ></lightning-formatted-date-time>
+            </template>
+            <template if:false={detail.End__c}>
+              &nbsp;-&nbsp;Present
+            </template>
+          </template>
+        </div>
+        <div class="slds-grid slds-wrap">
+          <p class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-p-bottom_small">
+            <strong>Address:</strong>
+            <template if:true={detail.Contact__c}>
+              <lightning-formatted-address
+                street={detail.Contact__r.MailingStreet}
+                city={detail.Contact__r.MailingCity}
+                province={detail.Contact__r.MailingState}
+                postal-code={detail.Contact__r.MailingPostalCode}
+                country={detail.Contact__r.MailingCountry}
+              ></lightning-formatted-address>
+            </template>
+            <template if:false={detail.Contact__c}><br />N/A</template>
+          </p>
+          <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+            <p class="slds-p-bottom_small">
+              <strong>Email:</strong>&nbsp;
+              <template if:true={detail.Contact__c}>
+                <lightning-formatted-email value={detail.Contact__r.Email} hide-icon></lightning-formatted-email>
+              </template>
+              <template if:false={detail.Contact__c}>N/A</template>
+            </p>
+
+            <p class="slds-p-bottom_small">
+              <strong>Assistant Email:</strong>&nbsp;
+              <template if:true={isAssistant}>
+                <lightning-formatted-email value={isAssistant} hide-icon></lightning-formatted-email>
+              </template>
+              <template if:false={isAssistant}>N/A</template>
+            </p>
+
+            <p class="slds-p-bottom_small">
+              <strong>Phone:</strong>&nbsp;
+              <template if:true={detail.Contact__c}>
+                <template if:true={detail.Contact__r.Phone}>
+                  <lightning-formatted-phone value={detail.Contact__r.Phone}></lightning-formatted-phone>
+                </template>
+                <template if:false={detail.Contact__r.Phone}>N/A</template>
+              </template>
+              <template if:false={detail.Contact__c}>N/A</template>
+            </p>
+            <p class="slds-p-bottom_small">
+              <strong>Fax:</strong>&nbsp;
+              <template if:true={detail.Contact__c}>
+                <template if:true={detail.Contact__r.Fax}>
+                  <lightning-formatted-phone value={detail.Contact__r.Fax}></lightning-formatted-phone>
+                </template>
+                <template if:false={detail.Contact__r.Fax}>N/A</template>
+              </template>
+              <template if:false={detail.Contact__c}>N/A</template>
+            </p>
+          </div>
+          <p class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-p-bottom_small">
+            <strong>Position:</strong>&nbsp;
+            {detail.Sub_Category__c}
+          </p>
+          <p class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-p-bottom_small">
+            <strong>Sub-Position:</strong>&nbsp;
+            <template if:true={detail.Other_Value__c}>
+              {detail.Other_Value__c}
+            </template>
+            <template if:false={detail.Other_Value__c}>N/A</template>
+          </p>
+          <p class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-p-bottom_small">
+            <strong>Voting Status:</strong>&nbsp;
+            <template if:true={detail.Personify_Sub_Customer_id__c}>
+              {detail.Personify_Sub_Customer_id__c}
+            </template>
+            <template if:false={detail.Personify_Sub_Customer_id__c}>N/A</template>
+          </p>
+          <p class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-p-bottom_small">
+            <strong>Representing:</strong>&nbsp;
+            <template if:true={detail.Sub_Contact__c}>
+              {detail.Sub_Contact__r.Display_Name__c}
+            </template>
+            <template if:false={detail.Sub_Contact__c}>
+              <template if:true={detail.Sub_Account__c}>
+                {detail.Sub_Account__r.Name}
+              </template>
+              <template if:false={detail.Sub_Account__c}>N/A</template>
+            </template>
+          </p>
+          <div class="slds-col slds-size_1-of-1 committee-member-detail__comment-form">
+            <lightning-textarea
+            name="comment"
+            label="Comments:"
+            disabled={readOnly}
+            placeholder="Add a comment..."
+            value={detail.Comments__c}
+            ></lightning-textarea>
+
+            <template if:true={hasExecutiveStaffPerms}>
+              <lightning-button
+                label="Edit"
+                onclick={handleEdit}
+                type="submit"
+                variant="brand"
+              ></lightning-button>
+              <lightning-button
+                label="Save"
+                onclick={handleSubmit}
+                disabled={loading}
+                type="submit"
+                class="slds-p-left_x-small"
+                variant="brand"
+              ></lightning-button>
+            </template>
+            <template if:true={success}>
+              <span class="slds-p-left_small slds-text-color_success">Success!</span>
+            </template>
+            <template if:true={error}>
+              <span class="slds-p-left_small slds-text-color_error">{error}</span>
+            </template>
+          </div>
+        </div>
+      </div>
+      <footer class="slds-card__footer">
+        <a class="slds-card__footer-action" href="#" onclick={handleViewMore}>
+          View More
+        </a>
+      </footer>
+    </div>
+  </template>
+  <template if:false={showDetail}>
+    <div class="slds-m-bottom_xx-small committee-member-card committee-member-card--none" data-id="member-detail">
+      <div class="slds-card">
+          <div class="slds-card__header slds-grid">
+              <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                  <div class="slds-media__figure">
+                      <span class="slds-icon_container slds-icon-standard-account" title="account">
+                          <lightning-icon
+                              icon-name="standard:person_name"
+                              alternative-text="member"
+                              title="member"
+                              size="small">
+                          </lightning-icon>
+                      </span>
+                  </div>
+                  <div class="slds-media__body">
+                      <h2 class="slds-card__header-title">
+                        No Member Selected
+                      </h2>
+                  </div>
+              </header>
+          </div>
+          <div class="slds-card__body slds-card__body_inner">
+            Select a member to view their information.
+          </div>
+      </div>
+    </div>
+  </template>
+
+  <div class="committee-member-list">
+    <div class="slds-page-header committee-member-list__header">
+      <div class="slds-page-header__row">
+        <div class="slds-page-header__col-title">
+          <div class="slds-media committee-member-list__title">
+            <div class="slds-media__figure">
+              <lightning-icon
+                icon-name="standard:contact"
+                alternative-text="contact"
+                title="contact"
+                size="small"
+              >
+              </lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <div class="slds-page-header__name-switcher">
+                <lightning-button-menu
+                  label={listLabel}
+                  alternative-text="Show menu"
+                  class="committee-member-list__menu"
+                  onselect={handleMenuSelect}
+                  menu-alignment="right"
+                  icon-size="large"
+                  variant="bare"
+                >
+                  <template for:each={lists} for:item="action">
+                    <lightning-menu-item
+                      id={action.id}
+                      label={action.label}
+                      value={action.value}
+                      key={action.label}
+                    >
+                    </lightning-menu-item>
+                  </template>
+                </lightning-button-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <template if:true={showActions}>
+          <div class="slds-page-header__col-actions">
+            <div class="slds-page-header__controls">
+              <div class="slds-page-header__control">
+                <lightning-button
+                  label={emailBtnLabel}
+                  title="Send Email with outlook"
+                  onclick={handleOpenEmailDraft}
+                >
+                </lightning-button>
+              </div>
+            </div>
+          </div>
+        </template> -->
+      </div>
+      <div class="slds-page-header__row committee-member-list__filters">
+        <div class="committee-member-list__filters__sortby">
+          <lightning-combobox
+            name="sortby"
+            label="Sort by:"
+            value={sortby}
+            placeholder="Select..."
+            options={sortOptions}
+            onchange={handleSortByChange}
+            >
+          </lightning-combobox>
+
+          <lightning-input 
+            type="checkbox"
+            label="DESC"
+            class="slds-p-left_x-small"
+            checked={sortbyDesc}
+            onchange={handleSortDescChange}
+            >
+          </lightning-input>
+        </div>
+        
+        <div class="slds-m-left_small committee-member-list__filters__thenby">
+          <lightning-combobox
+            name="thenby"
+            label="Then by:"
+            value={thenby}
+            placeholder="Select..."
+            options={sortOptions}
+            onchange={handleThenByChange}
+            >
+          </lightning-combobox>
+
+          <lightning-input 
+            type="checkbox"
+            label="DESC"
+            class="slds-p-left_x-small"
+            checked={thenbyDesc}
+            onchange={handleThenDescChange}
+            >
+          </lightning-input>
+        </div>
+
+        <lightning-button 
+          class="slds-m-left_large slds-m-right_large" 
+          variant="brand" 
+          label="Refresh" 
+          title="Refresh" 
+          onclick={handleRefresh}
+          >
+        </lightning-button>
+      </div>
+    </div>
+    <div class="committee-member-list__table">
+      <template if:true={loading}>
+        <div class="committee-member-list__loading">
+          <lightning-spinner
+            alternative-text="Loading"
+            size="medium"
+            variant="brand"
+          ></lightning-spinner>
+        </div>
+      </template>
+      <template if:false={loading}>
+        <template if:true={empty}>
+          <div class="committee-member-list__empty slds-p-around_large">
+            <p>No {selectedList} Committee Members found.</p>
+          </div>
+        </template>
+        <template if:false={empty}>
+          <lightning-datatable
+            key-field={recordId}
+            data={committeeMembers}
+            columns={columns}
+            column-widths-mode="auto"
+            min-column-width="75"
+            resize-column-disabled="true"
+            onrowaction={handleRowAction}
+            onrowselection={handleRowSelection}
+          ></lightning-datatable>
+        </template>
+      </template>
+    </div>
+  </div>
+</template>

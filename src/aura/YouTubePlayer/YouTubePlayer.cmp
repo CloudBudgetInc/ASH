@@ -1,0 +1,26 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowActions,lightning:availableForFlowScreens" controller="CurrentUserController">
+  <ltng:require
+    scripts="{!join(',',
+            $Resource.YouTubeJS,
+            $Resource.YouTubeJSWidget)}"
+    afterScriptsLoaded="{!c.onYouTubePlayerAPIReady}"
+  />
+  <aura:attribute
+    name="videoUrl"
+    type="string"
+    default="https://www.youtube.com/embed/5_vfzzxoUts"
+  />
+  <aura:attribute name="width" type="string" default="720" />
+  <aura:attribute name="height" type="string" default="480" />
+  <aura:attribute name="autoPlay" type="boolean" default="true" />
+  <aura:attribute name="hideControls" type="boolean" default="false" />
+  <iframe
+    id="player"
+    width="{!v.width}"
+    height="{!v.height}"
+    src="{!v.autoPlay &amp;&amp; v.hideControls ? v.videoUrl + '?autoplay=1&amp;mute=1&amp;controls=0&amp;disablekb=1&amp;rel=0&amp;enablejsapi=1'
+         : v.autoPlay ? v.videoUrl + '?autoplay=1&amp;mute=1&amp;rel=0&amp;enablejsapi=1'
+         : v.hideControls ? v.videoUrl + '?controls=0&amp;disablekb=1&amp;rel=0&amp;enablejsapi=1' : v.videoUrl + '?rel=0&amp;enablejsapi=1'}"
+    sandbox="allow-scripts allow-same-origin allow-presentation"
+  ></iframe>
+</aura:component>

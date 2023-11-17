@@ -1,0 +1,100 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="records" type="ConnectApi.ManagedContentVersion[]" />
+  <aura:attribute name="title" type="String" />
+  <aura:attribute name="maxItems" type="String" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'testimonials-carousel component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <aura:if isTrue="{!v.title}">
+      <h2 class="testimonials-carousel__title">{!v.title}</h2>
+    </aura:if>
+    <div class="custom-carousel slds-carousel">
+      <div class="slds-carousel__stage">
+        <lightning:buttonIcon
+          class="custom-carousel__icon--left"
+          iconName="utility:chevronleft"
+          variant="bare"
+          size="large"
+          onclick="{! c.handlePrev }"
+          alternativeText="chevronleft"
+          title="chevronleft"
+        />
+        <div
+          class="slds-carousel__panels"
+          id="carousel-panels"
+          style="transform:translateX(-0%)"
+        >
+          <aura:iteration items="{!v.records}" var="record" indexVar="index">
+            <div
+              id="{!'content-id-' + (index + 1)}"
+              class="slds-carousel__panel"
+              role="tabpanel"
+              aria-hidden="false"
+              aria-labelledby="{!'indicator-id-' + (index + 1)}"
+            >
+              <div class="custom-carousel__content"  style="{!'left: ' + (50 + 100 * index) + '%;'}">
+                <div class="testimonial">
+                  <aura:if isTrue="{!record.contentNodes.Image}">
+                    <img
+                      class="testimonial-img"
+                      src="{! '/sfsites/c' + record.contentNodes.Image.url}"
+                      alt="{!record.contentNodes.Image.altText}"
+                    />
+                  </aura:if>
+                  <h3 class="testimonial-title">
+                      <lightning:formattedRichText class="h3" value="{!record.contentNodes.Headline.value}" />
+                  </h3>
+                  <p class="testimonial-subheading">
+                      - <lightning:formattedRichText class="p" value="{!record.contentNodes.Name.value}" /><aura:if isTrue="{! !empty(record.contentNodes.Title.value)}">, <lightning:formattedRichText class="p" value="{!record.contentNodes.Title.value}" />
+                      </aura:if><aura:if isTrue="{! !empty(record.contentNodes.Organization.value)}">, <lightning:formattedRichText class="p" value="{!record.contentNodes.Organization.value}" /></aura:if>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </aura:iteration>
+        </div>
+        <lightning:buttonIcon
+          class="custom-carousel__icon--right"
+          iconName="utility:chevronright"
+          variant="bare"
+          size="large"
+          onclick="{! c.handleNext }"
+          alternativeText="chevronRight"
+          title="chevronRight"
+        />
+        <ul class="slds-carousel__indicators" role="tablist">
+          <aura:iteration items="{!v.records}" var="record" indexVar="index">
+            <li class="slds-carousel__indicator" role="presentation">
+              <a
+                id="{!'indicator-id-' + (index + 1)}"
+                class="{!index == 0 ? 'slds-carousel__indicator-action slds-is-active'
+                       : 'slds-carousel__indicator-action'}"
+                href="javascript:void(0);"
+                role="tab"
+                tabindex="0"
+                aria-selected="true"
+                aria-controls="{!'content-id-' + (index + 1)}"
+                title="{!record.title}"
+                onclick="{!c.handleIndicatorPress}"
+              >
+                <span class="slds-assistive-text">{!record.contentNodes.Headline.value}</span>
+              </a>
+            </li>
+          </aura:iteration>
+        </ul>
+      </div>
+    </div></div
+  >
+</aura:component>

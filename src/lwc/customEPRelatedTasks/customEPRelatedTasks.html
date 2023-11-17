@@ -1,0 +1,54 @@
+<template>
+    <div class="ep-task-list">
+        <div class="slds-page-header ep-task-list__header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon
+                                icon-name="custom:custom19"
+                                alternative-text="Tasks"
+                                title="Tasks"
+                                size="small"
+                            ></lightning-icon>
+                        </div>
+                        <div class="slds-media__body ep-task-list__heading">
+                            <h2 class="slds-card__header-title">
+                                <span>Tasks ({totalTasks})</span>
+                            </h2>
+
+                            <div class="ep-task-list__heading__refresh">
+                                <template if:true={refreshSuccess}>
+                                    <div class="ep-task-list__heading__refresh__message">Refreshed!</div>
+                                </template>
+
+                                <lightning-icon
+                                    class="refreshIcon"
+                                    icon-name="utility:refresh"
+                                    alternative-text="Refresh"
+                                    title="Refresh"
+                                    size="small"
+                                    onclick={handleDataRefresh}
+                                    ></lightning-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <template if:true={tasksList}>
+            <lightning-datatable
+                key-field="id"
+                columns={columns}
+                data={tasksList}
+                hide-checkbox-column
+                column-widths-mode="auto"
+                min-column-width="140"
+                onrowaction={handleRowAction}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={handleSort}>
+            </lightning-datatable>
+        </template>
+    </div>
+</template>

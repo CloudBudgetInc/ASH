@@ -1,0 +1,69 @@
+<aura:component
+  implements="forceCommunity:searchInterface,forceCommunity:availableForAllPageTypes"
+>
+  <aura:attribute name="searchText" type="String" default="" />
+  <aura:attribute name="showClose" type="Boolean" default="true" />
+  <aura:attribute name="showCancel" type="Boolean" default="true" />
+  <aura:attribute name="centerSearch" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+  <aura:registerEvent name="cancel" type="c:PressEvent" />
+  
+  <div
+    class="{! join(' ',
+      'search',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : '',
+      v.centerSearch ? 'search--center' : ''
+    )}"
+    id="search"
+  >
+    <div class="search__form">
+      <aura:if isTrue="{!v.showClose}">
+        <button
+          class="search__button-cancel"
+          onclick="{!c.handleCancel}"
+          aura:id="search-cancel-button"
+        >
+          <img
+            class="search__form-close-icon"
+            src="{!$ContentAsset.Hamburger_Close_Icon}"
+            alt="search-close-icon"
+            aura:id="search-close-icon"
+          />
+        </button>
+      </aura:if>
+      <span class="search__form-container">
+        <div class="slds-form-element slds-lookup" data-select="single">
+          <div class="slds-form-element__control">
+            <div
+              class="search__input-container slds-input-has-icon slds-input-has-icon--left"
+            >
+              <lightning:buttonIcon
+                iconName="utility:search"
+                variant="bare"
+                alternativeText="Search"
+                class="search__form-icon slds-input__icon"
+              />
+              <ui:inputText
+                value="{!v.searchText}"
+                aura:id="search__input"
+                class="{! !v.showClose ? 'search__form-input search__form-input-error-page slds-lookup__search-input slds-input'
+                       : 'search__form-input slds-lookup__search-input slds-input' }"
+                placeholder="Enter Search Criteria"
+                keyup="{!c.handleKeyUp}"
+              />
+            </div>
+          </div>
+        </div>
+        <ui:button
+          aura:id="search__form-button"
+          buttonTitle="Search"
+          class="{! !v.showClose ? 'search__form-button search__form-button-error-page' : 'search__form-button'}"
+          label="Search"
+          press="{!c.handleSearch}"
+        />
+      </span>
+    </div>
+  </div>
+</aura:component>

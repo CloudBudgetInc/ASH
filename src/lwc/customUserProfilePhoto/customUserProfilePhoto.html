@@ -1,0 +1,70 @@
+<template>
+  <div class="slds-tabs_card sf-profile">
+    <template if:true={hasProfileImage}>
+      <div class="sf-profile__left">
+        <div class="sf-profile__img-container">
+          <img class="sf-profile__img" src={photoUrl} alt="profile-image" />
+          <template if:true={isCurrentUser}>
+            <div data-id="dropdown-container" class={dropdownClass}>
+              <lightning-button-icon
+                alternative-text="Show More"
+                icon-name="utility:edit"
+                size="small"
+                title="Edit Photo"
+                variant="border-filled"
+                onclick={handleToggleMenu}
+              ></lightning-button-icon>
+              <div class="slds-dropdown slds-dropdown_left">
+                <ul class="slds-dropdown__list" role="menu" aria-label="Show More">
+                  <li class="slds-dropdown__item" role="presentation">
+                    <a href="#" role="menuitem" tabindex="0">
+                      <label for="file-upload" class="sf-profile__upload">
+                        <span class="sf-profile__btn" role="button" aria-label="Add/Update Photo">
+                          Add/Update Photo
+                        </span>
+                        <input
+                          class="file-upload"
+                          id="file-upload"
+                          type="file"
+                          accept="image/jpg,image/jpeg,image/png"
+                          onchange={handleImageUpload}
+                        />
+                      </label>
+                    </a>
+                  </li>
+                  <li class="slds-dropdown__item" role="presentation">
+                    <a href="#" role="menuitem" tabindex="0">
+                      <button class="sf-profile__remove slds-button" onclick={handeleDelete}>
+                        Clear Photo
+                      </button>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+    <div class="sf-profile__right">
+      <template if:true={contact}>
+        <p class="sf-profile__name">{contact.Display_Name__c}</p>
+        <template if:true={contact.Main_Address_Company__c}>
+          <p class="sf-profile__text">{contact.Main_Address_Company__c}</p>
+        </template>
+        <template if:true={contact.Title}>
+          <p class="sf-profile__text">{contact.Title}</p>
+        </template>
+               <template if:true={contact.npsp__Primary_Affiliation__c}>
+          <p class="sf-profile__text">{contact.npsp__Primary_Affiliation__r.Name}</p>
+        </template>
+        <template if:true={contact.Membership_Type_Formula__c}>
+          <p class="sf-profile__text">{contact.Membership_Type_Formula__c} since {contact.Member_Since_Year__c} </p>
+        </template>
+       <template if:true={contact.Donor_Level__c}>
+          <p class="sf-profile__text">{contact.Donor_Level__c}</p>
+        </template>
+      </template>
+    </div>
+  </div>
+</template>

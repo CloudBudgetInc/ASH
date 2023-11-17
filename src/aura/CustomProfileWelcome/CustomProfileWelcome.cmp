@@ -1,0 +1,17 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CurrentUserController"
+>
+<aura:attribute name="userId" type="String" />
+<aura:attribute name="user" type="User" />
+<aura:attribute name="message" type="String" />
+
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="profile-welcome">
+  <img class="profile-welcome__img" src="{!v.user.FullPhotoUrl}" alt="user profile image" />
+  <h1 class="profile-welcome__intro">Welcome, {!v.user.FirstName + ' ' + v.user.LastName}</h1>
+  <p class="profile-welcome__message">{!v.message}</p>
+</div>
+
+</aura:component>

@@ -1,0 +1,169 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="image" type="Object" />
+  <aura:attribute name="description" type="String" />
+  <aura:attribute
+    name="descriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="buttonLabel" type="String" />
+  <aura:attribute name="buttonType" type="String" default="primary" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="showTitle" type="Boolean" default="true" />
+  <aura:attribute name="showLogo" type="Boolean" default="false" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="reverse" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'text-image-module component-container--padding-horizontal',
+      v.reverse ? 'reverse' : '',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="text-image-module__left">
+      <div class="text-image-module__heading">
+        <aura:if isTrue="{!v.showLogo}">
+          <img
+            class="text-image-module__logo"
+            src="{!$ContentAsset.ashrc_logo_mark_svg}"
+            alt="ashrc_logo"
+          />
+        </aura:if>
+        <aura:if isTrue="{!v.showTitle}">
+          <h2 class="text-image-module__heading-title">
+            <lightning:formattedRichText
+              class="h2"
+              value="{!v.record.contentNodes.Headline.value}"
+            />
+          </h2>
+        </aura:if>
+      </div>
+      <img
+        class="text-image-module__featured-image text-image-module__featured-image--sm"
+        src="{!v.image.src}"
+        alt="{!v.image.alt}"
+      />
+      <p class="text-image-module__body">
+        <lightning:formattedRichText class="p" value="{!v.description}" />
+      </p>
+      <aura:if isTrue="{! !empty(v.buttonLabel)}">
+        <aura:if isTrue="{!v.openTab}">
+          <a
+            class="{! join(' ',
+              'text-image-module__cta cta-button',
+              'cta-button--' + v.buttonType
+            )}"
+            href="{!v.buttonLink}"
+            target="_blank"
+          >
+            {!v.buttonLabel}
+          </a>
+          <aura:set attribute="else">
+            <a
+              class="{! join(' ',
+                'text-image-module__cta cta-button',
+                'cta-button--' + v.buttonType
+              )}"
+              href="{!v.buttonLink}"
+            >
+              {!v.buttonLabel}
+            </a>
+          </aura:set>
+        </aura:if>
+      </aura:if>
+    </div>
+    <div class="text-image-module__right">
+      <img
+        class="text-image-module__featured-image text-image-module__featured-image--md"
+        src="{!v.image.src}"
+        alt="{!v.image.alt}"
+      />
+    </div>
+  </div>
+  
+  <!-- <div
+    class="{! join(' ',
+      'text-image-module component-container-padding-horizontal',
+      v.reverse ? 'reverse' : '',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="text-image-module__heading">
+      <aura:if isTrue="{!v.showLogo}">
+        <img
+          class="text-image-module__logo"
+          src="{!$ContentAsset.ashrc_logo_mark_svg}"
+          alt="ashrc_logo"
+        />
+      </aura:if>
+      <h2 class="text-image-module__heading-title">
+        <lightning:formattedRichText
+          class="h2"
+          value="{!v.record.contentNodes.Headline.value}"
+        />
+      </h2>
+    </div>
+    <div 
+      class="{! join(' ',
+        'text-image-module__container',
+        v.reverse ? 'reverse' : ''
+      )}"
+    >
+      <div class="text-image-module__left">
+        <img
+          class="text-image-module__featured-image text-image-module__featured-image-sm"
+          src="{!v.image.src}"
+          alt="{!v.image.alt}"
+        />
+        <p class="text-image-module__body">
+          <lightning:formattedRichText class="p" value="{!v.description}" />
+        </p>
+        <aura:if isTrue="{! !empty(v.buttonLabel)}">
+          <aura:if isTrue="{!v.openTab}">
+            <a
+              class="{! join(' ',
+                'text-image-module__cta cta-button',
+                'cta-button-' + v.buttonType
+              )}"
+              href="{!v.buttonLink}"
+              target="_blank"
+            >
+              {!v.buttonLabel}
+            </a>
+            <aura:set attribute="else">
+              <a
+                class="{! join(' ',
+                  'text-image-module__cta cta-button',
+                  'cta-button-' + v.buttonType
+                )}"
+                href="{!v.buttonLink}"
+              >
+                {!v.buttonLabel}
+              </a>
+            </aura:set>
+          </aura:if>
+        </aura:if>
+      </div>
+      <div class="text-image-module__right">
+        <img
+          class="text-image-module__featured-image text-image-module__featured-image-md"
+          src="{!v.image.src}"
+          alt="{!v.image.alt}"
+        />
+      </div>
+    </div>
+  </div> -->
+</aura:component>

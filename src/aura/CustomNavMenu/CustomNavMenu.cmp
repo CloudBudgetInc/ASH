@@ -1,0 +1,194 @@
+<aura:component extends="forceCommunity:navigationMenuBase">
+  <aura:attribute name="navigationLinkSetId" type="String" />
+  <aura:attribute name="loggedIn" type="Boolean" default="false" />
+  <aura:attribute name="member" type="String" />
+  <aura:attribute name="twitterLink" type="String" />
+  <aura:attribute name="facebookLink" type="String" />
+  <aura:attribute name="instagramLink" type="String" />
+  <aura:attribute name="youTubeLink" type="String" />
+  <aura:attribute name="baseUrl" type="String" />
+  
+  <div class="{!v.loggedIn ? 'navMenu navMenu__auth' : 'navMenu'}">
+    <aura:if isTrue="{!v.loggedIn}">
+      <section class="navMenu__section navMenu__auth-section">
+        <img
+          class="navMenu__icon"
+          src="{!$ContentAsset.Profile_Icon}"
+          alt="avatar-icon"
+          id="navMenu-icon"
+        />
+        <ul class="navMenu__auth-links">
+          <li class="navMenu__auth-user">
+            <span class="navMenu__label">Welcome, {!v.member}!</span>
+          </li>
+        </ul>
+      </section>
+    </aura:if>
+    <section class="navMenu__section navMenu__links-section">
+      <ul class="navMenu__links" onclick="{!c.onClick}">
+        <aura:iteration items="{!v.menuItems}" var="item" indexVar="index">
+          <aura:if isTrue="{!item.subMenu}">
+            <li class="navMenu__link">
+              <div
+                class="navMenu__accordionSectionHeader"
+                id="{!'accordion-container-' + index}"
+                onclick="{!c.handleAccordion}"
+              >
+                <span
+                  class="navMenu__label"
+                  id="{!'accordion-label-' + index}"
+                  onclick="{!c.handleAccordion}"
+                  data-label="{!item.label}"
+                >
+                  {!item.label}
+                </span>
+                <span
+                  class="navMenu__label navMenu__icon-plus"
+                  id="{!'accordion-plus-' + index}"
+                  onclick="{!c.handleAccordion}"
+                  >+</span
+                >
+                <span
+                  class="navMenu__label navMenu__icon-minus"
+                  id="{!'accordion-minus-' + index}"
+                  onclick="{!c.handleAccordion}"
+                  >-</span
+                >
+              </div>
+              <ul
+                class="navMenu__accordionSection"
+                id="{!'accordion-' + index + '-section'}"
+                onclick="{!c.onClick}"
+              >
+                <aura:iteration items="{!item.subMenu}" var="subItem">
+                  <li data-label="{!subItem.label}">
+                    <a
+                      class="{!subItem.active ? 'navMenu__label navMenu__label--active navMenu__sublink' : 'navMenu__label navMenu__sublink'}"
+                      href="{!subItem.target}"
+                      target="{!subItem.tab}"
+                      data-menu-item-id="{!subItem.id}"
+                    >
+                      {!subItem.label}
+                    </a>
+                  </li>
+                </aura:iteration>
+              </ul>
+            </li>
+            <aura:set attribute="else">
+              <aura:if isTrue="{!item.label != 'Home'}">
+                <li class="navMenu__link">
+                  <a
+                    class="{!item.active ? 'navMenu__label navMenu__label--active' : 'navMenu__label'}"
+                    data-label="{!item.label}"
+                    href="{!item.target}"
+                    target="{!item.tab}"
+                    data-menu-item-id="{!item.id}"
+                  >
+                    {!item.label}
+                  </a>
+                </li>
+              </aura:if>
+            </aura:set>
+          </aura:if>
+        </aura:iteration>
+      </ul>
+    </section>
+    <section class="navMenu__section navMenu__section-col">
+      <span class="navMenu__label navMenu__label-contact">Contact Us:</span>
+      <div class="navMenu__contacts">
+        <div class="navMenu__location">
+          <img
+            class="navMenu__location-icon"
+            src="{!$ContentAsset.Location_Icon}"
+            alt="location-icon"
+          />
+          <span class="navMenu__address">
+            <span class="navMenu__address-name">
+              ASH RESEARCH <br /> COLLABORATIVE
+            </span>
+            <br />
+            <span class="navMenu__address-location">
+              2021 L Street NW, Suite 900 <br /> Washington, DC 20036
+            </span>
+          </span>
+        </div>
+        <div class="navMenu__phone">
+          <img
+            class="navMenu__phone-icon"
+            src="{!$ContentAsset.Phone_Icon}"
+            alt="phone-icon"
+          />
+          <span class="navMenu__phone-numbers">
+            <a class="navMenu__contact-link" href="tel:1-202-776-0544"
+              >Local +1 (202) 776.0544</a
+            >
+            <a class="navMenu__contact-link" href="tel:1-866-828-1231"
+              >Toll Free: +1 (866) 828.1231</a
+            >
+          </span>
+        </div>
+        <a
+          class="navMenu__contact-link"
+          href="mailto:info@ashrc.org"
+          target="_top"
+        >
+          <img
+            class="navMenu__contact-icon"
+            src="{!$ContentAsset.Email_Icon}"
+            alt="email-icon"
+          />
+          Email: <i>info@ashrc.org</i>
+        </a>
+        <a class="navMenu__contact-link" href="tel:1-202-776-0545">
+          <img
+            class="navMenu__contact-icon"
+            src="{!$ContentAsset.Fax_Icon}"
+            alt="fax-icon"
+          />
+          Fax: +1 (202) 776.0545
+        </a>
+      </div>
+    </section>
+    <section class="navMenu__section">
+      <span class="navMenu__label">Let's Stay Connected</span>
+      <div class="navMenu__social-links">
+        <a
+          class="navMenu__social-link"
+          href="{!v.facebookLink}"
+          target="_blank"
+        >
+          <img
+            class="navMenu__social-icon"
+            src="{!$ContentAsset.Facebook_Icon}"
+            alt="facebook"
+          />
+        </a>
+        <a class="navMenu__social-link" href="{!v.twitterLink}" target="_blank">
+          <img
+            class="navMenu__social-icon"
+            src="{!$ContentAsset.Twitter_Icon}"
+            alt="twitter"
+          />
+        </a>
+        <a
+          class="navMenu__social-link"
+          href="{!v.instagramLink}"
+          target="_blank"
+        >
+          <img
+            class="navMenu__social-icon"
+            src="{!$ContentAsset.Instagram_Icon}"
+            alt="instagram"
+          />
+        </a>
+        <!-- <a class="navMenu__social-link" href="{!v.youTubeLink}" target="_blank">
+          <img
+            class="navMenu__social-icon"
+            src="{!$ContentAsset.Youtube_Icon}"
+            alt="youtube"
+          />
+        </a> -->
+      </div>
+    </section>
+  </div>
+</aura:component>

@@ -1,0 +1,71 @@
+<design:component label="Custom Content Accordion">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter a content slug for the CMS content to display in the accordion. Uses Website Content - Full to supply content to accordion."
+  />
+  <design:attribute
+      name="accordion1Label"
+      label="Accordion 1 Label"
+      description="Enter a label for the first accordion."
+    ></design:attribute>
+    <design:attribute
+      name="accordion2Label"
+      label="Accordion 2 Label"
+      description="Enter a label for the second accordion."
+    ></design:attribute>
+    <design:attribute
+      name="accordion3Label"
+      label="Accordion 3 Label"
+      description="Enter a label for the third accordion."
+    ></design:attribute>
+    <design:attribute
+      name="accordion4Label"
+      label="Accordion 4 Label"
+      description="Enter a label for a fourth accordion."
+    ></design:attribute>
+    <design:attribute
+      name="panel1DescField"
+      label="Panel 1 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the first panel."
+    ></design:attribute>
+    <design:attribute
+      name="panel2DescField"
+      label="Panel 2 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the second panel."
+    ></design:attribute>
+    <design:attribute
+      name="panel3DescField"
+      label="Panel 3 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the third panel."
+    ></design:attribute>
+    <design:attribute
+      name="panel4DescField"
+      label="Panel 4 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the fourth panel."
+    ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+  <design:attribute
+    name="showLargeTopPadding"
+    label="Apply Large Top Padding"
+    description="Check to apply large top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showLargeBottomPadding"
+    label="Apply Large Bottom Padding"
+    description="Check to apply large bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,82 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="headline" type="String" />
+  <aura:attribute
+    name="headlineField"
+    type="String"
+    default="Headline"
+  />
+  <aura:attribute name="content" type="String" />
+  <aura:attribute
+    name="contentField"
+    type="String"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="buttonLabel" type="String" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="buttonStyle" type="String" default="primary" />
+  <aura:attribute name="buttonSize" type="String" default="large" />
+  <aura:attribute name="showBottomBorder" type="Boolean" default="true" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="true" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="true" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'custom-text-cta component-container--padding-horizontal',
+      v.showTopPadding ? 'custom-text-cta--padding-top' : '',
+      v.showBottomPadding ? 'custom-text-cta--padding-bottom' : ''
+    )}"
+  >
+    <div
+      class="{! join(' ',
+        'custom-text-cta__container',
+        v.showBottomBorder ? 'border' : ''
+      )}"
+    >
+      <div class="custom-text-cta__header">
+        <lightning:formattedRichText
+          class="h2"
+          value="{!v.headline}"
+        />
+        <img class="custom-text-cta__bubbles" src="{!$ContentAsset.ashrc_bubbles}" alt="ashrc bubbles" />
+      </div>
+      <lightning:formattedRichText
+        class="p"
+        value="{!v.content}"
+      />
+      <aura:if isTrue="{! !empty(v.buttonLabel)}">
+        <aura:if isTrue="{!v.openTab}">
+          <a
+            class="{! join(' ',
+              'custom-text-cta__cta cta-button',
+              'cta-button--' + v.buttonStyle,
+              'cta-button--' + v.buttonSize
+            )}"
+            href="{!v.buttonLink}"
+            target="_blank"
+          >
+            {!v.buttonLabel}
+          </a>
+          <aura:set attribute="else">
+            <a
+              class="{! join(' ',
+                'custom-text-cta__cta cta-button',
+                'cta-button--' + v.buttonStyle,
+                'cta-button--' + v.buttonSize
+              )}"
+              href="{!v.buttonLink}">
+                {!v.buttonLabel}
+            </a>
+          </aura:set>
+        </aura:if>
+      </aura:if>
+    </div>
+  </div>
+</aura:component>

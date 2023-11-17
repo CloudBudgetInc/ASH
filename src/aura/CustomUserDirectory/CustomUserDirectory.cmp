@@ -1,0 +1,425 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomUserDirectoryController"
+>
+  <!-- Design Attributes -->
+  <aura:attribute name="headline" type="String" default="CTN Member Directory" />
+  <aura:attribute
+    name="intro"
+    type="String" 
+    default="The Clinical Trials Network Member Directory is a comprehensive, searchable online directory of member sites and their research staff.  Use our Member Directory to find and connect with fellow members of the Clinical Trial Network."
+  />
+  <aura:attribute name="nameLabel" type="String" default="Name" />
+  <aura:attribute name="roleLabel" type="String" default="Role" />
+  <aura:attribute name="consortiumLabel" type="String" default="Consortium" />
+  <aura:attribute name="stateLabel" type="String" default="State" />
+  <aura:attribute name="ctuLabel" type="String" default="CTU/CRS" />
+  <aura:attribute name="sortBy" type="String" default="Name" />
+  <aura:attribute name="sortDir" type="String" default="ASC" />
+  <aura:attribute name="pageSize" type="Integer" default="25" />
+  <aura:attribute name="baseUrl" type="String" default="/s/" />
+  <aura:attribute name="detailUrl" type="String" default="member-profile" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <!-- API Attributes -->
+  <aura:attribute name="contacts" type="Contact_Junction__c[]" />
+  <aura:attribute name="filteredContacts" type="Contact_Junction__c[]" />
+  <aura:attribute name="displayContacts" type="Contact_Junction__c[]" />
+
+  <!-- Local Attributes -->
+  <aura:attribute name="currentPage" type="Integer" default="1" />
+  <aura:attribute name="pages" type="Integer[]" default="[1]" />
+  <aura:attribute name="names" type="String[]" />
+  <aura:attribute name="roles" type="String[]" />
+  <aura:attribute name="consortiums" type="String[]" />
+  <aura:attribute name="states" type="String[]" />
+  <aura:attribute name="ctus" type="String[]" />
+  <aura:attribute name="filter" type="Map" default="{}" />
+  <aura:attribute name="disableClearAll" type="Boolean" default="true" />
+  <aura:attribute name="searchText" type="String" default="" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+  
+  <div
+    class="{! join(' ',
+      'user-directory component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <div class="user-directory__heading">
+      <h2 class="user-directory__title">{!v.headline}</h2>
+      <aura:if isTrue="{!!empty(v.intro)}">
+        <p class="p">{!v.intro}</p>
+      </aura:if>
+    </div>
+    <div class="search" id="directory-table">
+      <div class="slds-form-element slds-lookup" data-select="single">
+        <div class="slds-form-element__control">
+          <div
+            class="search__input-container slds-input-has-icon slds-input-has-icon--left"
+          >
+            <lightning:buttonIcon
+              iconName="utility:search"
+              variant="bare"
+              alternativeText="Search"
+              class="search__form-icon slds-input__icon"
+            />
+            <ui:inputText
+              value="{!v.searchText}"
+              class="search__input slds-lookup__search-input slds-input"
+              placeholder="Enter Search Criteria"
+              keyup="{!c.handleKeyUp}"
+            />
+          </div>
+        </div>
+      </div>
+      <ui:button
+        buttonTitle="Search"
+        class="search__button"
+        label="Search"
+        press="{!c.handleSearch}"
+      />
+    </div>
+    <div class="user-directory__results">
+      <p>(Results Found: {!v.filteredContacts.length} records)</p>
+    </div>
+    <div class="user-directory__table-container">
+      <div class="user-directory__table-wrapper">
+        <table class="user-directory__table">
+          <thead>
+            <tr>
+              <th>
+                <lightning:button
+                  aura:id="Name-label"
+                  class="user-directory__label-btn"
+                  label="{!v.nameLabel}"
+                  name="Name"
+                  value="ASC"
+                  iconName="{!v.sortBy == 'Name' ? 
+                    v.sortDir == 'DESC' ? 'utility:arrowup' : 'utility:arrowdown'
+                    : 'utility:sort'}"
+                  iconPosition="right"
+                  variant="base"
+                  onclick="{! c.handleSort }"
+                />
+                <br />
+                <lightning:buttonMenu
+                  class="user-directory__filter-btn"
+                  aura:id="Name-filter"
+                  name="Name_Filter"
+                  alternativeText="Filter"
+                  iconName="utility:filterList"
+                  variant="container"
+                  onselect="{! c.handleFilter }"
+                >
+                  <lightning:menuItem
+                    aura:id="clearName"
+                    checked="false"
+                    disabled="true"
+                    value="clear"
+                    label="Clear"
+                  />
+                  <lightning:menuDivider />
+                  <aura:iteration items="{!v.names}" var="name">
+                    <lightning:menuItem
+                      aura:id="NameItems"
+                      checked="false"
+                      value="{!name}"
+                      label="{!name}"
+                    />
+                  </aura:iteration>
+                </lightning:buttonMenu>
+              </th>
+              <th>
+                <lightning:button
+                  aura:id="Role-label"
+                  class="user-directory__label-btn"
+                  label="{!v.roleLabel}"
+                  name="Role"
+                  value=""
+                  iconName="{!v.sortBy == 'Role' ? 
+                    v.sortDir == 'DESC' ? 'utility:arrowup' : 'utility:arrowdown'
+                    : 'utility:sort'}"
+                  iconPosition="right"
+                  variant="base"
+                  onclick="{! c.handleSort }"
+                />
+                <br />
+                <lightning:buttonMenu
+                  class="user-directory__filter-btn"
+                  aura:id="Role-filter"
+                  name="Role_Filter"
+                  alternativeText="Filter"
+                  iconName="utility:filterList"
+                  variant="container"
+                  onselect="{! c.handleFilter }"
+                >
+                  <lightning:menuItem
+                    aura:id="clearRole"
+                    checked="false"
+                    disabled="true"
+                    value="clear"
+                    label="Clear"
+                  />
+                  <lightning:menuDivider />
+                  <aura:iteration items="{!v.roles}" var="role">
+                    <lightning:menuItem
+                      aura:id="RoleItems"
+                      checked="false"
+                      value="{!role}"
+                      label="{!role}"
+                    />
+                  </aura:iteration>
+                </lightning:buttonMenu>
+              </th>
+              <th>
+                <lightning:button
+                  aura:id="Consortium-label"
+                  class="user-directory__label-btn"
+                  label="{!v.consortiumLabel}"
+                  name="Consortium"
+                  value=""
+                  iconName="{!v.sortBy == 'Consortium' ? 
+                    v.sortDir == 'DESC' ? 'utility:arrowup' : 'utility:arrowdown'
+                    : 'utility:sort'}"
+                  iconPosition="right"
+                  variant="base"
+                  onclick="{! c.handleSort }"
+                />
+                <br />
+                <lightning:buttonMenu
+                  class="user-directory__filter-btn"
+                  aura:id="Consortium-filter"
+                  name="Consortium_Filter"
+                  alternativeText="Filter"
+                  iconName="utility:filterList"
+                  variant="container"
+                  onselect="{! c.handleFilter }"
+                >
+                  <lightning:menuItem
+                    aura:id="clearConsortium"
+                    checked="false"
+                    disabled="true"
+                    value="clear"
+                    label="Clear"
+                  />
+                  <lightning:menuDivider />
+                  <aura:iteration items="{!v.consortiums}" var="consortium">
+                    <lightning:menuItem
+                      aura:id="ConsortiumItems"
+                      checked="false"
+                      value="{!consortium}"
+                      label="{!consortium}"
+                    />
+                  </aura:iteration>
+                </lightning:buttonMenu>
+              </th>
+              <th>
+                <lightning:button
+                  aura:id="State-label"
+                  class="user-directory__label-btn"
+                  label="{!v.stateLabel}"
+                  name="State"
+                  value=""
+                  iconName="{!v.sortBy == 'State' ? 
+                    v.sortDir == 'DESC' ? 'utility:arrowup' : 'utility:arrowdown'
+                    : 'utility:sort'}"
+                  iconPosition="right"
+                  variant="base"
+                  onclick="{! c.handleSort }"
+                />
+                <br />
+                <lightning:buttonMenu
+                  class="user-directory__filter-btn"
+                  aura:id="State-filter"
+                  name="State_Filter"
+                  alternativeText="Filter"
+                  iconName="utility:filterList"
+                  variant="container"
+                  onselect="{! c.handleFilter }"
+                >
+                  <lightning:menuItem
+                    aura:id="clearState"
+                    checked="false"
+                    disabled="true"
+                    value="clear"
+                    label="Clear"
+                  />
+                  <lightning:menuDivider />
+                  <aura:iteration items="{!v.states}" var="state">
+                    <lightning:menuItem
+                      aura:id="StateItems"
+                      checked="false"
+                      value="{!state}"
+                      label="{!state}"
+                    />
+                  </aura:iteration>
+                </lightning:buttonMenu>
+              </th>
+              <th>
+                <lightning:button
+                  aura:id="CTU-label"
+                  class="user-directory__label-btn"
+                  label="{!v.ctuLabel}"
+                  name="CTU"
+                  value=""
+                  iconName="{!v.sortBy == 'CTU' ? 
+                    v.sortDir == 'DESC' ? 'utility:arrowup' : 'utility:arrowdown'
+                    : 'utility:sort'}"
+                  iconPosition="right"
+                  variant="base"
+                  onclick="{! c.handleSort }"
+                />
+                <br />
+                <lightning:buttonMenu
+                  class="user-directory__filter-btn"
+                  aura:id="CTU-filter"
+                  name="CTU_Filter"
+                  alternativeText="Filter"
+                  iconName="utility:filterList"
+                  variant="container"
+                  onselect="{! c.handleFilter }"
+                >
+                  <lightning:menuItem
+                    aura:id="clearCTU"
+                    checked="false"
+                    disabled="true"
+                    value="clear"
+                    label="Clear"
+                  />
+                  <lightning:menuDivider />
+                  <aura:iteration items="{!v.ctus}" var="ctu">
+                    <lightning:menuItem
+                      aura:id="CTUItems"
+                      checked="false"
+                      value="{!ctu}"
+                      label="{!ctu}"
+                    />
+                  </aura:iteration>
+                </lightning:buttonMenu>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <aura:iteration items="{!v.displayContacts}" var="contact">
+              <tr>
+                <td data-href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}" onclick="{!c.handleRowClick}">
+                  <a href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}">
+                    {!contact.Contact__r.Display_Name__c}
+                  </a>
+                  </td>
+                  <td data-href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}" onclick="{!c.handleRowClick}">
+                    <a href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}">
+                      <aura:if isTrue="{! !empty(contact.Contact_Type__c)}">
+                        {!contact.Contact_Type__c}
+                        <aura:set attribute="else">
+                          N/A
+                        </aura:set>
+                      </aura:if>
+                    </a>
+                  </td>
+                  <td data-href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}" onclick="{!c.handleRowClick}">
+                    <a href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}">
+                      <aura:if isTrue="{! !empty(contact.Clinical_Trial_Unit__r)
+                        &amp;&amp; !empty(contact.Clinical_Trial_Unit__r.Consortium__r)
+                        &amp;&amp; !empty(contact.Clinical_Trial_Unit__r.Consortium__r.Name)}">
+                        {!contact.Clinical_Trial_Unit__r.Consortium__r.Name}
+                        <aura:set attribute="else">
+                          N/A
+                        </aura:set>
+                      </aura:if>
+                    </a>
+                  </td>
+                  <td data-href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}" onclick="{!c.handleRowClick}">
+                    <a href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}">
+                      <aura:if isTrue="{! !empty(contact.Address__c)
+                        &amp;&amp; !empty(contact.Address__r)
+                        &amp;&amp; !empty(contact.Address__r.State__c)}">
+                        {!contact.Address__r.State__c}
+                        <aura:set attribute="else">
+                          N/A
+                        </aura:set>
+                      </aura:if>
+                    </a>
+                  </td>
+                  <td data-href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}" onclick="{!c.handleRowClick}">
+                    <a href="{!v.baseUrl + v.detailUrl + '/' + contact.Id}">
+                      <aura:if isTrue="{! !empty(contact.Clinical_Trial_Unit__r) &amp;&amp; !empty(contact.Clinical_Trial_Unit__r.Name)}">
+                        {!contact.Clinical_Trial_Unit__r.Name}
+                        <aura:set attribute="else">
+                          N/A
+                        </aura:set>
+                      </aura:if>
+                    </a>
+                  </td>
+                </tr>
+              </aura:iteration>
+              <aura:if isTrue="{! empty(v.displayContacts)}">
+                <tr class="user-directory__empty">
+                  <td colspan="6">
+                    No results found
+                  </td>
+                </tr>
+              </aura:if>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="user-directory__actions">
+      <nav class="user-directory__pagination" aria-label="pagination">
+        <aura:if isTrue="{!v.pages.length > 1}">
+          <lightning:button
+            class="user-directory__pagination-arrow"
+            variant="brand"
+            label="&lt;"
+            title="Prev"
+            disabled="{!v.currentPage &lt;= 1}"
+            onclick="{! c.handlePrevClick }"
+          />
+        </aura:if>
+        <ul class="user-directory__pagination-nums">
+          <aura:iteration items="{!v.pages}" var="page">
+            <li
+              class="{! join(' ',
+                '',
+                v.currentPage == page ? 'active' : ''
+              )}"
+            >
+              <lightning:button
+                name="{!page}"
+                class="user-directory__pagination-num"
+                variant="brand"
+                label="{!page}"
+                title="{!page}"
+                onclick="{! c.handlePaginationClick }"
+              />
+            </li>
+          </aura:iteration>
+        </ul>
+        <aura:if isTrue="{!v.pages.length > 1}">
+          <lightning:button
+            class="user-directory__pagination-arrow"
+            variant="brand"
+            label="&gt;"
+            title="Next"
+            disabled="{!v.currentPage &gt;= v.pages.length}"
+            onclick="{! c.handleNextClick }"
+          />
+        </aura:if>
+      </nav>
+      <lightning:button
+        aura:id="clearAll"
+        class="table-btn table-btn--clear"
+        variant="brand"
+        label="Clear Filters"
+        title="Clear Filters"
+        disabled="{!v.disableClearAll}"
+        onclick="{! c.handleClearAllFilters }"
+        iconName="utility:magicwand"
+        iconPosition="right"
+      />
+    </div>
+  </div>
+</aura:component>

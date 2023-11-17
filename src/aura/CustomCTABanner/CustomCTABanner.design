@@ -1,0 +1,49 @@
+<design:component label="Custom CTA Banner">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="descriptionField"
+    label="Description Field"
+    datasource="Headline, Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the text to display in the banner."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLabel"
+    label="Button Label"
+    description="Enter the label for the button."
+  ></design:attribute>
+  <design:attribute
+    name="buttonLink"
+    label="Button Link"
+    description="Enter a link for the button."
+  ></design:attribute>
+  <design:attribute
+    name="buttonStyle"
+    label="Button Style"
+    datasource="primary, secondary, tertiary, form, transparent, transparent-secondary, transparent-light, disabled"
+    description="Choose a style for the button."
+  ></design:attribute>
+  <design:attribute
+    name="openTab"
+    label="Open button link in new tab"
+    description="Check to open the button link in a new tab."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+  <design:attribute
+    name="showExtraPadding"
+    label="Apply Extra Padding"
+    description="Check to apply extra padding."
+  ></design:attribute>
+</design:component>

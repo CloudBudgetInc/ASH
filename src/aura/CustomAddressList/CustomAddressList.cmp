@@ -1,0 +1,481 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomAddressController"
+>
+  <aura:attribute name="addresses" type="Address__c[]" />
+  <aura:attribute name="contactId" type="String" />
+  <aura:attribute name="accountId" type="String" />
+  <aura:attribute name="isMember" type="Boolean" default="false" />
+  <aura:attribute name="isModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="isAddModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="isRemoveModalOpen" type="Boolean" default="false" />
+  <aura:attribute name="editId" type="String" />
+  <aura:attribute name="removeId" type="String" />
+  <aura:attribute name="loading" type="Boolean" default="false" />
+  <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+
+  <!-- Handlers -->
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="custom-address">
+    <aura:if isTrue="{!empty(v.addresses)}">
+      <div class="custom-address__empty">
+        <p>
+          There are no addresses to display.
+        </p>
+        <!-- Add Button -->
+        <lightning:button
+          class="custom-address__btn--empty"
+          variant="neutral"
+          label="Add Address"
+          title="Add Address"
+          onclick="{! c.openAddModal }"
+        />
+      </div>
+      <aura:set attribute="else">
+        <div class="custom-address__container">
+          <div class="custom-address__header">
+            <h2 class="custom-address__title">
+              Addresses
+            </h2>
+            <lightning:button
+              class="custom-address__btn--add"
+              variant="neutral"
+              label="Add Address"
+              title="Add Address"
+              onclick="{! c.openAddModal }"
+            />
+          </div>
+          <ul class="custom-address-list">
+            <aura:iteration items="{!v.addresses}" var="address">
+              <li class="custom-address-item">
+                <span class="custom-address__btns">
+                  <!-- Edit Button -->
+                  <lightning:button
+                    class="custom-address__btn"
+                    variant="neutral"
+                    label="Edit"
+                    name="{!address.Id}"
+                    title="Edit"
+                    onclick="{! c.openModal }"
+                  />
+                  <!-- Remove Button -->
+                  <lightning:button
+                    class="custom-address__btn"
+                    name="{!address.Id}"
+                    variant="brand"
+                    label="Remove"
+                    title="Remove"
+                    onclick="{! c.openRemoveModal }"
+                  />
+                </span>
+                <div class="custom-address-item__container">
+                  <p class="custom-address-item__street">
+                    {!address.Street__c}
+                  </p>
+                  <p>{!address.Street2__c}</p>
+                  <p>
+                    {!address.City__c},
+                    {!address.State__c} {!' '}
+                    {!address.PostalCode__c}
+                  </p>
+                  <p>{!address.Country_Lookup__r.Name}</p>
+                  <span class="custom-address-item__pills">
+                    <aura:if isTrue="{!address.Main__c}">
+                      <p class="custom-address-item__pill">Main</p>
+                    </aura:if>
+                    <aura:if isTrue="{!address.Billing__c}">
+                      <p class="custom-address-item__pill">Billing</p>
+                    </aura:if>
+                    <aura:if isTrue="{!address.Shipping__c}">
+                      <p class="custom-address-item__pill">Shipping</p>
+                    </aura:if>
+                    <aura:if isTrue="{!address.Member_Directory__c}">
+                      <p class="custom-address-item__pill">Member Directory</p>
+                    </aura:if>
+                    <aura:if isTrue="{!address.Find_a_Hematologist__c}">
+                      <p class="custom-address-item__pill">Find a Hematologist</p>
+                    </aura:if>
+                  </span>
+                </div>
+
+                <!-- START of EDIT Popup FORM -->
+                <div class="custom-address__modal">
+                  <aura:if
+                    isTrue="{!v.isModalOpen &amp;&amp; v.editId == address.Id}"
+                  >
+                    <!-- Modal/Popup Box starts here-->
+                    <section
+                      role="dialog"
+                      tabindex="-1"
+                      aria-labelledby="modal-heading-edit"
+                      aria-modal="true"
+                      aria-describedby="modal-content-id-edit"
+                      class="slds-modal slds-fade-in-open"
+                    >
+                      <div class="slds-modal__container">
+                        <!-- Modal/Popup Box Header Starts here-->
+                        <header class="slds-modal__header">
+                          <h2
+                            id="modal-heading-edit"
+                            class="slds-text-heading_medium slds-hyphenate"
+                          >
+                            Edit Address
+                          </h2>
+                          <lightning:buttonIcon
+                            iconName="utility:close"
+                            size="large"
+                            variant="bare"
+                            onclick="{! c.closeModal }"
+                            alternativeText="Close"
+                            title="Close"
+                          />
+                        </header>
+                        <div
+                          class="slds-modal__content slds-p-around_medium"
+                          id="modal-content-id-edit"
+                        >
+                          <lightning:recordEditForm
+                            aura:id="addressEditForm"
+                            recordId="{!address.Id}"
+                            objectApiName="Address__c"
+                            onload="{!c.setLoadingFalse}"
+                            onerror="{!c.setLoadingFalse}"
+                            onsubmit="{!c.submitEditDetails}"
+                            onsuccess="{!c.handleSuccess}"
+                          >
+                            <lightning:messages />
+                            <div class="slds-grid slds-wrap">
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Address_Type__c"
+                                required="true"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Street__c"
+                                required="true"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Street2__c"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="City__c"
+                                required="true"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="State__c"
+                                required="true"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="PostalCode__c"
+                                required="true"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Country_Lookup__c"
+                                style="display: none;"
+                              />
+                              <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                                <c:CustomLookup
+                                  objectAPIName="Country__c"
+                                  IconName="custom:custom26"
+                                  selectedRecord="{!v.selectedLookUpRecord}"
+                                  label="Country"
+                                  placeholder="Search Countries..."
+                                  required="true"
+                                />
+                              </div>
+                              <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" />
+                              <aura:if isTrue="{!v.isMember}">
+                                <lightning:inputField
+                                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                  fieldName="Member_Directory__c"
+                                />
+                              </aura:if>
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Main__c"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Billing__c"
+                              />
+                              <lightning:inputField
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                fieldName="Shipping__c"
+                              />
+                              <aura:if isTrue="{!v.isMember}">
+                                <lightning:inputField
+                                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                                  fieldName="Find_a_Hematologist__c"
+                                />
+                              </aura:if>
+                            </div>
+                            <aura:if isTrue="{!v.loading}">
+                              <div class="custom-address__spinner">
+                                <lightning:spinner
+                                  alternativeText="Loading"
+                                  size="small"
+                                  variant="brand"
+                                />
+                              </div>
+                            </aura:if>
+                            <div
+                              class="custom-address__actions slds-m-top_medium"
+                            >
+                              <lightning:button
+                                variant="neutral"
+                                label="Cancel"
+                                title="Cancel"
+                                onclick="{! c.closeModal }"
+                              />
+                              <lightning:button
+                                variant="brand"
+                                type="submit"
+                                name="save"
+                                label="Save"
+                              />
+                            </div>
+                          </lightning:recordEditForm>
+                        </div>
+                      </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                  </aura:if>
+                </div>
+                <!-- END of EDIT Popup FORM -->
+
+                <!-- START of DELETE Popup FORM -->
+                <div class="custom-address__modal">
+                  <aura:if
+                    isTrue="{!v.isRemoveModalOpen &amp;&amp; v.removeId == address.Id}"
+                  >
+                    <!-- Modal/Popup Box starts here-->
+                    <section
+                      role="dialog"
+                      tabindex="-1"
+                      aria-labelledby="modal-heading-delete"
+                      aria-modal="true"
+                      aria-describedby="modal-content-id-delete"
+                      class="slds-modal slds-fade-in-open"
+                    >
+                      <div class="slds-modal__container">
+                        <!-- Modal/Popup Box Header Starts here-->
+                        <header class="slds-modal__header">
+                          <h2
+                            id="modal-heading-delete"
+                            class="slds-text-heading_medium slds-hyphenate"
+                          >
+                            Remove Address
+                          </h2>
+                          <lightning:buttonIcon
+                            iconName="utility:close"
+                            size="large"
+                            variant="bare"
+                            onclick="{! c.closeRemoveModal }"
+                            alternativeText="Close"
+                            title="Close"
+                          />
+                        </header>
+                        <div
+                          class="slds-modal__content slds-p-around_medium"
+                          id="modal-content-id-delete"
+                        >
+                          <p>Are you sure you want to remove this address?</p>
+                          <aura:if isTrue="{!v.loading}">
+                            <div class="custom-address__spinner">
+                              <lightning:spinner
+                                alternativeText="Loading"
+                                size="small"
+                                variant="brand"
+                              />
+                            </div>
+                          </aura:if>
+                          <div
+                            class="custom-address__actions slds-m-top_medium"
+                          >
+                            <lightning:button
+                              variant="neutral"
+                              label="Cancel"
+                              title="Cancel"
+                              onclick="{! c.closeRemoveModal }"
+                            />
+                            <lightning:button
+                              variant="brand"
+                              name="delete"
+                              label="Remove"
+                              title="Remove"
+                              onclick="{! c.handleRemove }"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+                  </aura:if>
+                </div>
+                <!-- END of DELETE Popup FORM -->
+              </li>
+            </aura:iteration>
+          </ul>
+        </div>
+      </aura:set>
+    </aura:if>
+    <!-- START of ADD Popup FORM -->
+    <div class="custom-address__modal">
+      <aura:if isTrue="{!v.isAddModalOpen}">
+        <!-- Modal/Popup Box starts here-->
+        <section
+          role="dialog"
+          tabindex="-1"
+          aria-labelledby="modal-heading-add"
+          aria-modal="true"
+          aria-describedby="modal-content-id-add"
+          class="slds-modal slds-fade-in-open"
+        >
+          <div class="slds-modal__container">
+            <!-- Modal/Popup Box Header Starts here-->
+            <header class="slds-modal__header">
+              <h2
+                id="modal-heading-add"
+                class="slds-text-heading_medium slds-hyphenate"
+              >
+                Add Address
+              </h2>
+              <lightning:buttonIcon
+                iconName="utility:close"
+                size="large"
+                variant="bare"
+                onclick="{! c.closeAddModal }"
+                alternativeText="Close"
+                title="Close"
+              />
+            </header>
+            <div
+              class="slds-modal__content slds-p-around_medium"
+              id="modal-content-id-add"
+            >
+              <lightning:recordEditForm
+                aura:id="addressAddForm"
+                objectApiName="Address__c"
+                onload="{!c.setLoadingFalse}"
+                onerror="{!c.setLoadingFalse}"
+                onsubmit="{!c.submitAddDetails}"
+                onsuccess="{!c.handleSuccess}"
+              >
+                <lightning:messages />
+                <div class="slds-grid slds-wrap">
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-hide"
+                    fieldName="Person__c"
+                    disabled="true"
+                    value="{!v.contactId}"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Address_Type__c"
+                    required="true"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Street__c"
+                    required="true"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Street2__c"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="City__c"
+                    required="true"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="State__c"
+                    required="true"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="PostalCode__c"
+                    required="true"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Country_Lookup__c"
+                    style="display: none;"
+                  />
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12">
+                    <c:CustomLookup
+                      objectAPIName="Country__c"
+                      IconName="custom:custom26"
+                      selectedRecord="{!v.selectedLookUpRecord}"
+                      label="Country"
+                      placeholder="Search Countries..."
+                      required="true"
+                    />
+                  </div>
+                  <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12" />
+                  <aura:if isTrue="{!v.isMember}">
+                    <lightning:inputField
+                      class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                      fieldName="Member_Directory__c"
+                    />
+                  </aura:if>
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Main__c"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Billing__c"
+                  />
+                  <lightning:inputField
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                    fieldName="Shipping__c"
+                  />
+                  <aura:if isTrue="{!v.isMember}">
+                    <lightning:inputField
+                      class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                      fieldName="Find_a_Hematologist__c"
+                    />
+                  </aura:if>
+                </div>
+                <aura:if isTrue="{!v.loading}">
+                  <div class="custom-address__spinner">
+                    <lightning:spinner
+                      alternativeText="Loading"
+                      size="small"
+                      variant="brand"
+                    />
+                  </div>
+                </aura:if>
+                <div class="custom-address__actions slds-m-top_medium">
+                  <lightning:button
+                    variant="neutral"
+                    label="Cancel"
+                    title="Cancel"
+                    onclick="{! c.closeAddModal }"
+                  />
+                  <lightning:button
+                    variant="brand"
+                    type="submit"
+                    name="save"
+                    label="Save"
+                  />
+                </div>
+              </lightning:recordEditForm>
+            </div>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+      </aura:if>
+    </div>
+    <!-- END of ADD Popup FORM -->
+  </div>
+</aura:component>

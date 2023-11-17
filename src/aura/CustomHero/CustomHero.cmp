@@ -1,0 +1,78 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="backgroundImage" type="String" />
+  <aura:attribute name="heading" type="String" />
+  <aura:attribute name="headingField" type="String" default="Headline" />
+  <aura:attribute name="subheading" type="String" />
+  <aura:attribute name="subheadingField" type="String" default="None" />
+  <aura:attribute name="bannerLayout" type="Boolean" default="true" />
+  <aura:attribute name="showButton" type="Boolean" default="false" />
+  <aura:attribute name="buttonLabel" type="String" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{!v.bannerLayout ? 'hero-banner' : 'hero'}"
+    style="{!'background-image:url(' + v.backgroundImage +')'}"
+  >
+    <aura:if isTrue="{!v.bannerLayout}">
+      <aura:if isTrue="{!v.headingField == 'Headline' || v.headingField == 'Subheading'}">
+        <h1
+          class="hero__title"
+          data-title="{!v.record.contentNodes.Headline.value}"
+        >
+          <div class="hero__title-text">
+            <lightning:formattedRichText
+              class="h1"
+              value="{!v.heading}"
+            />
+          </div>
+        </h1>
+        <aura:set attribute="else">
+          <div
+            class="hero__title"
+            data-title="{!v.record.contentNodes.Headline.value}"
+          >
+            <div class="hero__title-text">
+              <lightning:formattedRichText
+                value="{!v.heading}"
+              />
+            </div>
+          </div>
+        </aura:set>
+      </aura:if>
+      <aura:set attribute="else">
+        <h1 class="hero__headline">
+          <lightning:formattedRichText
+            class="hero__headline-text h1"
+            value="{!v.record.contentNodes.Headline.value}"
+          />
+        </h1>
+        <div class="hero__body subheading">
+          <lightning:formattedRichText
+            class="hero__body-text subheading"
+            value="{!v.subheading}"
+          />
+        </div>
+        <aura:if isTrue="{!v.showButton}">
+          <aura:if isTrue="{!v.openTab}">
+            <a class="hero__button cta-button cta-button--transparent-light" href="{!v.buttonLink}" target="_blank">
+              {!v.buttonLabel}
+            </a>
+            <aura:set attribute="else">
+              <a class="hero__button cta-button cta-button--transparent-light" href="{!v.buttonLink}">
+                {!v.buttonLabel}
+              </a>
+            </aura:set>
+          </aura:if>
+        </aura:if>
+      </aura:set>
+    </aura:if>
+  </div>
+</aura:component>

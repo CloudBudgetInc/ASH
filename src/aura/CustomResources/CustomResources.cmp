@@ -1,0 +1,180 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="folderId" type="String" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="iconImage" type="Object" />
+  <aura:attribute
+    name="iconImageField"
+    type="String"
+    required="false"
+    default="None"
+  />
+  <aura:attribute name="headline" type="String" />
+  <aura:attribute
+    name="headlineField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="description" type="String" />
+  <aura:attribute
+    name="descriptionField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="resources" type="String" />
+  <aura:attribute
+    name="resourcesField"
+    type="String"
+    required="true"
+    default="Rich Text Field 3"
+  />
+  <aura:attribute name="buttonLabel" type="String" />
+  <aura:attribute name="buttonLink" type="String" />
+  <aura:attribute name="buttonStyle" type="String" default="primary" />
+  <aura:attribute name="buttonSize" type="String" default="small" />
+  <aura:attribute name="openTab" type="Boolean" default="false" />
+  <aura:attribute name="linkColor" type="String" default="red" />
+  <aura:attribute name="twoColumns" type="Boolean" default="false" />
+  <aura:attribute name="backgroundColor" type="String" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'custom-resources',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : '',
+      v.backgroundColor == '#fff' ? 'white' : ''
+    )}"
+  >
+    <aura:if isTrue="{!v.twoColumns}">
+      <div class="custom-resources__row component-container--padding-horizontal">
+        <div class="custom-resources__left">
+          <div class="custom-resources__heading">
+            <aura:if isTrue="{!v.iconImageField != 'None'}">
+              <img
+                class="custom-resources__icon"
+                src="{!v.iconImage.src}"
+                alt="{!v.iconImage.alt}"
+              />
+            </aura:if>
+            <lightning:formattedRichText
+              class="custom-resources__title"
+              value="{!v.headline}"
+            />
+          </div>
+          <lightning:formattedRichText
+            class="custom-resources__description"
+            value="{!v.description}"
+          />
+          <div class="custom-resources__list">
+            <c:CustomResourceList
+              folderId="{!v.folderId}"
+              showDate="false"
+              showVersion="false"
+            />
+          </div>
+          <aura:if isTrue="{!v.buttonLabel}">
+            <div class="custom-resources__cta-container">
+              <aura:if isTrue="{!v.openTab}">
+                <a
+                  class="{! join(' ',
+                    'custom-resources__cta cta-button',
+                    'cta-button--' + v.buttonStyle,
+                    'cta-button--' + v.buttonSize
+                  )}"
+                  href="{!v.buttonLink}"
+                  target="_blank"
+                >
+                  {!v.buttonLabel}
+                </a>
+                <aura:set attribute="else">
+                  <a
+                    class="{! join(' ',
+                      'custom-resources__cta cta-button',
+                      'cta-button--' + v.buttonStyle,
+                      'cta-button--' + v.buttonSize
+                    )}"
+                    href="{!v.buttonLink}"
+                  >
+                    {!v.buttonLabel}
+                  </a>
+                </aura:set>
+              </aura:if>
+            </div>
+          </aura:if>
+        </div>
+        <div
+          class="custom-resources__right"
+        >
+          <aura:if isTrue="{!v.resourcesField != 'None'}">
+            <lightning:formattedRichText
+              class="{! join(' ',
+                'custom-resources__resources',
+                'custom-resources__resources--' + v.linkColor
+              )}"
+              value="{!v.resources}"
+            />
+          </aura:if>
+          <img class="custom-resources__bubbles" src="{!$ContentAsset.ashrc_bubbles}" alt="ashrc bubbles" />
+        </div>
+      </div>
+      <aura:set attribute="else">
+        <div
+          class="custom-resources__wrapper"
+          style="{! empty(v.backgroundColor) ? '' : 'background:' + v.backgroundColor + ';'}"
+        >
+          <div class="custom-resources__container component-container--padding-horizontal">
+            <lightning:formattedRichText
+              class="custom-resources__title"
+              value="{!v.headline}"
+            />
+            <lightning:formattedRichText
+              class="custom-resources__description"
+              value="{!v.description}"
+            />
+            <aura:if isTrue="{!v.buttonLabel}">
+              <div class="custom-resources__cta-wrapper">
+                <aura:if isTrue="{!v.openTab}">
+                  <a
+                    class="{! join(' ',
+                      'custom-resources__cta cta-button',
+                      'cta-button--' + v.buttonStyle,
+                      'cta-button--' + v.buttonSize
+                    )}"
+                    href="{!v.buttonLink}"
+                    target="_blank"
+                  >
+                    {!v.buttonLabel}
+                  </a>
+                  <aura:set attribute="else">
+                    <a
+                      class="{! join(' ',
+                        'custom-resources__cta cta-button',
+                        'cta-button--' + v.buttonStyle,
+                        'cta-button--' + v.buttonSize
+                      )}"
+                      href="{!v.buttonLink}"
+                    >
+                      {!v.buttonLabel}
+                    </a>
+                  </aura:set>
+                </aura:if>
+              </div>
+            </aura:if>
+            <div class="custom-resources__list">
+              <c:CustomResourceList folderId="{!v.folderId}" />
+            </div>
+          </div>
+        </div>
+      </aura:set>
+    </aura:if>
+  </div>
+</aura:component>

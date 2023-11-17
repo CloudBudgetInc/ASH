@@ -1,0 +1,97 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomASHRCSubscriptionController"
+>
+  <aura:attribute name="contact" type="Contact" />
+  <aura:attribute name="submitted" type="Boolean" default="false" />
+  <aura:attribute name="error" type="String" />
+  <aura:attribute name="loading" type="Boolean" default="false" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div class="subscription component-container--padding-horizontal">
+    <h2 class="subscription__title">Subscription Management</h2>
+    <p class="subscription__copy">
+      Welcome to your email management center where you can manage your individual preferences for email:
+    </p>
+    <p class="subscription__email">
+      {!v.contact.Email}
+    </p>
+    <p class="subscription__copy subscription__separator">
+      Below, you can opt-in or out to receive emails from ASH RC. You can unsubscribe at any time, 
+      but please allow up to 24-hours for changes to your subscription preferences to be processed.
+    </p>
+    <div class="subscription__container">
+      <h3 class="subscription__container-title">
+        Subscribe or Unsubscribe to ALL Email Promotions and e-Newsletters
+      </h3>
+      <p class="subscription__copy">
+        If you would like to subscribe/unsubscribe from all current and future ASH RC email 
+        promotions and enewsletters, please press the corresponding checkbox and clicking 
+        the save button below:
+      </p>
+      <form class="subscription__form" onsubmit="{!c.handleSubscribe}">
+        <div class="subscription__form-group">
+          <label class="subscription__form-label">
+            <aura:if isTrue="{!!v.contact.ASHRC_Email__c}">
+              <input type="radio" id="subscribe" name="sub-radio" />
+              <aura:set attribute="else">
+                <input
+                  type="radio"
+                  id="subscribe"
+                  name="sub-radio"
+                  checked="checked"
+                />
+              </aura:set>
+            </aura:if>
+            <span class="subscription__form-label-text">Subscribe All</span>
+          </label>
+          <label class="subscription__form-label">
+            <aura:if isTrue="{!!v.contact.ASHRC_Email__c}">
+              <input
+                type="radio"
+                id="unsubscribe"
+                name="sub-radio"
+                checked="checked"
+              />
+              <aura:set attribute="else">
+                <input type="radio" id="unsubscribe" name="sub-radio" />
+              </aura:set>
+            </aura:if>
+            <span class="subscription__form-label-text">Unsubscribe All</span>
+          </label>
+        </div>
+        <p class="subscription__copy">
+          <strong>Please Note:</strong> By selecting SUBSCRIBE TO ALL, 
+          you will be enrolled to receive communications from ASH RC. 
+          If you elect to unsubscribe from all email promotions, ASH RC 
+          members may occassionaly receive informational communications 
+          from ASH RC about changes to their account or specific ASH RC programs 
+          and services that directly relate to their membership status.
+        </p>
+        <button
+          class="{! join(' ',
+            'cta-button cta-button--medium',
+            v.loading ? 'cta-button--disabled' : 'cta-button--form'
+          )}"
+          disabled="{!v.loading}"
+          type="submit"
+        >
+          Save
+        </button>
+        <aura:if isTrue="{!v.submitted}">
+          <p class="subscription__success">
+            Thank you, your information has been successfully updated.
+          </p>
+          <aura:set attribute="else">
+            <aura:if isTrue="{!!empty(v.error)}">
+              <p class="subscription__error">
+                {!v.error}
+              </p>
+            </aura:if>
+          </aura:set>
+        </aura:if>
+      </form>
+    </div>
+  </div>
+</aura:component>

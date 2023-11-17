@@ -1,0 +1,48 @@
+<design:component label="Custom Boilerplate Content">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Compact."
+  ></design:attribute>
+  <design:attribute
+    name="recordId"
+    label="Record Id"
+    description="Article detail record id."
+  ></design:attribute>
+  <design:attribute
+    name="showOnPressRelease"
+    label="Show Boilerplate for Press Releases"
+    description="Check to display this boilerplate content on Press Release detail pages."
+  ></design:attribute>
+  <design:attribute
+    name="showOnNews"
+    label="Show Boilerplate for News"
+    description="Check to display this boilerplate content on News detail pages."
+  ></design:attribute>
+  <design:attribute
+    name="showOnEvent"
+    label="Show Boilerplate for Event/Webinars"
+    description="Check to display this boilerplate content on Event/Webinar detail pages."
+  ></design:attribute>
+  <design:attribute
+    name="showHeadline"
+    label="Show Headline"
+    description="Check to display headline from CMS above body."
+  ></design:attribute>
+  <design:attribute
+    name="bodyField"
+    label="Body Text"
+    datasource="Rich Text Field 1, Rich Text Field 2"
+    description="Select the CMS field name for the body to display."
+  ></design:attribute>
+  <design:attribute
+    name="showTopPadding"
+    label="Apply Top Padding"
+    description="Check to apply top padding."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

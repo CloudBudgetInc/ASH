@@ -1,0 +1,100 @@
+<design:component label="Custom Demographics">
+  <design:attribute
+    name="title"
+    label="Heading"
+  />
+  <design:attribute
+    name="intro"
+    label="Introduction"
+    description="Optionally enter introduction text."
+  />
+  <design:attribute
+    name="learnMoreLabel"
+    label="Learn More Link Label"
+    description="Optionally enter a label for a learn more link."
+  />
+  <design:attribute
+    name="learnMoreLink"
+    label="Learn More Link"
+    description="Optionally enter a link to learn more."
+  />
+  <design:attribute
+    name="personalTitle"
+    label="Personal Info Heading"
+    description="Enter a heading for the personal info section that contains birthday and country info."
+  />
+  <design:attribute
+    name="personalHelp"
+    label="Personal Info Help Text"
+    description="Enter help text for the personal info section that will appear under the heading and in the edit form."
+  />
+  <design:attribute
+    name="genderTitle"
+    label="Gender Heading"
+    description="Enter a heading for the gender section."
+  />
+  <design:attribute
+    name="genderHelp"
+    label="Gender Help Text"
+    description="Enter help text for the gender section that will appear under the heading and in the edit form."
+  />
+  <design:attribute
+    name="pronounsTitle"
+    label="Pronouns Heading"
+    description="Enter a heading for the pronouns section."
+  />
+  <design:attribute
+    name="pronounsHelp"
+    label="Pronouns Help Text"
+    description="Enter help text for the pronouns section that will appear under the heading and in the edit form."
+  />
+  <design:attribute
+    name="orientationTitle"
+    label="Orientation Heading"
+    description="Enter a heading for the orientation section."
+  />
+  <design:attribute
+    name="orientationHelp"
+    label="Orientation Help Text"
+    description="Enter help text for the orientation section that will appear under the heading and in the edit form."
+  />
+  <design:attribute
+    name="disabilityTitle"
+    label="Disability Heading"
+    description="Enter a heading for the disability section."
+  />
+  <design:attribute
+    name="disabilityHelp"
+    label="Disability Help Text"
+    description="Enter help text for the disability section that will appear under the heading and in the edit form."
+  />
+  <design:attribute
+    name="ethnicityTitle"
+    label="Ethnicity Heading"
+    description="Enter a heading for the ethnicity section."
+  />
+  <design:attribute
+    name="ethnicityHelp"
+    label="Ethnicity Help Text"
+    description="Enter help text for the ethnicity section that will appear under the heading and in the edit form."
+  />
+  <design:attribute
+    name="msg"
+    label="Confirmation Message"
+    description="Enter a msg for when the user wants to opt-out after opting-in."
+  />
+  <design:attribute
+    name="editButtonLabel"
+    label="Edit Button Label"
+  />
+  <design:attribute
+    name="editFormTitle"
+    label="Edit Form Heading"
+    description="Enter text for the heading of the edit form popup."
+  />
+  <design:attribute
+    name="placeholder"
+    label="Placeholder Field Text"
+    description="Enter text to show when a field is empty."
+  />
+</design:component>

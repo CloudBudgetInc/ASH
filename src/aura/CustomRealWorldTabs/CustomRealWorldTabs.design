@@ -1,0 +1,66 @@
+<design:component label="Custom Real World Evidence Tabs">
+    <design:attribute
+      name="contentSlug"
+      label="Content Slug"
+      description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+    ></design:attribute>
+    <design:attribute
+      name="tab1Label"
+      label="Tab 1 Label"
+      description="Enter a label for the first tab."
+    ></design:attribute>
+    <design:attribute
+      name="tab2Label"
+      label="Tab 2 Label"
+      description="Enter a label for the second tab."
+    ></design:attribute>
+    <design:attribute
+      name="tab3Label"
+      label="Tab 3 Label"
+      description="Enter a label for the third tab."
+    ></design:attribute>
+    <design:attribute
+      name="tab4Label"
+      label="Tab 4 Label"
+      description="Enter a label for a fourth tab."
+    ></design:attribute>
+    <design:attribute
+      name="panel1DescField"
+      label="Panel 1 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the first panel."
+    ></design:attribute>
+    <design:attribute
+      name="panel2DescField"
+      label="Panel 2 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the second panel."
+    ></design:attribute>
+    <design:attribute
+      name="panel3DescField"
+      label="Panel 3 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the third panel."
+    ></design:attribute>
+    <design:attribute
+      name="panel4DescField"
+      label="Panel 4 Content Field"
+      datasource="None, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+      description="Select the CMS field name for the content to display in the fourth panel."
+    ></design:attribute>
+    <design:attribute
+      name="showHeaderTitle"
+      label="Show Header Title"
+      description="Check to show header title above tabs."
+    ></design:attribute>
+    <design:attribute
+      name="showTopPadding"
+      label="Apply Top Padding"
+      description="Check to apply top padding."
+    ></design:attribute>
+    <design:attribute
+      name="showBottomPadding"
+      label="Apply Bottom Padding"
+      description="Check to apply bottom padding."
+    ></design:attribute>
+  </design:component>

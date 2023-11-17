@@ -1,0 +1,18 @@
+.THIS.lookup {
+  padding: 0 4px 0.25rem;
+}
+
+.THIS .pillSize {
+  height: 32px;
+  width: 100%;
+}
+
+.THIS .lookup__error {
+  border: 2px solid #c23924;
+  border-radius: 0.25rem;
+  outline: none !important;
+}
+
+.THIS .lookup__error-msg {
+  color: #c23924;
+}

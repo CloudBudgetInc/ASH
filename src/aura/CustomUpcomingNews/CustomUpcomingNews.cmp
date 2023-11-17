@@ -1,0 +1,145 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="ManagedContentController"
+>
+  <aura:attribute name="contentSlug" type="String" required="true" />
+  <aura:attribute name="articleDetailUrl" type="String" default="/s/article" />
+  <aura:attribute name="record" type="ConnectApi.ManagedContentVersion" />
+  <aura:attribute name="iconImage" type="Object" />
+  <aura:attribute
+    name="iconImageField"
+    type="String"
+    required="true"
+    default="None"
+  />
+  <aura:attribute name="headline" type="String" />
+  <aura:attribute
+    name="headlineField"
+    type="String"
+    required="true"
+    default="Rich Text Field 1"
+  />
+  <aura:attribute name="body" type="String" />
+  <aura:attribute
+    name="bodyField"
+    type="String"
+    required="true"
+    default="Rich Text Field 2"
+  />
+  <aura:attribute name="topButtonLabel" type="String" />
+  <aura:attribute name="topButtonLink" type="String" />
+  <aura:attribute name="topButtonStyle" type="String" default="tertiary" />
+  <aura:attribute name="topButtonSize" type="String" default="small" />
+  <aura:attribute name="openTopTab" type="Boolean" default="false" />
+  <aura:attribute name="bottomButtonLabel" type="String" />
+  <aura:attribute name="bottomButtonLink" type="String" />
+  <aura:attribute name="bottomButtonStyle" type="String" default="primary" />
+  <aura:attribute name="bottomButtonSize" type="String" default="small" />
+  <aura:attribute name="openBottomTab" type="Boolean" default="false" />
+  <aura:attribute name="showTopPadding" type="Boolean" default="false" />
+  <aura:attribute name="showBottomPadding" type="Boolean" default="false" />
+
+  <!-- Article Panel Attributes -->
+  <aura:attribute name="topic" type="String" />
+
+  <aura:handler name="init" value="this" action="{!c.init}" />
+
+  <div
+    class="{! join(' ',
+      'upcoming-news component-container--padding-horizontal',
+      v.showTopPadding ? 'padding-top' : '',
+      v.showBottomPadding ? 'padding-bottom' : ''
+    )}"
+  >
+    <!-- @TODO: Handle Search/Filter -->
+    <!-- <lightning:button
+      aura:id="sort-filter"
+      class="upcoming-news__sort-filter-btn"
+      variant="brand"
+      label="Sort/Filter"
+      title="Sort/Filter"
+      onclick="{! c.handleSortFilter }"
+    /> -->
+    <div class="upcoming-news__container">
+      <div class="upcoming-news__left">
+        <div class="upcoming-news__heading">
+          <aura:if isTrue="{!v.iconImageField != 'None'}">
+            <img
+              class="upcoming-news__icon"
+              src="{!v.iconImage.src}"
+              alt="{!v.iconImage.alt}"
+            />
+          </aura:if>
+          <lightning:formattedRichText
+            class="upcoming-news__title"
+            value="{!v.headline}"
+          />
+        </div>
+        <lightning:formattedRichText
+          class="upcoming-news__body"
+          value="{!v.body}"
+        />
+        <aura:if isTrue="{!v.topButtonLabel}">
+            <aura:if isTrue="{!v.openTopTab}">
+              <a
+                class="{! join(' ',
+                  'upcoming-news__cta upcoming-news__cta--top cta-button',
+                  'cta-button--' + v.topButtonStyle,
+                  'cta-button--' + v.topButtonSize
+                )}"
+                href="{!v.topButtonLink}"
+                target="_blank"
+              >
+                {!v.topButtonLabel}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'upcoming-news__cta upcoming-news__cta--top cta-button',
+                    'cta-button--' + v.topButtonStyle,
+                    'cta-button--' + v.topButtonSize
+                  )}"
+                  href="{!v.topButtonLink}"
+                >
+                  {!v.topButtonLabel}
+                </a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+          <aura:if isTrue="{!v.bottomButtonLabel}">
+            <aura:if isTrue="{!v.openBottomTab}">
+              <a
+                class="{! join(' ',
+                  'upcoming-news__cta upcoming-news__cta--bottom cta-button',
+                  'cta-button--' + v.bottomButtonStyle,
+                  'cta-button--' + v.bottomButtonSize
+                )}"
+                href="{!v.bottomButtonLink}"
+                target="_blank"
+              >
+                {!v.bottomButtonLabel}
+              </a>
+              <aura:set attribute="else">
+                <a
+                  class="{! join(' ',
+                    'upcoming-news__cta upcoming-news__cta--bottom cta-button',
+                    'cta-button--' + v.bottomButtonStyle,
+                    'cta-button--' + v.bottomButtonSize
+                  )}"
+                  href="{!v.bottomButtonLink}"
+                >
+                  {!v.bottomButtonLabel}
+                </a>
+              </aura:set>
+            </aura:if>
+          </aura:if>
+      </div>
+      <div class="upcoming-news__right">
+        <c:CustomArticlePanel
+          baseUrl="{!v.articleDetailUrl}"
+          topic="{!v.topic}"
+        />
+      </div>
+    </div>
+  </div>
+</aura:component>

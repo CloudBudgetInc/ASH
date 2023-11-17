@@ -1,0 +1,36 @@
+<design:component label="Two Column Cards">
+  <design:attribute
+    name="contentSlug"
+    label="Content Slug"
+    description="Enter the content slug for the CMS content to display. The content type to use for this component is Website Content - Full."
+  ></design:attribute>
+  <design:attribute
+    name="leftHeadlineField"
+    label="Left Headline Field"
+    datasource="Headline, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the heading to display in the left card."
+  ></design:attribute>
+  <design:attribute
+    name="leftDescriptionField"
+    label="Left Description Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the description to display in the left card."
+  ></design:attribute>
+  <design:attribute
+    name="rightHeadlineField"
+    label="Right Headline Field"
+    datasource="Headline, Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the heading to display in the right card."
+  ></design:attribute>
+  <design:attribute
+    name="rightDescriptionField"
+    label="Right Descriptions Field"
+    datasource="Subheading, Rich Text Field 1, Rich Text Field 2, Rich Text Field 3, Rich Text Field 4"
+    description="Select the CMS field name for the description to display in the right card."
+  ></design:attribute>
+  <design:attribute
+    name="showBottomPadding"
+    label="Apply Bottom Padding"
+    description="Check to apply bottom padding."
+  ></design:attribute>
+</design:component>

@@ -1,0 +1,205 @@
+<aura:component
+  implements="forceCommunity:availableForAllPageTypes"
+  controller="CustomFindHematologistController"
+>
+<!-- Design Attributes -->
+<aura:attribute name="title" type="String" default="Find a Hematologist (FAH)" />
+<aura:attribute name="introMsg" type="String" default="To participate in the directory, you must select an address and phone number to be displayed. Please go to the Address Book tab to select an address." />
+<aura:attribute name="nonMemberMsg" type="String" default="To participate in the directory, you must be an ASH member." />
+<aura:attribute name="participateMsg" type="String" default="ASH invites you to sign up for Find a Hematologist, a public directory through which patients can search for a hematologist in their area or physicians can identify hematologists to refer their patients to. There is no cost to be listed in this directory, and as a member of ASH you will be able to opt out at any time." />
+<aura:attribute name="serviceMsg" type="String" default="The services listed below will be displayed in the directory." />
+<aura:attribute name="editBtnLabel" type="String" default="Edit Services" />
+<aura:attribute name="checkboxLabel" type="String" default="Yes, I would like to participate in Find a Hematologist" />
+<aura:attribute name="editFormTitle" type="String" default="Edit Service Offerings" />
+
+<!-- API Attributes -->
+<aura:attribute name="contact" type="Contact" />
+<aura:attribute name="fah" type="Address__c" />
+<aura:attribute name="isMember" type="Boolean" default="true" />
+<aura:attribute name="hideNotification" type="Boolean" />
+<aura:attribute name="showOfferings" type="Boolean" />
+
+<!-- Local Attributes -->
+<aura:attribute name="isModalOpen" type="Boolean" />
+<aura:attribute name="loading" type="Boolean" />
+
+<!-- Handlers -->
+<aura:handler name="init" value="this" action="{!c.init}" />
+
+<div class="custom-fah">
+  <div class="custom-fah__header">
+    <h2 class="custom-fah__title">
+      {!v.title}
+    </h2>
+  </div>
+  <aura:if isTrue="{! !v.hideNotification}">
+    <aura:if isTrue="{!!v.isMember}">
+        <p class="custom-fah__intro">{!v.nonMemberMsg}</p>
+      <aura:set attribute="else">
+        <p class="custom-fah__intro">
+          To participate in the directory, you must select an address and phone number to be displayed.<br />
+          Please go to the Address Book tab to select an address and to the General tab to add an FAH phone number.
+        </p>
+      </aura:set>
+    </aura:if>
+
+    <aura:set attribute="else">
+      <section>
+        <p class="custom-fah__section-title">Participate in the Find a Hematologist Directory</p>
+        <p class="custom-fah__msg">
+          ASH invites you to sign up for 
+          <a href="https://www.hematology.org/education/patients/find-a-hematologist" target="_blank">Find a Hematologist</a>, 
+          a public directory through which patients can search for a hematologist in their area or physicians can identify 
+          hematologists to refer their patients to. There is no cost to be listed in 
+          this directory, and as a member of ASH you will be able to opt out at any time.
+        </p>
+        <div class="slds-form-element custom-fah__opt-in">
+          <div class="slds-form-element__control">
+            <div class="slds-checkbox">
+              <input
+                type="checkbox"
+                name="FAH_Opt_In__c"
+                id="FAH_Opt_In__c"
+                value="FAH_Opt_In__c"
+                checked="{!v.contact.FAH_Opt_In__c}"
+                onchange="{!c.handleOptIn}"
+              />
+              <label class="slds-checkbox__label" for="FAH_Opt_In__c">
+                <span class="slds-checkbox_faux"></span>
+                <span class="slds-form-element__label">{!v.checkboxLabel}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="custom-fah__section-header">
+          <p class="custom-fah__section-title-service">Service Offerings</p>
+          <aura:if isTrue="{!v.hideNotification}">
+            <lightning:button
+              class="custom-fah__btn"
+              variant="neutral"
+              label="{!v.editBtnLabel}"
+              title="{!v.editBtnLabel}"
+              onclick="{! c.openModal }"
+            />
+          </aura:if>
+        </div>
+        <p class="custom-fah__msg">
+          {!v.serviceMsg}
+        </p>
+        <aura:if isTrue="{! !v.contact.Accept_New_Patients__c 
+          &amp;&amp; !v.contact.Perform_Case_Reviews__c
+          &amp;&amp; !v.contact.Provide_Second_Opinions__c}">
+          <p class="custom-fah__msg--empty">No service offerings specified.</p>
+          <aura:set attribute="else">
+            <span class="custom-fah-item__pills">
+              <aura:if isTrue="{!v.contact.Accept_New_Patients__c}">
+                <p class="custom-fah-item__pill">I accept new patients</p>
+              </aura:if>
+              <aura:if isTrue="{!v.contact.Perform_Case_Reviews__c}">
+                <p class="custom-fah-item__pill">I perform case reviews</p>
+              </aura:if>
+              <aura:if isTrue="{!v.contact.Provide_Second_Opinions__c}">
+                <p class="custom-fah-item__pill">I provide second opinions</p>
+              </aura:if>
+            </span>
+          </aura:set>
+        </aura:if>
+      </section>
+    </aura:set>
+  </aura:if>
+
+  <!-- START of EDIT Popup FORM -->
+  <div>
+    <aura:if isTrue="{!v.isModalOpen}">
+      <!-- Modal/Popup Box starts here-->
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-edit"
+        aria-modal="true"
+        aria-describedby="modal-content-id-edit"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <!-- Modal/Popup Box Header Starts here-->
+          <header class="slds-modal__header">
+            <h2
+              id="modal-heading-edit"
+              class="slds-text-heading_medium slds-hyphenate"
+            >
+              {!v.editFormTitle}
+            </h2>
+            <lightning:buttonIcon
+              iconName="utility:close"
+              size="large"
+              variant="bare"
+              onclick="{! c.closeModal }"
+              alternativeText="Close"
+              title="Close"
+            />
+          </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-edit"
+          >
+            <lightning:recordEditForm
+              recordId="{!v.contact.Id}"
+              objectApiName="Contact"
+              onerror="{!c.handleError}"
+              onload="{!c.setLoadingFalse}"
+              onsubmit="{!c.submitDetails}"
+              onsuccess="{!c.handleSuccess}"
+            >
+              <div class="slds-grid slds-wrap">
+                <h2 class="custom-fah__title custom-fah__title--form slds-col slds-size_1-of-1">
+                  Service Offerings
+                </h2>
+                <p class="custom-fah__msg--form slds-col slds-size_1-of-1">
+                  {!v.serviceMsg}
+                </p>
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                  fieldName="Accept_New_Patients__c"
+                />
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                  fieldName="Perform_Case_Reviews__c"
+                />
+                <lightning:inputField
+                  class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12"
+                  fieldName="Provide_Second_Opinions__c"
+                />
+              </div>
+              <aura:if isTrue="{!v.loading}">
+                <div class="custom-fah__spinner">
+                  <lightning:spinner alternativeText="Loading" size="small" variant="brand" />
+                </div>
+              </aura:if>
+              <lightning:messages />
+              <div class="custom-fah__actions slds-m-top_medium">
+                <lightning:button
+                  variant="neutral"
+                  label="Cancel"
+                  title="Cancel"
+                  onclick="{! c.closeModal }"
+                />
+                <lightning:button
+                  variant="brand"
+                  type="submit"
+                  name="save"
+                  label="Save"
+                />
+              </div>
+            </lightning:recordEditForm>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+  </div>
+  <!-- END of EDIT Popup FORM -->
+</div>
+</aura:component>
