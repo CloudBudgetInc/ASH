@@ -27,6 +27,8 @@ const subtractReportLines = (baseRL, currentRL) => {
 		normalizeRL(baseRL);
 	} catch (e) {
 		_message('error', 'Subtract Report Lines Error : ' + e);
+		console.error('BASE:' + JSON.stringify(baseRL));
+		console.error('CURRENT:' + JSON.stringify(currentRL));
 	}
 };
 
@@ -54,6 +56,10 @@ const calculateDifference = (reportLines) => {
 	} catch (e) {
 		_message('error', 'Calculate Difference Error ' + e);
 	}
+};
+
+const roundToTwoDecimals = (num) => {
+	return Math.round(num * 100) / 100;
 };
 
 const round = (n) => Number(n.toFixed(2));
