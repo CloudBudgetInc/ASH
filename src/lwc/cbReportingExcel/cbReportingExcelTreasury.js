@@ -9,16 +9,15 @@ import {
 	SIMPLE_BORDERS,
 	TOTAL_NET_LINE_FILL
 } from "./cbReportingExcelStyles"
-import {_message, _prompt, _setCell} from 'c/cbUtils';
-import {addSpecialTableToMainSheet} from "./cbReportingExcelExhibitSpecialTable";
-import {sumReportLines} from "./cbReportingExcelUtils";
+import {_getCopy, _message, _prompt, _setCell} from 'c/cbUtils';
+import {subtractReportLines, sumReportLines} from "./cbReportingExcelUtils";
 
 
 let _this;
 const setTreasuryContext = (context) => _this = context;
 let separatedReportingBalances = {};// reporting balances separated by Dimension 2, key is Dim2 Name
 const FIRST_SHEET_NAME = 'Summary';
-let FILE_NAME = "ASH Budget Exhibit";
+let FILE_NAME = "Treasury Report ";
 
 const SHEET_MAPPING = {
 	'Annual Meeting (353)': 'Annual Meeting',
@@ -52,7 +51,8 @@ const SHEET_TYPE = {
 const manageDataAndGenerateTreasuryFile = () => {
 	createDataSetsSeparatedBySheets();
 	convertReportingBalancesToReportLines();
-	console.log('separatedReportingBalances = ' + JSON.stringify(separatedReportingBalances));
+	generateExcelFile();
+	//console.log('separatedReportingBalances = ' + JSON.stringify(separatedReportingBalances));
 };
 
 /**
@@ -97,7 +97,7 @@ const convertReportingBalancesToReportLines = () => {
 		let sheetType = SHEET_TYPE[sheetName];
 		let reportLines = getReportLinesFromReportingBalances(reportingBalances, sheetType);
 		if (sheetType === 'summary') {
-			addSummarySubTotalLines(reportLines);
+			reportLines = addSummarySubTotalLines(reportLines);
 		}
 		//reportLines = addSubTotalLines(reportLines);
 		//reportLines = calculateDifference(reportLines);
@@ -177,22 +177,27 @@ const addSummarySubTotalLines = (reportLines) => {
 	reportLines.sort(compareFn);
 	const reportLinesGroup = {};
 	reportLines.forEach(rl => {
+		console.log('rl.incomeStatementGroup BEFORE = ' + rl.incomeStatementGroup);
 		try {
 			if (rl.incomeStatementGroup !== 'Income') rl.incomeStatementGroup = 'Expense';
-			let key1 = rl.dim2Name === 'Awards (352)' ? rl.dim2Name + rl.dim3Name + rl.incomeStatementGroup : rl.dim2Name + rl.incomeStatementGroup;
-			let key2 = rl.dim2Name === 'Awards (352)' ? rl.dim2Name + rl.incomeStatementGroup : false;
+			const lineIsAward = rl.dim2Name === 'Awards (352)';
+			let key1 = lineIsAward ? rl.dim2Name + rl.dim3Name + rl.incomeStatementGroup : rl.dim2Name + rl.incomeStatementGroup; // key of simple line
+			let key2 = lineIsAward ? rl.dim2Name + rl.incomeStatementGroup : false;// key of sum Awards line
 			rl.key1 = key1;
 			rl.key2 = key2;
+			if (lineIsAward) rl.isSubline = true;
 
-			rl.label = rl.dim2Name === 'Awards (352)' ? '>> ' + rl.dim3Name : rl.dim2Name;
+			rl.label = lineIsAward ? '   ' + rl.dim3Name : rl.dim2Name;
 
 			if (key2) {
 				const groupRL = reportLinesGroup[key2];
+				const rlCopy = _getCopy(rl);
+				rlCopy.isSubline = false;
 				if (!groupRL) {
-					rl.label = 'Awards (352)';
-					reportLinesGroup[key2] = rl;
+					rlCopy.label = 'Awards TOTAL';
+					reportLinesGroup[key2] = rlCopy;
 				} else {
-					sumReportLines(groupRL, rl);
+					sumReportLines(groupRL, rlCopy);
 				}
 			}
 
@@ -202,6 +207,7 @@ const addSummarySubTotalLines = (reportLines) => {
 			} else {
 				sumReportLines(groupRL, rl);
 			}
+			console.log('rl.incomeStatementGroup AFTER = ' + rl.incomeStatementGroup);
 		} catch (e) {
 			_message('error', 'Add Summary Sub Total Lines Error : ' + e);
 		}
@@ -209,17 +215,22 @@ const addSummarySubTotalLines = (reportLines) => {
 	//console.log('reportLinesGroup = ' + JSON.stringify(reportLinesGroup));
 	reportLines = Object.values(reportLinesGroup);
 	const incomeLines = reportLines.filter(rl => rl.incomeStatementGroup === 'Income');
-	const expenseLines = reportLines.filter(rl => rl.incomeStatementGroup !== 'Expense' && !rl.dim2Name.includes('Focus Fellowship Training Program'));
+	const expenseLines = reportLines.filter(rl => rl.incomeStatementGroup !== 'Income' && !rl.dim2Name.includes('Focus Fellowship Training Program'));
 	const FFTPLines = reportLines.filter(rl => rl.dim2Name.includes('Focus Fellowship Training Program'));
+	const FFTPL = FFTPLines.length > 0 ? FFTPLines[0] : undefined;
+	FFTPL.incomeStatementGroup = 'Reserve Expenses';
 	const totalIncomeRL = {
 		actual: 0,
 		approvedBudget: 0,
 		processedBudget: 0,
 		processedVsApproved: 0,
 		processedVsApprovedPercent: 0,
-		label: 'Income Total'
+		label: 'Income Total',
+		type: 'programProject'
 	};
-	incomeLines.forEach(rl => sumReportLines(totalIncomeRL, rl));
+	incomeLines.forEach(rl => {
+		if (!rl.isSubline) sumReportLines(totalIncomeRL, rl);
+	});
 
 	const totalExpenseRL = {
 		actual: 0,
@@ -227,15 +238,37 @@ const addSummarySubTotalLines = (reportLines) => {
 		processedBudget: 0,
 		processedVsApproved: 0,
 		processedVsApprovedPercent: 0,
-		label: 'Expense Total'
+		label: 'Expense Total',
+		type: 'programProject'
 	};
-	expenseLines.forEach(rl => sumReportLines(totalExpenseRL, rl));
+	expenseLines.forEach(rl => {
+		if (!rl.isSubline) sumReportLines(totalExpenseRL, rl);
+	});
+	const totalNetIncomeBeforeFFTP = _getCopy(totalIncomeRL);
+	totalNetIncomeBeforeFFTP.label = 'Total Net Income from Operations';
+	subtractReportLines(totalNetIncomeBeforeFFTP, totalExpenseRL);
 
-	reportLines = [...incomeLines, totalIncomeRL, ...expenseLines, totalExpenseRL];
+	const totalExpenseAfterFFTP = _getCopy(totalExpenseRL);
+	totalExpenseAfterFFTP.label = 'Total Expense from Operations and Reserves';
+	sumReportLines(totalExpenseAfterFFTP, FFTPL);
+
+	const totalNetIncomeAfterFFTP = _getCopy(totalIncomeRL);
+	totalNetIncomeAfterFFTP.label = 'Total Net Income from Operations and Reserves';
+	subtractReportLines(totalNetIncomeAfterFFTP, totalExpenseAfterFFTP);
+	/// clean extra income statement
+	incomeLines.forEach((rl, i) => rl.incomeStatementGroup = i ? null : rl.incomeStatementGroup);
+	expenseLines.forEach((rl, i) => rl.incomeStatementGroup = i ? null : rl.incomeStatementGroup);
+
+	// null is empty row
+	reportLines = [...incomeLines, totalIncomeRL, null, ...expenseLines, totalExpenseRL, null, totalIncomeRL, totalExpenseRL, totalNetIncomeBeforeFFTP, null,
+		FFTPL, null, totalIncomeRL, totalExpenseAfterFFTP, totalNetIncomeAfterFFTP];
+
 	//console.log('incomeLines = ' + JSON.stringify(incomeLines));
 	console.log('reportLines = ' + JSON.stringify(reportLines));
 	//console.log('FFTPLines = ' + JSON.stringify(FFTPLines));
+	return reportLines;
 };
+
 
 const addCommonSubTotalLines = (reportLines) => {
 
@@ -289,7 +322,6 @@ const getNewProgramSubLine = (rl) => {
  */
 const generateExcelFile = async () => {
 	try {
-
 		_this.showSpinner = true;
 		let fileName = `${FILE_NAME} ${_this.selectedBY}`;
 		fileName = await _prompt("Type the file name", fileName, 'File Name');
@@ -302,12 +334,13 @@ const generateExcelFile = async () => {
 		//Object.keys(this.separatedReportingBalances).forEach(name => console.log('SHEET NAME : ' + name));
 		Object.keys(separatedReportingBalances).forEach(sheetName => {
 			const lines = separatedReportingBalances[sheetName];
-			let dim1Sheet = workbook.addWorksheet(sheetName, {views: [{state: "frozen", ySplit: 1, xSplit: 0}]});
-			addHeaderAndSetColumnWidth(dim1Sheet);
-			addReportLines(dim1Sheet, lines);
+			let sheetType = SHEET_TYPE[sheetName];
+			let excelSheet = workbook.addWorksheet(sheetName, {views: [{state: "frozen", ySplit: 1, xSplit: 0}]});
+			if (sheetType === 'summary') {
+				addSummaryHeaderAndSetColumnWidth(excelSheet);
+				addSummaryReportLines(excelSheet, lines);
+			}
 		});
-
-		addSpecialTableToMainSheet(workbook.getWorksheet(FIRST_SHEET_NAME), separatedReportingBalances[FIRST_SHEET_NAME]);
 
 		let data = await workbook.xlsx.writeBuffer();
 		const blob = new Blob([data], {type: "application/octet-stream"});
@@ -323,31 +356,25 @@ const generateExcelFile = async () => {
 	}
 };
 
-let HEADER_PARAMS;
-const getHeaderParams = () => {
-	if (!HEADER_PARAMS) {
-		const previousBY = _this.selectedBY - 1;
-		const nextBY = +_this.selectedBY + 1;
-		HEADER_PARAMS = [
-			{title: 'Program-Project', width: 50},
-			{title: 'Income Statement Group', width: 35},
-			{title: 'General Ledger Name', width: 35},
-			{title: 'Account-Subaccount', width: 20},
-			{title: 'Label', width: 47},
-			{title: `${previousBY} Actual`, width: 15},
-			{title: `${_this.selectedBY} Approved Budgeted`, width: 22},
-			{title: `${nextBY} Proposed Budgeted`, width: 22},
-			{title: `Proposed FY${nextBY} vs Approved FY${_this.selectedBY} ($)`, width: 32},
-			{title: `Proposed FY${nextBY} vs Approved FY${_this.selectedBY} (%)`, width: 32}
-		];
-	}
-	return HEADER_PARAMS;
+const getSummaryHeaderParams = () => {
+	const previousBY = _this.selectedBY - 1;
+	const nextBY = +_this.selectedBY + 1;
+	const summaryHeaders = [
+		{title: 'Type', width: 35},
+		{title: 'Label', width: 50},
+		{title: `${previousBY} Actual`, width: 15},
+		{title: `${_this.selectedBY} Approved Budgeted`, width: 22},
+		{title: `${nextBY} Proposed Budgeted`, width: 22},
+		{title: `Proposed FY${nextBY} vs Approved FY${_this.selectedBY} ($)`, width: 32},
+		{title: `Proposed FY${nextBY} vs Approved FY${_this.selectedBY} (%)`, width: 32}
+	];
+	return summaryHeaders;
 };
 
-const addHeaderAndSetColumnWidth = (sheet) => {
+const addSummaryHeaderAndSetColumnWidth = (sheet) => {
 	try {
 		const headerRow = sheet.getRow(1);
-		getHeaderParams().forEach((h, i) => {
+		getSummaryHeaderParams().forEach((h, i) => {
 			try {
 				const headerCell = headerRow.getCell(i + 1);
 				_setCell(headerCell, h.title, HEADER_FILL, HEADER_FONT, null, null, SIMPLE_BORDERS);
@@ -361,26 +388,26 @@ const addHeaderAndSetColumnWidth = (sheet) => {
 	}
 };
 
-const FIELD_ORDER = ['programProject', 'incomeStatementGroup', 'generalLedgerName', 'accountSubAccount', 'label', 'actual', 'approvedBudget', 'processedBudget', 'processedVsApproved', 'processedVsApprovedPercent'];
+const SUMMARY_FIELD_ORDER = ['incomeStatementGroup', 'label', 'actual', 'approvedBudget', 'processedBudget', 'processedVsApproved', 'processedVsApprovedPercent'];
 
-const addReportLines = (sheet, lines) => {
+const addSummaryReportLines = (sheet, lines) => {
 	try {
 		let rowPosition = 2;
-		let rowFill, rowFont, previousLineWasProgramSubtotal, previousLineWasSimple;
+		let rowFill, rowFont;
 		lines.forEach(line => {
-			if (previousLineWasProgramSubtotal) rowPosition++;
+			if (!line) {
+				rowPosition++;
+				return null;
+			}
 			const excelRow = sheet.getRow(rowPosition++);
 			rowFill = getReportLineFill(line.type);
 			rowFont = getReportLineFont(line.type);
-			if (previousLineWasSimple) line.programProject = line.incomeStatementGroup = undefined;
-			FIELD_ORDER.forEach((f, i) => {
+			SUMMARY_FIELD_ORDER.forEach((f, i) => {
 				const cell = excelRow.getCell(i + 1);
 				_setCell(cell, line[f], rowFill, rowFont, null, null, SIMPLE_BORDERS);
 				if (['actual', 'approvedBudget', 'processedBudget', 'processedVsApproved'].includes(f)) cell.numFmt = CURRENCY_FMT;
 				if (f === 'processedVsApprovedPercent') cell.numFmt = PERCENT_FMT;
 			});
-			previousLineWasProgramSubtotal = line.type === 'program';
-			previousLineWasSimple = line.type === undefined;
 		})
 	} catch (e) {
 		_message('error', 'Add Report Lines Error ' + e);
