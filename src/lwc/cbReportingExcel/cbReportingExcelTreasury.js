@@ -21,13 +21,13 @@ let FILE_NAME = "Treasury Report ";
 
 const SHEET_MAPPING = {
 	'Annual Meeting (353)': 'Annual Meeting',
-	'Publications (366)': 'Pubs',
-	'Blood Advances (384)': 'Blood',
-	'Blood Neoplasia (385)': 'Blood',
-	'Blood VTH (387)': 'Blood',
-	'Clinical News Magazine (376)': 'Blood',
-	'How I Treat (149)': 'Blood',
-	'Self Assessment Program (354)': 'Blood',
+	'Publications (366)': 'Blood',
+	'Blood Advances (384)': 'Pubs',
+	'Blood Neoplasia (385)': 'Pubs',
+	'Blood VTH (387)': 'Pubs',
+	'Clinical News Magazine (376)': 'Pubs',
+	'How I Treat (149)': 'Pubs',
+	'Self Assessment Program (354)': 'Pubs',
 	'LLC (363)': 'HDQ',
 	'Highlights of ASH (355)': 'Small Meetings',
 	'Meeting on Genomic Editing (382)': 'Small Meetings',
@@ -98,9 +98,12 @@ const convertReportingBalancesToReportLines = () => {
 		let reportLines = getReportLinesFromReportingBalances(reportingBalances, sheetType);
 		if (sheetType === 'summary') {
 			reportLines = addSummarySubTotalLines(reportLines);
+		} else if (sheetType === 'pairs') {
+			//console.log('>>' + JSON.stringify(reportLines));
+		} else {
+			reportLines = addSimpleSubTotalLines(reportLines);
+			console.log('>>' + JSON.stringify(reportLines));
 		}
-		//reportLines = addSubTotalLines(reportLines);
-		//reportLines = calculateDifference(reportLines);
 		separatedReportingBalances[sheetName] = reportLines;
 	});
 };
@@ -177,7 +180,6 @@ const addSummarySubTotalLines = (reportLines) => {
 	reportLines.sort(compareFn);
 	const reportLinesGroup = {};
 	reportLines.forEach(rl => {
-		console.log('rl.incomeStatementGroup BEFORE = ' + rl.incomeStatementGroup);
 		try {
 			if (rl.incomeStatementGroup !== 'Income') rl.incomeStatementGroup = 'Expense';
 			const lineIsAward = rl.dim2Name === 'Awards (352)';
@@ -207,7 +209,6 @@ const addSummarySubTotalLines = (reportLines) => {
 			} else {
 				sumReportLines(groupRL, rl);
 			}
-			console.log('rl.incomeStatementGroup AFTER = ' + rl.incomeStatementGroup);
 		} catch (e) {
 			_message('error', 'Add Summary Sub Total Lines Error : ' + e);
 		}
@@ -264,18 +265,143 @@ const addSummarySubTotalLines = (reportLines) => {
 		FFTPL, null, totalIncomeRL, totalExpenseAfterFFTP, totalNetIncomeAfterFFTP];
 
 	//console.log('incomeLines = ' + JSON.stringify(incomeLines));
-	console.log('reportLines = ' + JSON.stringify(reportLines));
+	//console.log('reportLines = ' + JSON.stringify(reportLines));
 	//console.log('FFTPLines = ' + JSON.stringify(FFTPLines));
 	return reportLines;
 };
 
+/**
+ * SIMPLE LINES
+ */
+const addSimpleSubTotalLines = (reportLines) => {
+	const compareFn = (a, b) => {
+		const first = a.incomeStatementGroup + a?.accName;
+		const second = b.incomeStatementGroup + b?.accName;
+		return first < second ? -1 : (first > second ? 1 : 0);
+	};
+	reportLines.sort(compareFn);
+	const reportLinesGroup = {};
+	reportLines.forEach(rl => {
+		try {
+			if (rl.incomeStatementGroup !== 'Income') rl.incomeStatementGroup = 'Expense';
+			let key1 = rl.incomeStatementGroup + rl.accName; // key of simple line
+			rl.label = rl.accName;
+			const groupRL = reportLinesGroup[key1];
+			if (!groupRL) {
+				reportLinesGroup[key1] = rl;
+			} else {
+				sumReportLines(groupRL, rl);
+			}
+		} catch (e) {
+			_message('error', 'Add Simple Sub Total Lines Error : ' + e);
+		}
+	});
+	//console.log('reportLinesGroup = ' + JSON.stringify(reportLinesGroup));
+	reportLines = Object.values(reportLinesGroup);
+	const incomeLines = reportLines.filter(rl => rl.incomeStatementGroup === 'Income');
+	const expenseLines = reportLines.filter(rl => rl.incomeStatementGroup !== 'Income');
+	const totalIncomeRL = {
+		actual: 0,
+		approvedBudget: 0,
+		processedBudget: 0,
+		processedVsApproved: 0,
+		processedVsApprovedPercent: 0,
+		label: 'Income Total',
+		type: 'programProject'
+	};
+	incomeLines.forEach(rl => sumReportLines(totalIncomeRL, rl));
 
-const addCommonSubTotalLines = (reportLines) => {
+	const totalExpenseRL = {
+		actual: 0,
+		approvedBudget: 0,
+		processedBudget: 0,
+		processedVsApproved: 0,
+		processedVsApprovedPercent: 0,
+		label: 'Expense Total',
+		type: 'programProject'
+	};
+	expenseLines.forEach(rl => sumReportLines(totalExpenseRL, rl));
+	const totalNetIncome = _getCopy(totalIncomeRL);
+	totalNetIncome.label = 'Total Net Income from Operations';
+	subtractReportLines(totalNetIncome, totalExpenseRL);
 
+	/// clean extra income statement
+	incomeLines.forEach((rl, i) => rl.incomeStatementGroup = i ? null : rl.incomeStatementGroup);
+	expenseLines.forEach((rl, i) => rl.incomeStatementGroup = i ? null : rl.incomeStatementGroup);
+
+	// null is empty row
+	reportLines = [...incomeLines, totalIncomeRL, null, ...expenseLines, totalExpenseRL, null, totalIncomeRL, totalExpenseRL, totalNetIncome];
+
+	//console.log('incomeLines = ' + JSON.stringify(incomeLines));
+	//console.log('reportLines = ' + JSON.stringify(reportLines));
+	//console.log('FFTPLines = ' + JSON.stringify(FFTPLines));
+	return reportLines;
 };
 
-const addSubTotalLines = (reportLines) => {
+/**
+ * PAIR LINES
+ */
+const addPairSubTotalLines = (reportLines) => {
+	const compareFn = (a, b) => {
+		const first = a.incomeStatementGroup + a?.dim3Name;
+		const second = b.incomeStatementGroup + b?.dim3Name;
+		return first < second ? -1 : (first > second ? 1 : 0);
+	};
+	reportLines.sort(compareFn);
+	const reportLinesGroup = {};
+	reportLines.forEach(rl => {
+		try {
+			if (rl.incomeStatementGroup !== 'Income') rl.incomeStatementGroup = 'Expense';
+			let key1 = rl.incomeStatementGroup + rl.dim3Name; // key of simple line
+			rl.label = rl.dim3Name;
+			const groupRL = reportLinesGroup[key1];
+			if (!groupRL) {
+				reportLinesGroup[key1] = rl;
+			} else {
+				sumReportLines(groupRL, rl);
+			}
+		} catch (e) {
+			_message('error', 'Add Simple Sub Total Lines Error : ' + e);
+		}
+	});
+	//console.log('reportLinesGroup = ' + JSON.stringify(reportLinesGroup));
+	reportLines = Object.values(reportLinesGroup);
+	const incomeLines = reportLines.filter(rl => rl.incomeStatementGroup === 'Income');
+	const expenseLines = reportLines.filter(rl => rl.incomeStatementGroup !== 'Income');
+	const totalIncomeRL = {
+		actual: 0,
+		approvedBudget: 0,
+		processedBudget: 0,
+		processedVsApproved: 0,
+		processedVsApprovedPercent: 0,
+		label: 'Income Total',
+		type: 'programProject'
+	};
+	incomeLines.forEach(rl => sumReportLines(totalIncomeRL, rl));
 
+	const totalExpenseRL = {
+		actual: 0,
+		approvedBudget: 0,
+		processedBudget: 0,
+		processedVsApproved: 0,
+		processedVsApprovedPercent: 0,
+		label: 'Expense Total',
+		type: 'programProject'
+	};
+	expenseLines.forEach(rl => sumReportLines(totalExpenseRL, rl));
+	const totalNetIncome = _getCopy(totalIncomeRL);
+	totalNetIncome.label = 'Total Net Income from Operations';
+	subtractReportLines(totalNetIncome, totalExpenseRL);
+
+
+
+	// null is empty row
+	reportLines = [...incomeLines, totalIncomeRL, null, ...expenseLines, totalExpenseRL, null, totalIncomeRL, totalExpenseRL, totalNetIncome];
+
+	//console.log('incomeLines = ' + JSON.stringify(incomeLines));
+	//console.log('reportLines = ' + JSON.stringify(reportLines));
+	//console.log('FFTPLines = ' + JSON.stringify(FFTPLines));
+	return reportLines;
 };
 
 const getNewIncomeStatementSubLine = (rl) => {
@@ -339,6 +465,11 @@ const generateExcelFile = async () => {
 			if (sheetType === 'summary') {
 				addSummaryHeaderAndSetColumnWidth(excelSheet);
 				addSummaryReportLines(excelSheet, lines);
+			} else if (sheetType === 'pairs') {
+
+			} else {
+				addSummaryHeaderAndSetColumnWidth(excelSheet);
+				addSummaryReportLines(excelSheet, lines);
 			}
 		});
 
@@ -356,11 +487,11 @@ const generateExcelFile = async () => {
 	}
 };
 
-const getSummaryHeaderParams = () => {
+const getSummaryAndSimpleHeaderParams = () => {
 	const previousBY = _this.selectedBY - 1;
 	const nextBY = +_this.selectedBY + 1;
 	const summaryHeaders = [
-		{title: 'Type', width: 35},
+		{title: 'Type', width: 17},
 		{title: 'Label', width: 50},
 		{title: `${previousBY} Actual`, width: 15},
 		{title: `${_this.selectedBY} Approved Budgeted`, width: 22},
@@ -374,7 +505,7 @@ const getSummaryHeaderParams = () => {
 const addSummaryHeaderAndSetColumnWidth = (sheet) => {
 	try {
 		const headerRow = sheet.getRow(1);
-		getSummaryHeaderParams().forEach((h, i) => {
+		getSummaryAndSimpleHeaderParams().forEach((h, i) => {
 			try {
 				const headerCell = headerRow.getCell(i + 1);
 				_setCell(headerCell, h.title, HEADER_FILL, HEADER_FONT, null, null, SIMPLE_BORDERS);
