@@ -1,23 +1,13 @@
 import {LightningElement, track} from "lwc";
 import exceljs from "@salesforce/resourceUrl/exceljs";
 import {loadScript} from "lightning/platformResourceLoader";
-import {_message, _parseServerError, _prompt, _setCell} from 'c/cbUtils';
+import {_message, _parseServerError} from 'c/cbUtils';
 import getReportDataServer from "@salesforce/apex/CBExcelReport.getReportDataServer";
 import getNeededAnalyticsServer from "@salesforce/apex/CBExcelReport.getNeededAnalyticsServer";
 
-import {calculateDifference, round, sumReportLines} from "./cbReportingExcelUtils"
-import {setContext, manageDataAndGenerateFile} from "./cbReportingExcelExhibit"
-import {
-	CURRENCY_FMT,
-	HEADER_FILL,
-	HEADER_FONT,
-	PERCENT_FMT,
-	PROGRAM_PROJECT_SUB_LINE_FILL,
-	PROGRAM_SUB_LINE_FILL,
-	PROGRAM_SUB_LINE_FONT,
-	SIMPLE_BORDERS,
-	TOTAL_NET_LINE_FILL
-} from "./cbReportingExcelStyles"
+import {round} from "./cbReportingExcelUtils"
+import {manageDataAndGenerateFile, setContext} from "./cbReportingExcelExhibit"
+import {manageDataAndGenerateTreasuryFile, setTreasuryContext} from "./cbReportingExcelTreasury"
 
 /**
  * DOCUMENTATION FOR THIS SHIT: https://www.npmjs.com/package/write-excel-file
@@ -110,9 +100,12 @@ export default class cbReportingExcel extends LightningElement {
 			console.log('DATA RECEIVED');
 			//console.log(this.reportingBalancesRaw.length);
 			//this.reportingBalancesRaw.forEach(rb => console.log(JSON.stringify(rb)));
-			if(this.selectedTemplate === 'Budget Exhibit') {
+			if (this.selectedTemplate === 'Budget Exhibit') {
 				setContext(this);
 				manageDataAndGenerateFile();
+			} else {
+				setTreasuryContext(this);
+				manageDataAndGenerateTreasuryFile();
 			}
 			this.showSpinner = false;
 		} catch (e) {
