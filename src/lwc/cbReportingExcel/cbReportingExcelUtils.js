@@ -19,7 +19,7 @@ const sumReportLines = (baseRL, currentRL, takeIntoAccountIncomeIsNegative) => {
 	}
 };
 
-const subtractReportLines = (baseRL, currentRL) => {
+const subtractReportLines = (baseRL, currentRL, log) => {
 	try {
 		baseRL.actual -= parseFloat(currentRL.actual);
 		baseRL.approvedBudget -= parseFloat(currentRL.approvedBudget);
@@ -29,6 +29,7 @@ const subtractReportLines = (baseRL, currentRL) => {
 		_message('error', 'Subtract Report Lines Error : ' + e);
 		console.error('BASE:' + JSON.stringify(baseRL));
 		console.error('CURRENT:' + JSON.stringify(currentRL));
+		console.error('LOG:' + log);
 	}
 };
 
@@ -46,6 +47,7 @@ const calculateDifference = (reportLines) => {
 	try {
 		reportLines.forEach(rl => {
 			try {
+				if (!rl) return null;
 				rl.processedVsApproved = rl.processedBudget - rl.approvedBudget;
 				rl.processedVsApprovedPercent = rl.approvedBudget === 0 ? 0 : (rl.processedVsApproved / rl.approvedBudget) * 100;
 			} catch (e) {
